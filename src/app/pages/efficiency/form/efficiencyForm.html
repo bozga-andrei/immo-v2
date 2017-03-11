@@ -1,0 +1,200 @@
+
+<!-- Ajuter auss le precompte imobiliare + si ascenseur ou non ( True => Entretien ascenseur) + rectifier l'assurance immeuble
+- pour l'entretien immeuble ajouter entre parentese => Électricité communs) -->
+<form name="acquisitionCostForm" id="acquisitionCostForm" novalidate>
+
+  <!-- Loyer mensuel (hors charges) -->
+  <div class="form-group">
+    <label>Loyer mensuel (hors charges)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="number"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="investMonthlyRent"
+             name="investMonthlyRent"
+             ng-model="invest.monthlyRent">
+    </div>
+  </div>
+
+  <!-- Surface du bien (en m²) -->
+  <div class="form-group">
+    <label>Surface du bien (en m²)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">m²</span>
+      <input type="number"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="investArea"
+             name="investArea"
+             ng-model="immo.area">
+    </div>
+  </div>
+
+  <!-- Entretien (€/an) -->
+  <div class="form-group">
+    <label>Entretien (€/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="number"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="ivestMaintenance"
+             name="ivestMaintenance"
+             ng-model="invest.maintenance">
+    </div>
+    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+        Modifier si nécessaire</span>
+  </div>
+
+  <!-- Charges perçues (€/mois) -->
+  <div class="form-group">
+    <label>Charges perçues (€/mois)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="number"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="investPrepaidExpenses"
+             name="investPrepaidExpenses"
+             ng-model="invest.prepaidExpenses">
+    </div>
+    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+        Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.</span>
+  </div>
+
+  <!-- Assurances (€/an) -->
+  <div class="form-group">
+    <label>Assurances (€/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="number"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="investInsurance"
+             name="investInsurance"
+             ng-model="invest.insurance">
+    </div>
+    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+        Modifier si nécessaire</span>
+  </div>
+
+  <!-- Assurance crédit(€/an) -->
+  <div class="form-group">
+    <label>Assurance crédit(€/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="investLoanInsurance"
+             name="investLoanInsurance"
+             ng-value="fin.totalLoanInsurance*12 | currency:'€/an':0"
+             readonly>
+    </div>
+  </div>
+
+  <!-- Rentabilité nette (%/an) -->
+  <div class="form-group">
+    <label>Rentabilité nette (%/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="profitabilityNet"
+             name="profitabilityNet"
+             ng-value="invest.profitabilityNet | currency:'%':2"
+             readonly>
+    </div>
+  </div>
+
+  <!-- Rentabilité nette -->
+  <div class="row control-group">
+    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
+      <br>
+      <p class="text-danger">Rentabilité nette: <b>{{invest.profitabilityNet | currency:'%':2}}</b>
+      </p>
+    </div>
+  </div>
+
+</form>
+
+
+<!-- Détails mensualités -->
+<div class="modal fade" id="monthlyPaymentsDetailsModal" tabindex="-1" role="dialog"
+     aria-labelledby="monthlyPaymentsDetailsLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="monthlyPaymentsDetailsLabel">Détails mensualités</h4>
+      </div>
+      <div class="modal-body">
+        <article class="text-justify">
+
+        </article>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Frais d’acte sur emprunt hypothécaire -->
+<div class="modal fade" id="taxLoanAmountDetailsModal" tabindex="-1" role="dialog"
+     aria-labelledby="taxLoanAmountDetailsLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="taxLoanAmountDetailsLabel">Frais d’acte sur emprunt hypothécaire</h4>
+      </div>
+      <div class="modal-body">
+        <article class="text-justify">
+          Capital emprunté = {{fin.loanAmount | currency:'€':0}} <br>
+          Le principe de base pour calculer les coûts = capital emprunté + accessoires(10%) = {{fin.loanAmount * 1.10 | currency:'€':0}} <br>
+          <br>
+          <ul>
+            <li>Droits d'enregistrement(1%) = {{fin.loanRegistrationTax | currency:'€':0}}.</li>
+            <li>Droits d'inscription hypothécaire(*) = {{fin.mortgageRegistration | currency:'€':0}}</li>
+            <li>Salaire du Conservateur sur l'inscription de votre hypothèque = {{fin.conservativeSalary | currency:'€':0}}
+            </li>
+            <li>Honoraires du notaire TVAC = {{fin.loanNotaryFees | currency:'€':0}}</li>
+            <li>Frais de dossier (acquises par la banque) = 300 € (**)</li>
+            <li><strong>Total des frais = {{fin.taxLoanAmount | currency:'€':0}}</strong></li>
+          </ul>
+          <hr>
+          <span>
+                (*)
+                Le droit d'inscription hypothécaire est une taxe virée directement
+                à l'État par le notaire, lors de l'inscription de l'acte à la
+                conservation des hypothèques. Le droit est fixé à 0.30 % et il est
+                calculé sur le montant du capital et des accessoires, comme le droit d'enregistrement.
+                <br>
+            </span>
+          <span>(**) montant moyen</span>
+
+          <hr>
+
+          <fusioncharts
+            width="100%"
+            height="400"
+            type="pie2d"
+            dataFormat="json"
+            dataSource="{{taxLoanAmountDataSource}}">
+          </fusioncharts>
+        </article>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

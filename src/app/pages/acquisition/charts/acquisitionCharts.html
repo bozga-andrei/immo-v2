@@ -1,0 +1,30 @@
+
+<div class="channels-block" ng-class="{'transparent': transparent}" ng-show="immo.total">
+  <div class="chart-bg"></div>
+  <div class="traffic-chart" id="trafficChart">
+    <div class="canvas-holder">
+      <canvas id="chart-area" width="280" height="280"></canvas>
+      <div class="traffic-text">
+        <span ng-bind="immo.total | currency: '€': 0"></span>
+        <span>Total coût d'achat</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="channels-info">
+    <div>
+      <div class="channels-info-item" ng-repeat="label in doughnutData.labels"
+           ng-init="i = $index;">
+        <div class="legend-color" style="background-color: {{doughnutData.datasets[0].backgroundColor[i]}}"></div>
+        <p>{{::label}}<span class="channel-number">+{{doughnutData.datasets[0].percentage[i] | number:2}}%</span></p>
+        <div class="progress progress-sm channel-progress">
+          <div class="progress-bar " role="progressbar"
+               aria-valuenow="{{doughnutData.datasets[0].percentage[i]}}" aria-valuemin="0" aria-valuemax="100"
+               style="width: {{doughnutData.datasets[0].percentage[i]}}%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
