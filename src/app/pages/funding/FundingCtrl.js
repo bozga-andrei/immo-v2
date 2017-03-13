@@ -53,6 +53,7 @@
         $scope.fin.taxLoanAmount = getTaxLoanAmount($scope.fin.loanAmount);
         $scope.fin.personalContribution = $scope.fin.personalContribution + $scope.fin.taxLoanAmount;
       }
+      Funding.saveFunding($scope.fin);
     }
 
 

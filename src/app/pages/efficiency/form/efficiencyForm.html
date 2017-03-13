@@ -13,7 +13,7 @@
              placeholder=""
              id="investMonthlyRent"
              name="investMonthlyRent"
-             ng-model="invest.monthlyRent">
+             ng-model="efficiency.monthlyRent">
     </div>
   </div>
 
@@ -41,7 +41,7 @@
              placeholder=""
              id="ivestMaintenance"
              name="ivestMaintenance"
-             ng-model="invest.maintenance">
+             ng-model="efficiency.maintenance">
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
         Modifier si nécessaire</span>
@@ -57,7 +57,7 @@
              placeholder=""
              id="investPrepaidExpenses"
              name="investPrepaidExpenses"
-             ng-model="invest.prepaidExpenses">
+             ng-model="efficiency.prepaidExpenses">
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
         Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.</span>
@@ -73,7 +73,7 @@
              placeholder=""
              id="investInsurance"
              name="investInsurance"
-             ng-model="invest.insurance">
+             ng-model="efficiency.insurance">
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
         Modifier si nécessaire</span>
@@ -104,7 +104,7 @@
              placeholder=""
              id="profitabilityNet"
              name="profitabilityNet"
-             ng-value="invest.profitabilityNet | currency:'%':2"
+             ng-value="efficiency.profitabilityNet | currency:'%':2"
              readonly>
     </div>
   </div>
@@ -113,7 +113,7 @@
   <div class="row control-group">
     <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
       <br>
-      <p class="text-danger">Rentabilité nette: <b>{{invest.profitabilityNet | currency:'%':2}}</b>
+      <p class="text-danger">Rentabilité nette: <b>{{efficiency.profitabilityNet | currency:'%':2}}</b>
       </p>
     </div>
   </div>

@@ -9,7 +9,7 @@
       .controller('AcquisitionCtrl', AcquisitionCtrl);
 
   /** @ngInject */
-  function AcquisitionCtrl($scope, $timeout, $log, Acquisition) {
+  function AcquisitionCtrl($scope, $timeout, $log, Acquisition, Funding) {
 
     var TVA = 1.21;
     var BXL_AND_WALLONIA_TAX_RATE = 0.125;
@@ -18,33 +18,16 @@
     var WALLONIA_REDUCED_TAX_RATE = 0.06;
     var FLANDERS_REDUCED_TAX_RATE = 0.05;
 
+
     //Immo
-    $scope.immo = {};
-    $scope.immo.price;
-    $scope.immo.taxAllowanceRate = BXL_AND_WALLONIA_TAX_RATE;
-    $scope.immo.taxAllowanceSum = 0;
-    $scope.immo.renovationPrice;
-    $scope.immo.variousFees = 1100;
-    $scope.immo.isPublicSale = false;
-    $scope.immo.total = 0;
-
-
-    //Funding
-    $scope.fin = {};
-    $scope.fin.personalContribution = 20000;
-    $scope.fin.loanAmount = 0;
-    $scope.fin.taxLoanAmount = 0;
-    $scope.fin.interestRateYear = 2.0;
-    $scope.fin.loanDurationOnYears = 20;
-    $scope.fin.insuranceLoan = 0.36;
-    $scope.fin.loanRegistrationTax = 0;
-    $scope.fin.conservativeSalary = 0;
-    $scope.fin.loanVariousFees = 300;
-    $scope.fin.loanNotaryFees = 0;
-    $scope.fin.monthlyPaymentsWithInsurance = 0;
-    $scope.fin.totalLoanInterest = 0;
-    $scope.fin.totalLoanInsurance = 0;
-    $scope.fin.totalLoanIterest = 0;
+    $scope.immo = Acquisition.getImmo();
+    if(!$scope.immo || !$scope.immo.total){
+      $scope.immo.taxAllowanceRate = BXL_AND_WALLONIA_TAX_RATE;
+      $scope.immo.taxAllowanceSum = 0;
+      $scope.immo.variousFees = 1100;
+      $scope.immo.isPublicSale = false;
+      $scope.immo.total = 0;
+    }
 
     $scope.invest = {};
     $scope.invest.prepaidExpenses = 0;
@@ -116,46 +99,13 @@
 
         // === Update Invest section ===
         //Update immo insurance
-        $scope.invest.insurance = ($scope.immo.area * 1.5);//TODO correction with the appropriate value
-
-        /*//Update loanAmount
-        if ($scope.immo.total > 0 && $scope.immo.total >= $scope.fin.personalContribution) {
-          $scope.fin.loanAmount = ($scope.immo.total - $scope.fin.personalContribution);
-        }
-
-        //Calculate the total fees for the Loan: (Registration fees, Notarial fees, and divers fees)
-        $scope.fin.taxLoanAmount = parseInt(getTaxLoanAmount());*/
-
-        //Update Apport personnel
-        if ($scope.immo.isPublicSale) {
-          if ($scope.immo.registrationTaxPublicSale && $scope.fin.taxLoanAmount)
-            $scope.fin.personalContribution = $scope.immo.registrationTaxPublicSale + $scope.fin.taxLoanAmount;
-        } else {
-          if ($scope.immo.registrationTax && $scope.immo.notaryHonorTTC && $scope.fin.taxLoanAmount)
-            $scope.fin.personalContribution = $scope.immo.registrationTax + $scope.immo.notaryHonorTTC + $scope.fin.taxLoanAmount;
-        }
+        //$scope.invest.insurance = ($scope.immo.area * 1.5);//TODO correction with the appropriate value
 
         Acquisition.saveImmo($scope.immo);
       },
       true
     );
 
-    //Watch when personalContribution is changing and update the loanAmount
-    $scope.$watch(
-      function () {
-        return $scope.fin.personalContribution;
-      },
-      function (newVal, oldVal) {
-        if (newVal) {
-          if ($scope.immo.total - newVal > 0) {
-            $scope.fin.loanAmount = ($scope.immo.total - newVal);
-          } else {
-            $scope.fin.loanAmount = 0;
-          }
-        }
-      },
-      true
-    );
 
     // Watch when investment object is changing
     $scope.$watchCollection('invest',

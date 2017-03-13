@@ -14,6 +14,8 @@
         .state('efficiency', {
           url: '/efficiency',
           templateUrl: 'app/pages/efficiency/efficiency.html',
+          controller: 'EfficiencyCtrl',
+          controllerAs: 'vm',
           title: 'Investissement',
           sidebarMeta: {
             icon: 'ion-arrow-graph-up-right',
