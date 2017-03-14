@@ -13,6 +13,7 @@
     return {
       restrict: 'E',
       controller: 'AcquisitionChartsCtrl',
+      controllerAs: 'acqChartsCtrl',
       templateUrl: 'app/pages/acquisition/charts/acquisitionCharts.html'
     };
   }

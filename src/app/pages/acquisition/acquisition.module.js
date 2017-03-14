@@ -17,7 +17,7 @@
           url: '/acquisition',
           templateUrl: 'app/pages/acquisition/acquisition.html',
           controller: 'AcquisitionCtrl',
-          controllerAs: 'vm',
+          controllerAs: 'acqCtrl',
           title: 'Acquisition',
           sidebarMeta: {
             icon: 'ion-android-home',

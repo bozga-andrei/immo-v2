@@ -13,7 +13,7 @@
              placeholder=""
              id="price"
              name="price"
-             ng-model="immo.price"
+             ng-model="acqCtrl.immo.price"
              ng-required="true">
     </div>
     <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.price.$touched">
@@ -36,7 +36,7 @@
              placeholder=""
              id="immoArea"
              name="immoArea"
-             ng-model="immo.area">
+             ng-model="acqCtrl.immo.area">
       <p class="help-block text-danger"></p>
     </div>
   </div>
@@ -53,7 +53,7 @@
              placeholder=""
              id="renovationPrice"
              name="renovationPrice"
-             ng-model="immo.renovationPrice">
+             ng-model="acqCtrl.immo.renovationPrice">
       <p class="help-block text-danger"></p>
     </div>
   </div>
@@ -64,34 +64,34 @@
     <div class="col-xs-offset-1">
       <div class="radio">
         <label class="radio custom-radio nowrap">
-          <input type="radio" name="taxAllowanceRate" id="taxAllowanceRate125"
-                 ng-model="immo.taxAllowanceRate" ng-value='0.125'>
+          <input type="radio" name="registrationFeePercentage" id="registrationFeePercentage125"
+                 ng-model="acqCtrl.immo.registrationFeePercentage" ng-value='0.125'>
           <span>12,5 % (Bruxelles & Wallonie)</span>
         </label>
       </div>
       <div class="radio">
         <label class="radio custom-radio nowrap">
-          <input type="radio" name="taxAllowanceRate" id="taxAllowanceRate6"
-                 ng-model="immo.taxAllowanceRate" ng-value='0.06'>
+          <input type="radio" name="registrationFeePercentage" id="registrationFeePercentage6"
+                 ng-model="acqCtrl.immo.registrationFeePercentage" ng-value='0.06'>
           <span>6 % (Wallonie - maison modeste)
-            <a data-toggle="modal" role="button" data-target="#taxAllowanceRate6Modal"><span class="glyphicon glyphicon-info-sign"></span></a>
+            <a data-toggle="modal" role="button" data-target="#registrationFeePercentage6Modal"><span class="glyphicon glyphicon-info-sign"></span></a>
           </span>
         </label>
       </div>
       <div class="radio">
         <label class="radio custom-radio nowrap">
-          <input type="radio" name="taxAllowanceRate" id="taxAllowanceRate10"
-                 ng-model="immo.taxAllowanceRate" ng-value='0.10'>
+          <input type="radio" name="registrationFeePercentage" id="registrationFeePercentage10"
+                 ng-model="acqCtrl.immo.registrationFeePercentage" ng-value='0.10'>
           <span>10 % (Flandre)</span>
         </label>
       </div>
       <div class="radio">
         <label class="radio custom-radio nowrap">
-          <input type="radio" name="taxAllowanceRate" id="taxAllowanceRate5"
-                 ng-model="immo.taxAllowanceRate" ng-value='0.05'>
+          <input type="radio" name="registrationFeePercentage" id="registrationFeePercentage5"
+                 ng-model="acqCtrl.immo.registrationFeePercentage" ng-value='0.05'>
           <span>5 % (Flandre - maison modeste)
             <!-- Button trigger modal -->
-            <a class="" data-toggle="modal" role="button" data-target="#taxAllowanceRate5Modal">
+            <a class="" data-toggle="modal" role="button" data-target="#registrationFeePercentage5Modal">
               <span class="glyphicon glyphicon-info-sign"></span>
             </a>
           </span>
@@ -99,8 +99,8 @@
       </div>
       <div class="radio">
         <label class="radio custom-radio nowrap">
-          <input type="radio" name="taxAllowanceRate" id="taxAllowanceRate15"
-                 ng-model="immo.taxAllowanceRate" ng-value='0.15'>
+          <input type="radio" name="registrationFeePercentage" id="registrationFeePercentage15"
+                 ng-model="acqCtrl.immo.registrationFeePercentage" ng-value='0.15'>
           <span>15 % (Wallonie 3e bien)</span>
         </label>
       </div>
@@ -114,14 +114,14 @@
       <div class="radio">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="normalSale" id="normalSale"
-                 ng-model="immo.isPublicSale" ng-value='false'>
+                 ng-model="acqCtrl.immo.isPublicSale" ng-value='false'>
           <span>Gré à gré</span>
         </label>
       </div>
       <div class="radio">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="publicSale" id="publicSale"
-                 ng-model="immo.isPublicSale" ng-value='true'>
+                 ng-model="acqCtrl.immo.isPublicSale" ng-value='true'>
           <span for="publicSale">Vente publique</span>
         </label>
       </div>
@@ -132,17 +132,17 @@
   <div class="form-group">
     <p>Abattement</p>
     <div class="col-xs-offset-1">
-      <div class="radio" ng-if="immo.taxAllowanceRate == 0.125">
+      <div class="radio" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance" id="taxAllowance60"
-                 ng-model="immo.taxAllowanceSum" ng-value="60000">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="acqCtrl.REDUCED_TAX_ALLOWANCE_SUM">
           <span>60.000 €</span>
         </label>
       </div>
-      <div class="radio" ng-if="immo.taxAllowanceRate == 0.125">
+      <div class="radio" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance" id="taxAllowance75"
-                 ng-model="immo.taxAllowanceSum" ng-value="75000">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="acqCtrl.TAX_ALLOWANCE_SUM">
           <span>75.000 €
             <!-- Button trigger modal -->
             <a data-toggle="modal" role="button" data-target="#taxAllowance75Modal">
@@ -151,10 +151,10 @@
           </span>
         </label>
       </div>
-      <div class="radio" ng-if="immo.taxAllowanceRate == 0.125">
+      <div class="radio" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance175" id="taxAllowance175"
-                 ng-model="immo.taxAllowanceSum" ng-value="175000">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="acqCtrl.TAX_ALLOWANCE_SUM_2017">
           <span>175.000 €
             <!-- Button trigger modal -->
             <a data-toggle="modal" role="button" data-target="#taxAllowance175Modal">
@@ -164,10 +164,10 @@
         </label>
       </div>
       <div class="radio"
-           ng-if="immo.taxAllowanceRate == 0.10 || immo.taxAllowanceRate == 0.05">
+           ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.FLANDERS_TAX_RATE || acqCtrl.immo.registrationFeePercentage == acqCtrl.FLANDERS_REDUCED_TAX_RATE">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance15" id="taxAllowance15"
-                 ng-model="immo.taxAllowanceSum" ng-value="15000">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="15000">
           <span>Abattement ordinaire: 15.000 €
             <!-- Button trigger modal -->
             <a data-toggle="modal" role="button" data-target="#taxAllowance15Modal">
@@ -176,10 +176,10 @@
           </span>
         </label>
       </div>
-      <div class="radio" ng-if="immo.taxAllowanceRate == 0.10">
+      <div class="radio" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.FLANDERS_TAX_RATE">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance25" id="taxAllowance25"
-                 ng-model="immo.taxAllowanceSum" ng-value="25000">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="25000">
           <span>
             Abattement majoré: 25.000 €
             <!-- Button trigger modal -->
@@ -189,10 +189,10 @@
           </span>
         </label>
       </div>
-      <div class="radio flex" ng-if="immo.taxAllowanceRate == 0.05">
+      <div class="radio flex" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.FLANDERS_REDUCED_TAX_RATE">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance35" id="taxAllowance35"
-                 ng-model="immo.taxAllowanceSum" ng-value="35000">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="35000">
           <span for="taxAllowance35">
             Abattement majoré: 35.000 €
             <!-- Button trigger modal -->
@@ -205,8 +205,7 @@
       <div class="radio radio-info">
         <label class="radio custom-radio nowrap">
           <input type="radio" name="taxAllowance" id="taxAllowance0"
-                 ng-model="immo.taxAllowanceSum" ng-value="0"
-                 ng-checked="immo.taxAllowanceRate">
+                 ng-model="acqCtrl.immo.taxAllowanceSum" ng-value="0">
           <span for="taxAllowance0">Pas d'abattement / inconnu </span>
         </label>
       </div>
@@ -215,7 +214,7 @@
   </div>
 
   <!-- Droits d’enregistrement -->
-  <div class="form-group" ng-if="immo.isPublicSale == false">
+  <div class="form-group" ng-if="acqCtrl.immo.isPublicSale == false">
     <label>Droits d’enregistrement <!-- Button trigger modal -->
       <a class="" data-toggle="modal" role="button" data-target="#registrationTaxPublicModal">
         <span class="glyphicon glyphicon-info-sign"></span>
@@ -225,25 +224,25 @@
            class="form-control"
            id="registrationTax"
            name="registrationTax"
-           ng-value="immo.registrationTax | currency : '€' : 0"
+           ng-value="acqCtrl.immo.registrationTax | currency : '€' : 0"
            readonly>
   </div>
 
   <!-- Honoraires notariaux barêmisés (htva) -->
-  <div class="form-group" ng-if="immo.isPublicSale == false">
+  <div class="form-group" ng-if="acqCtrl.immo.isPublicSale == false">
     <label>Honoraires notariaux barêmisés (TVAC)</label>
     <input type="text"
            class="form-control"
            id="honorTVAC"
            name="honorTVAC"
-           ng-value="immo.notaryHonorTTC | currency:'€':0"
+           ng-value="acqCtrl.immo.notaryHonorTTC | currency:'€':0"
            readonly>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-          Honoraires notariaux HTVA: {{immo.notaryHonorHTVA | currency:'€':0}} </span>
+          Honoraires notariaux HTVA: {{acqCtrl.immo.notaryHonorHTVA | currency:'€':0}} </span>
   </div>
 
   <!-- Frais de la vente publique -->
-  <div class="form-group" ng-if="immo.isPublicSale == true">
+  <div class="form-group" ng-if="acqCtrl.immo.isPublicSale == true">
     <label>Frais de la vente publique
       <!-- Button trigger modal -->
       <a data-toggle="modal" role="button" data-target="#registrationTaxPublicSaleModal">
@@ -254,9 +253,8 @@
            class="form-control"
            id="registrationTaxPublicSale"
            name="registrationTaxPublicSale"
-           ng-value="immo.registrationTaxPublicSale | currency:'€':0"
+           ng-value="acqCtrl.immo.registrationTaxPublicSale | currency:'€':0"
            readonly>
-    <span class="help-block" ng-show="fin.loanRegistrationTax > 0"></span>
   </div>
 
   <!-- Frais divers (tvac) -->
@@ -272,14 +270,14 @@
            placeholder=""
            id="variousFees"
            name="variousFees"
-           ng-model="immo.variousFees"
+           ng-model="acqCtrl.immo.variousFees"
            data-validation-number-message="Ce champ ne doit contenir que des chiffres">
     <p class="help-block text-danger"></p>
   </div>
 
   <br>
-  <p>Total coût d'achat: {{immo.total | currency:"€":0}}</p>
-  <p>Total prix au m²: {{immo.total / immo.area | currency:"€":0}}</p>
+  <p>Total coût d'achat: {{acqCtrl.immo.total | currency:"€":0}}</p>
+  <p>Total prix au m²: {{acqCtrl.immo.total / acqCtrl.immo.area | currency:"€":0}}</p>
 
   <br>
   <div id="success"></div>
@@ -288,14 +286,14 @@
 
 
 <!-- Modal Flandre - maison modeste -->
-<div class="modal fade" id="taxAllowanceRate5Modal" tabindex="-1" role="dialog"
-     aria-labelledby="taxAllowanceRate5ModalLabel">
+<div class="modal fade" id="registrationFeePercentage5Modal" tabindex="-1" role="dialog"
+     aria-labelledby="registrationFeePercentage5ModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
           aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="taxAllowanceRate5ModalLabel">Réduction de moitié pour maison modeste</h4>
+        <h4 class="modal-title" id="registrationFeePercentage5ModalLabel">Réduction de moitié pour maison modeste</h4>
       </div>
       <div class="modal-body">
         <article class="text-justify">Cette réduction s'adresse à celui qui achète un bien immobilier pour y
@@ -526,7 +524,7 @@
         <article class="text-justify">
           Le pourcentage des frais englobe:
           <ul>
-            <li>Droits d’enregistrement: {{immo.taxAllowanceRate * 100}}%</li>
+            <li>Droits d’enregistrement: {{acqCtrl.immo.registrationFeePercentage * 100}}%</li>
             <li>Les honoraires du notaire (entre 1 et 3% suivant le prix offert)</li>
             <li>Les honoraires du conservateur des hypothèques (calculé sur base d’un tarif légal, de
               l’ordre de 250 €)

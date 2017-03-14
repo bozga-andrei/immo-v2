@@ -9,110 +9,110 @@
       .controller('AcquisitionCtrl', AcquisitionCtrl);
 
   /** @ngInject */
-  function AcquisitionCtrl($scope, $timeout, $log, Acquisition, Funding) {
+  function AcquisitionCtrl($scope, $log, Acquisition, Funding) {
 
-    var TVA = 1.21;
-    var BXL_AND_WALLONIA_TAX_RATE = 0.125;
-    var WALLONIA_AFTER_3_IMMO_TAX_RATE = 0.15;
-    var FLANDERS_TAX_RATE = 0.10;
-    var WALLONIA_REDUCED_TAX_RATE = 0.06;
-    var FLANDERS_REDUCED_TAX_RATE = 0.05;
+    var acqCtrl = this;
 
+    const TVA = 1.21;
+
+    acqCtrl.BXL_AND_WALLONIA_TAX_RATE = 0.125;
+    acqCtrl.WALLONIA_AFTER_3_IMMO_TAX_RATE = 0.15;
+    acqCtrl.FLANDERS_TAX_RATE = 0.10;
+    acqCtrl.WALLONIA_REDUCED_TAX_RATE = 0.06;
+    acqCtrl.FLANDERS_REDUCED_TAX_RATE = 0.05;
+
+    acqCtrl.REDUCED_TAX_ALLOWANCE_SUM = 60000;
+    acqCtrl.TAX_ALLOWANCE_SUM = 75000;
+    acqCtrl.TAX_ALLOWANCE_SUM_2017 = 175000;
 
     //Immo
-    $scope.immo = Acquisition.getImmo();
-    if(!$scope.immo || !$scope.immo.total){
-      $scope.immo.taxAllowanceRate = BXL_AND_WALLONIA_TAX_RATE;
-      $scope.immo.taxAllowanceSum = 0;
-      $scope.immo.variousFees = 1100;
-      $scope.immo.isPublicSale = false;
-      $scope.immo.total = 0;
+    acqCtrl.immo = Acquisition.getImmo();
+    if(!acqCtrl.immo || !acqCtrl.immo.total){
+      acqCtrl.immo.registrationFeePercentage = acqCtrl.BXL_AND_WALLONIA_TAX_RATE;
+      acqCtrl.immo.taxAllowanceSum = 0;
+      acqCtrl.immo.variousFees = 1100;
+      acqCtrl.immo.isPublicSale = false;
+      acqCtrl.immo.total = 0;
     }
 
-    $scope.invest = {};
-    $scope.invest.prepaidExpenses = 0;
+    acqCtrl.invest = {};
+    acqCtrl.invest.prepaidExpenses = 0;
 
 
-    $scope.taxLoanAmountDataSource = {};
+    acqCtrl.taxLoanAmountDataSource = {};
 
 
-    //Watch when taxAllowanceRate is changing and reset taxAllowanceSum to 0
+    //Watch when registrationFeePercentage is changing and reset registrationFeePercentage to 0
     $scope.$watch(
       function () {
-        return $scope.immo.taxAllowanceRate;
+        return acqCtrl.immo.registrationFeePercentage;
       },
       function (newVal, oldVal) {
-        if (newVal) {
-          //Reset taxAllowanceSum to 0 if taxAllowanceRate is changing
-          $scope.immo.taxAllowanceSum = 0;
+        if(!newVal || angular.equals(newVal, oldVal)){
+          return; // simply skip that
         }
+          //Reset taxAllowanceSum to 0 if registrationFeePercentage is changing
+          acqCtrl.immo.taxAllowanceSum = 0;
       },
       true
     );
 
     // Watch when immo price is changing
-    $scope.$watchCollection('immo',
+    $scope.$watchCollection('acqCtrl.immo',
       function (newVal, oldVal) {
 
         //Check if the selected taxAllowanceSum is 175000 and price under 500.000€
-        if ($scope.immo.taxAllowanceSum == 175000 && newVal.price > 500000) {
+        if (acqCtrl.immo.taxAllowanceSum == 175000 && newVal.price > 500000) {
           //Tax allowance is not accorded for a price higher than 500.000€
-          $scope.immo.registrationTax = newVal.price * $scope.immo.taxAllowanceRate;
+          acqCtrl.immo.registrationTax = Number((newVal.price * acqCtrl.immo.registrationFeePercentage).toFixed(0));
         } else {
-          if (newVal.price > $scope.immo.taxAllowanceSum) {
-            var reducedPrice = newVal.price - $scope.immo.taxAllowanceSum;
+          if (newVal.price > acqCtrl.immo.taxAllowanceSum) {
+            var reducedPrice = newVal.price - acqCtrl.immo.taxAllowanceSum;
             //The reduced tax is relevant only for a price under 161.438€, after that sum the normal tax rate is applicable.
-            if (($scope.immo.taxAllowanceRate == FLANDERS_REDUCED_TAX_RATE ||
-              $scope.immo.taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE) && newVal.price > 161438.00) {
-              var regionTax = $scope.immo.taxAllowanceRate == WALLONIA_REDUCED_TAX_RATE ? 0.125 : 0.100;
-              $scope.immo.registrationTax = (161438.00 * $scope.immo.taxAllowanceRate) + ((newVal.price - 161438.00) * regionTax);
+            if ((acqCtrl.immo.registrationFeePercentage == acqCtrl.FLANDERS_REDUCED_TAX_RATE ||
+              acqCtrl.immo.registrationFeePercentage == acqCtrl.WALLONIA_REDUCED_TAX_RATE) && newVal.price > 161438.00) {
+              var regionTax = acqCtrl.immo.registrationFeePercentage == acqCtrl.WALLONIA_REDUCED_TAX_RATE ? 0.125 : 0.100;
+              acqCtrl.immo.registrationTax = Number(((161438.00 * acqCtrl.immo.registrationFeePercentage) + ((newVal.price - 161438.00) * regionTax)).toFixed(0));
             } else {
-              $scope.immo.registrationTax = reducedPrice * $scope.immo.taxAllowanceRate;
+              acqCtrl.immo.registrationTax = Number((reducedPrice * acqCtrl.immo.registrationFeePercentage).toFixed(0));
             }
           } else {
             //If tax allowance is smaller than the 'price' set registration tax to 0
-            $scope.immo.registrationTax = 0;
-            if ($scope.immo.isPublicSale) {
-              $scope.immo.registrationTaxPublicSale = 0;
+            acqCtrl.immo.registrationTax = 0;
+            if (acqCtrl.immo.isPublicSale) {
+              acqCtrl.immo.registrationTaxPublicSale = 0;
             }
           }
         }
 
         //If is a public sale
-        if ($scope.immo.isPublicSale) {
-          $scope.immo.registrationTaxPublicSale = getPublicSaleAmountOfTax(newVal.price, $scope.immo.taxAllowanceRate);
-          if ($scope.immo.taxAllowanceSum != 0) {
-            if ($scope.immo.taxAllowanceSum == 175000 && newVal.price < 500000) {
-              $scope.immo.registrationTaxPublicSale = $scope.immo.registrationTaxPublicSale - ($scope.immo.taxAllowanceSum * $scope.immo.taxAllowanceRate)
-            } else if ($scope.immo.taxAllowanceSum != 175000) {
-              $scope.immo.registrationTaxPublicSale = $scope.immo.registrationTaxPublicSale - ($scope.immo.taxAllowanceSum * $scope.immo.taxAllowanceRate)
-            }
-          }
+        if (acqCtrl.immo.isPublicSale) {
+          acqCtrl.immo.registrationTaxPublicSale = getPublicSaleAmountOfTax(newVal.price, acqCtrl.immo.registrationFeePercentage, acqCtrl.immo.taxAllowanceSum);
+        } else {
+          acqCtrl.immo.notaryHonorHTVA = getImmoNotaryHonorary(newVal.price);
+          acqCtrl.immo.notaryHonorTTC = parseInt(acqCtrl.immo.notaryHonorHTVA * TVA);
         }
 
 
-        $scope.immo.notaryHonorHTVA = getImmoNotaryHonorary(newVal.price);
-        $scope.immo.notaryHonorTTC = parseInt($scope.immo.notaryHonorHTVA * TVA);
-
-        $scope.immo.total = getTotalImmoAmount();
-        //$log.debug("Immo.total is set to : [" + $scope.immo.total + "]");
+        acqCtrl.immo.total = getTotalImmoAmount();
+        //$log.debug("Immo.total is set to : [" + acqCtrl.immo.total + "]");
 
         // === Update Invest section ===
         //Update immo insurance
-        //$scope.invest.insurance = ($scope.immo.area * 1.5);//TODO correction with the appropriate value
+        //acqCtrl.invest.insurance = (acqCtrl.immo.area * 1.5);//TODO correction with the appropriate value
 
-        Acquisition.saveImmo($scope.immo);
+        Acquisition.saveImmo(acqCtrl.immo);
       },
       true
     );
 
 
     // Watch when investment object is changing
-    $scope.$watchCollection('invest',
+    $scope.$watchCollection('acqCtrl.invest',
       function (newVal, oldVal) {
-        //$log.debug("invest.monthlyRent is set to : [" + $scope.invest.monthlyRent + "]");
+        //$log.debug("invest.monthlyRent is set to : [" + acqCtrl.invest.monthlyRent + "]");
         if (newVal.monthlyRent >= 0) {
-          $scope.invest.profitabilityNet = (((((newVal.monthlyRent * 12) - $scope.invest.maintenance - $scope.fin.totalLoanInsurance - $scope.invest.insurance) + ($scope.invest.prepaidExpenses * 12)) / $scope.immo.total) * 100);
+          acqCtrl.invest.profitabilityNet = (((((newVal.monthlyRent * 12) - acqCtrl.invest.maintenance - acqCtrl.fin.totalLoanInsurance - acqCtrl.invest.insurance) + (acqCtrl.invest.prepaidExpenses * 12)) / acqCtrl.immo.total) * 100);
         }
       },
       true
@@ -121,11 +121,11 @@
     //Watch when monthlyRent is changing and update the surface maintenance
     $scope.$watch(
       function () {
-        return $scope.invest.monthlyRent;
+        return acqCtrl.invest.monthlyRent;
       },
       function (newVal, oldVal) {
         if (newVal) {
-          $scope.invest.maintenance = (newVal * 0.04); // 4%/year of the monthly rate
+          acqCtrl.invest.maintenance = (newVal * 0.04); // 4%/year of the monthly rate
         }
       },
       true
@@ -134,11 +134,11 @@
     //Watch when immo.area is changing and update the invest.insurance
     $scope.$watch(
       function () {
-        return $scope.immo.area;
+        return acqCtrl.immo.area;
       },
       function (newVal, oldVal) {
         if (newVal) {
-          $scope.invest.insurance = (newVal * 1.5);//TODO correction with the appropriate value
+          acqCtrl.invest.insurance = (newVal * 1.5);//TODO correction with the appropriate value
         }
       },
       true
@@ -147,16 +147,16 @@
 
     function getTotalImmoAmount() {
       var total;
-      if($scope.immo.renovationPrice){
-        total = $scope.immo.price + $scope.immo.variousFees + $scope.immo.renovationPrice;
+      if(acqCtrl.immo.renovationPrice){
+        total = acqCtrl.immo.price + acqCtrl.immo.variousFees + acqCtrl.immo.renovationPrice;
       } else {
-        total = $scope.immo.price + $scope.immo.variousFees;
+        total = acqCtrl.immo.price + acqCtrl.immo.variousFees;
       }
 
-      if ($scope.immo.isPublicSale) {
-        total = total + $scope.immo.registrationTaxPublicSale;
+      if (acqCtrl.immo.isPublicSale) {
+        total = total + acqCtrl.immo.registrationTaxPublicSale;
       } else {
-        total = total + $scope.immo.registrationTax + $scope.immo.notaryHonorTTC;
+        total = total + acqCtrl.immo.registrationTax + acqCtrl.immo.notaryHonorTTC;
       }
       return total
     }
@@ -178,7 +178,7 @@
       var x = Math.pow(1 + interest, payments);
       var monthly = (loanAmount * x * interest) / (x - 1);
 
-      $scope.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
+      acqCtrl.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
 
 
       //$log.debug("Return: " + monthly);
@@ -224,65 +224,73 @@
     /**
      * Calculate the amount of tax to be payed for a public sale
      * @param immoPrice the price of the good
-     * @param taxAllowanceRate 0.125 => Brussels; 0.06 Brussels reduced tax
+     * @param registrationFeePercentage => The percentage of taxe Brussels; 0.06 Brussels reduced tax
+     * @param taxAllowanceSum 0.125 => Brussels; 0.06 Brussels reduced tax
      * @returns {number} the amount of tax based on the price of the good
      */
-    function getPublicSaleAmountOfTax(immoPrice, taxAllowanceRate) {
+    function getPublicSaleAmountOfTax(immoPrice, registrationFeePercentage, taxAllowanceSum) {
       var amountOfTax = 0;
 
       if (immoPrice <= 30000.00) {
-        amountOfTax = immoPrice * (0.2750 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.2750 + registrationFeePercentage);
       } else if (immoPrice > 30000.00 && immoPrice <= 40000.00) {
-        amountOfTax = immoPrice * (0.1900 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.1900 + registrationFeePercentage);
       } else if (immoPrice > 40000.00 && immoPrice <= 50000.00) {
-        amountOfTax = immoPrice * (0.1550 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.1550 + registrationFeePercentage);
       } else if (immoPrice > 50000.00 && immoPrice <= 60000.00) {
-        amountOfTax = immoPrice * (0.1200 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.1200 + registrationFeePercentage);
       } else if (immoPrice > 60000.00 && immoPrice <= 70000.00) {
-        amountOfTax = immoPrice * (0.1100 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.1100 + registrationFeePercentage);
       } else if (immoPrice > 70000.00 && immoPrice <= 80000.00) {
-        amountOfTax = immoPrice * (0.1050 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.1050 + registrationFeePercentage);
       } else if (immoPrice > 80000.00 && immoPrice <= 90000.00) {
-        amountOfTax = immoPrice * (0.0950 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0950 + registrationFeePercentage);
       } else if (immoPrice > 90000.00 && immoPrice <= 100000.00) {
-        amountOfTax = immoPrice * (0.0900 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0900 + registrationFeePercentage);
       } else if (immoPrice > 100000.00 && immoPrice <= 110000.00) {
-        amountOfTax = immoPrice * (0.0850 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0850 + registrationFeePercentage);
       } else if (immoPrice > 110000.00 && immoPrice <= 125000.00) {
-        amountOfTax = immoPrice * (0.0825 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0825 + registrationFeePercentage);
       } else if (immoPrice > 125000.00 && immoPrice <= 150000.00) {
-        amountOfTax = immoPrice * (0.0750 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0750 + registrationFeePercentage);
       } else if (immoPrice > 150000.00 && immoPrice <= 175000.00) {
-        amountOfTax = immoPrice * (0.0725 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0725 + registrationFeePercentage);
       } else if (immoPrice > 175000.00 && immoPrice <= 200000.00) {
-        amountOfTax = immoPrice * (0.0675 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0675 + registrationFeePercentage);
       } else if (immoPrice > 200000.00 && immoPrice <= 225000.00) {
-        amountOfTax = immoPrice * (0.0600 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0600 + registrationFeePercentage);
       } else if (immoPrice > 225000.00 && immoPrice <= 250000.00) {
-        amountOfTax = immoPrice * (0.0550 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0550 + registrationFeePercentage);
       } else if (immoPrice > 250000.00 && immoPrice <= 275000.00) {
-        amountOfTax = immoPrice * (0.0500 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0500 + registrationFeePercentage);
       } else if (immoPrice > 275000.00 && immoPrice <= 300000.00) {
-        amountOfTax = immoPrice * (0.0475 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0475 + registrationFeePercentage);
       } else if (immoPrice > 300000.00 && immoPrice <= 325000.00) {
-        amountOfTax = immoPrice * (0.0425 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0425 + registrationFeePercentage);
       } else if (immoPrice > 325000.00 && immoPrice <= 375000.00) {
-        amountOfTax = immoPrice * (0.0400 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0400 + registrationFeePercentage);
       } else if (immoPrice > 375000.00 && immoPrice <= 400000.00) {
-        amountOfTax = immoPrice * (0.0350 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0350 + registrationFeePercentage);
       } else if (immoPrice > 400000.00 && immoPrice <= 425000.00) {
-        amountOfTax = immoPrice * (0.0325 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0325 + registrationFeePercentage);
       } else if (immoPrice > 425000.00 && immoPrice <= 500000.00) {
-        amountOfTax = immoPrice * (0.0300 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0300 + registrationFeePercentage);
       } else if (immoPrice > 500000.00 && immoPrice <= 550000.00) {
-        amountOfTax = immoPrice * (0.0275 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0275 + registrationFeePercentage);
       } else if (immoPrice > 550000.00 && immoPrice <= 600000.00) {
-        amountOfTax = immoPrice * (0.0250 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0250 + registrationFeePercentage);
       } else if (immoPrice > 600000.00 && immoPrice <= 750000.00) {
-        amountOfTax = immoPrice * (0.0225 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0225 + registrationFeePercentage);
       } else if (immoPrice > 750000.00) {
-        amountOfTax = immoPrice * (0.0200 + taxAllowanceRate);
+        amountOfTax = immoPrice * (0.0200 + registrationFeePercentage);
       }
+
+      if(immoPrice <= taxAllowanceSum) {
+        amountOfTax = amountOfTax - (immoPrice * registrationFeePercentage);
+      } else if(immoPrice > taxAllowanceSum && immoPrice < 500000) {
+        amountOfTax = amountOfTax - (taxAllowanceSum * registrationFeePercentage);
+      }
+
       return amountOfTax;
     }
 
@@ -294,7 +302,7 @@
      */
     function getLoanRegistrationTax(loanAmountWithAccessory) {
 
-      return loanAmountWithAccessory * 0.01;
+      return Number((loanAmountWithAccessory * 0.01).toFixed(0));
     }
 
     /**
@@ -329,7 +337,7 @@
       notaryFees = Math.max(notaryFees, 8.48);
       //Add TVA
       notaryFees = notaryFees * TVA;
-      $scope.fin.loanNotaryFees = notaryFees;
+      acqCtrl.fin.loanNotaryFees = notaryFees;
 
       //$log.debug("Return notary fees " + notaryFees);
 

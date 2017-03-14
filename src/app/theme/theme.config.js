@@ -17,8 +17,8 @@
       default: 'rgba(#000000, 0.2)',
       defaultText: '#ffffff',
       dashboard: {
-        white: '#ffffff',
-      },
+        white: '#ffffff'
+      }
     });
   }
 

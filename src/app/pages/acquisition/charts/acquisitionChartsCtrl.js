@@ -6,36 +6,40 @@
   'use strict';
 
   angular.module('BlurAdmin.pages.acquisition')
-      .controller('AcquisitionChartsCtrl', AcquisitionChartsCtrl);
+    .controller('AcquisitionChartsCtrl', AcquisitionChartsCtrl);
 
   /** @ngInject */
   function AcquisitionChartsCtrl($scope, $log, baConfig, colorHelper) {
 
-    $scope.transparent = baConfig.theme.blur;
+    var vm = this;
+
+    vm.immo = $scope.acqCtrl.immo;
+
+    vm.transparent = baConfig.theme.blur;
     var dashboardColors = baConfig.colors.dashboard;
 
     // Watch when fin object is changing
-    $scope.$watchCollection('immo',
-      function (newVal, oldVal) {
-        /*if(!newVal || angular.equals(newVal, oldVal)){
+    $scope.$watchCollection(angular.bind(this, function () {
+        return vm.immo;
+      }), function (newVal, oldVal) {
+        if (!newVal || !newVal.total) {
           return; // simply skip that
-        }*/
+        }
         updateChart();
       },
       true
     );
 
 
-
     function updateChart() {
-      var renovationPrice = !$scope.immo.renovationPrice ? 0 : $scope.immo.renovationPrice;
+      var renovationPrice = !vm.immo.renovationPrice ? 0 : vm.immo.renovationPrice;
 
-      var pricePercentage = ($scope.immo.price * (100 / $scope.immo.total)),
-        renovationPricePercentage = (renovationPrice * (100 / $scope.immo.total)),
-        registrationTaxPricePercentage = ($scope.immo.registrationTax * (100 / $scope.immo.total)),
-        variousFeesPercentage = ($scope.immo.variousFees * (100 / $scope.immo.total));
+      var pricePercentage = (vm.immo.price * (100 / vm.immo.total)),
+        renovationPricePercentage = (renovationPrice * (100 / vm.immo.total)),
+        registrationTaxPricePercentage = (vm.immo.registrationTax * (100 / vm.immo.total)),
+        variousFeesPercentage = (vm.immo.variousFees * (100 / vm.immo.total));
 
-      $scope.doughnutData = {
+      vm.doughnutData = {
         labels: [
           "Prix",
           "Montant des Travaux",
@@ -44,7 +48,7 @@
         ],
         datasets: [
           {
-            data: [$scope.immo.price, $scope.immo.renovationPrice, $scope.immo.registrationTax, $scope.immo.variousFees],
+            data: [vm.immo.price, vm.immo.renovationPrice, vm.immo.registrationTax, vm.immo.variousFees],
             backgroundColor: [
               dashboardColors.white,
               dashboardColors.blueStone,
@@ -65,7 +69,7 @@
       var ctx = document.getElementById('chart-area').getContext('2d');
       window.myDoughnut = new Chart(ctx, {
         type: 'doughnut',
-        data: $scope.doughnutData,
+        data: vm.doughnutData,
         options: {
           cutoutPercentage: 64,
           responsive: true,
@@ -77,7 +81,6 @@
         }
       });
     }
-
 
 
   }

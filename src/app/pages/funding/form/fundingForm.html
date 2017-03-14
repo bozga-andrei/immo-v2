@@ -5,12 +5,12 @@
     <label>Total coût d'achat:</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="text"
              class="form-control with-success-addon"
              placeholder=""
              id="immoTotal"
              name="immoTotal"
-             ng-model="immo.total">
+             ng-value="immo.total | currency:'€':'0'" disabled>
     </div>
   </div>
 

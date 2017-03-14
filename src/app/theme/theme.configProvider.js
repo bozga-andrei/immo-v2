@@ -9,7 +9,7 @@
     default: '#ffffff',
     defaultText: '#666666',
     border: '#dddddd',
-    borderDark: '#aaaaaa',
+    borderDark: '#aaaaaa'
   };
 
   // main functional color scheme

@@ -36,9 +36,9 @@
     if($scope.immo.total){
       //Calculate personal Contribution
       if ($scope.immo.isPublicSale) {
-        $scope.fin.personalContribution = $scope.immo.registrationTaxPublicSale + $scope.immo.variousFees;
+        $scope.fin.personalContribution = Number(($scope.immo.registrationTaxPublicSale + $scope.immo.variousFees).toFixed(0));
       } else {
-        $scope.fin.personalContribution = $scope.immo.registrationTax + $scope.immo.notaryHonorTTC + $scope.immo.variousFees;
+        $scope.fin.personalContribution = Number(($scope.immo.registrationTax + $scope.immo.notaryHonorTTC + $scope.immo.variousFees).toFixed(0));
       }
       if(!$scope.fin.personalContribution)
         $scope.fin.personalContribution = 0;
@@ -158,7 +158,7 @@
       };
 
       $log.debug("Total tax for the loan is: " + taxLoanAmount);
-      return taxLoanAmount;
+      return Number((taxLoanAmount).toFixed(0));
     }
 
     function getMonthlyRate(loanAmount, interestRateYear, loanDurationOnYears) {
