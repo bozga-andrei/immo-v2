@@ -13,6 +13,7 @@
     return {
       restrict: 'E',
       controller: 'EfficiencyChartsCtrl',
+      controllerAs: 'effChartsCtrl',
       templateUrl: 'app/pages/efficiency/charts/efficiencyCharts.html'
     };
   }

@@ -13,6 +13,7 @@
     return {
       restrict: 'E',
       controller: 'AcquisitionCtrl',
+      controllerAs: 'acqCtrl',
       templateUrl: 'app/pages/acquisition/acquisition.html'
     };
   }

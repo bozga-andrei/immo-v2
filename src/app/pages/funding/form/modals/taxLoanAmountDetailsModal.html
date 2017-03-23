@@ -1,0 +1,51 @@
+<!-- Frais d’acte sur emprunt hypothécaire -->
+<div class="modal-content">
+  <div class="modal-header bg-info">
+    <button type="button" class="close" ng-click="$dismiss()" aria-label="Close">
+      <em class="ion-ios-close-empty sn-link-close"></em>
+    </button>
+    <h4 class="" id="taxAllowance75ModalLabel"><i class="ion-information-circled modal-icon"></i> Frais d’acte sur
+      emprunt hypothécaire</h4>
+  </div>
+  <div class="modal-body">
+    <article class="text-justify">
+      Capital emprunté = {{funCtrl.fin.loanAmount | currency:'€':0}} <br>
+      Le principe de base pour calculer les coûts = capital emprunté + accessoires(10%) = {{funCtrl.fin.loanAmount *
+      1.10 | currency:'€':0}} <br>
+      <br>
+      <ul>
+        <li>Droits d'enregistrement(1%) = {{funCtrl.fin.loanRegistrationTax | currency:'€':0}}.</li>
+        <li>Droits d'inscription hypothécaire(*) = {{funCtrl.fin.mortgageRegistration | currency:'€':0}}</li>
+        <li>Salaire du Conservateur sur l'inscription de votre hypothèque = {{funCtrl.fin.conservativeSalary |
+          currency:'€':0}}
+        </li>
+        <li>Honoraires du notaire TVAC = {{funCtrl.fin.loanRegistrationNotaryFees | currency:'€':0}}</li>
+        <li>Frais de dossier (acquises par la banque) = {{funCtrl.fin.loanVariousFees | currency:'€':0}} (**)</li>
+        <li><strong>Total des frais = {{funCtrl.fin.taxLoanAmount | currency:'€':0}}</strong></li>
+      </ul>
+      <hr>
+      <span>
+          (*)
+          Le droit d'inscription hypothécaire est une taxe virée directement
+          à l'État par le notaire, lors de l'inscription de l'acte à la
+          conservation des hypothèques. Le droit est fixé à 0.30 % et il est
+          calculé sur le montant du capital et des accessoires, comme le droit d'enregistrement.
+          <br>
+      </span>
+      <span>(**) montant moyen</span>
+
+      <hr>
+
+      <fusioncharts
+        width="100%"
+        height="400"
+        type="pie2d"
+        dataFormat="json"
+        dataSource="{{funCtrl.taxLoanAmountDataSource}}">
+      </fusioncharts>
+    </article>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-info" ng-click="$dismiss()">Fermer</button>
+  </div>
+</div>

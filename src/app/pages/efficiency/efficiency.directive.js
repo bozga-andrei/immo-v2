@@ -13,6 +13,7 @@
     return {
       restrict: 'E',
       controller: 'EfficiencyCtrl',
+      controllerAs: 'effCtrl',
       templateUrl: 'app/pages/efficiency/efficiency.html'
     };
   }

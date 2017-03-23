@@ -15,7 +15,7 @@
           url: '/efficiency',
           templateUrl: 'app/pages/efficiency/efficiency.html',
           controller: 'EfficiencyCtrl',
-          controllerAs: 'vm',
+          controllerAs: 'effCtrl',
           title: 'Investissement',
           sidebarMeta: {
             icon: 'ion-arrow-graph-up-right',

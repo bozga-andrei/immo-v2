@@ -1,0 +1,26 @@
+<!-- Détails frais de la vente public -->
+<div class="modal-content">
+  <div class="modal-header bg-info">
+    <button type="button" class="close" ng-click="$dismiss()" aria-label="Close">
+      <em class="ion-ios-close-empty sn-link-close"></em>
+    </button>
+    <h4 class="" id="taxAllowance75ModalLabel"><i class="ion-information-circled modal-icon"></i> Détails frais de la vente public</h4>
+  </div>
+  <div class="modal-body">
+    <article class="text-justify">
+      Le pourcentage des frais englobe:
+      <ul>
+        <li>Droits d’enregistrement: {{acqCtrl.immo.registrationFeePercentage * 100}}%</li>
+        <li>Les honoraires du notaire (entre 1 et 3% suivant le prix offert)</li>
+        <li>Les honoraires du conservateur des hypothèques (calculé sur base d’un tarif légal, de
+          l’ordre de 250 €)
+        </li>
+        <li>Les frais du procès-verbal d’attribution du prix de vente aux différents créanciers</li>
+        <li>Les frais de publicité pour la vente publique.</li>
+      </ul>
+    </article>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-info" ng-click="$dismiss()">Fermer</button>
+  </div>
+</div>

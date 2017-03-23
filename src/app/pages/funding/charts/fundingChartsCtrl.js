@@ -11,18 +11,18 @@
   /** @ngInject */
   function FundingChartsCtrl($scope, $log, baConfig, colorHelper) {
 
-    $scope.transparent = baConfig.theme.blur;
+    var funChartsCtrl = this;
+
+    funChartsCtrl.fin = $scope.funCtrl.fin;
+
+    funChartsCtrl.transparent = baConfig.theme.blur;
     var dashboardColors = baConfig.colors.dashboard;
 
-    //updateChart();
 
     // Watch when fin object is changing
-    $scope.$watchCollection('fin',
+    $scope.$watchCollection('funChartsCtrl.fin',
       function (newVal, oldVal) {
-        /*if(!newVal || angular.equals(newVal, oldVal)){
-         return; // simply skip that
-         }*/
-        if ($scope.fin.taxLoanAmount) {
+        if (funChartsCtrl.fin.taxLoanAmount) {
           updateChart();
         }
       },
@@ -31,23 +31,23 @@
 
 
     function updateChart() {
-      var loanRegistrationTaxPercentage = ($scope.fin.loanRegistrationTax * (100 / $scope.fin.taxLoanAmount));
-      var mortgageRegistrationPercentage = ($scope.fin.mortgageRegistration * (100 / $scope.fin.taxLoanAmount));
-      var conservativeSalaryPercentage = ($scope.fin.conservativeSalary * (100 / $scope.fin.taxLoanAmount));
-      var loanNotaryFeesPercentage = ($scope.fin.loanNotaryFees * (100 / $scope.fin.taxLoanAmount));
-      var loanVariousFeesPercentage = ($scope.fin.loanVariousFees * (100 / $scope.fin.taxLoanAmount));
+      var loanRegistrationTaxPercentage = (funChartsCtrl.fin.loanRegistrationTax * (100 / funChartsCtrl.fin.taxLoanAmount));
+      var mortgageRegistrationPercentage = (funChartsCtrl.fin.mortgageRegistration * (100 / funChartsCtrl.fin.taxLoanAmount));
+      var conservativeSalaryPercentage = (funChartsCtrl.fin.conservativeSalary * (100 / funChartsCtrl.fin.taxLoanAmount));
+      var loanNotaryFeesPercentage = (funChartsCtrl.fin.loanRegistrationNotaryFees * (100 / funChartsCtrl.fin.taxLoanAmount));
+      var loanVariousFeesPercentage = (funChartsCtrl.fin.loanVariousFees * (100 / funChartsCtrl.fin.taxLoanAmount));
 
-      $scope.doughnutData = {
+      funChartsCtrl.doughnutData = {
         labels: [
           "Droits d'enregistrement(1%)",
-          "Droits d'inscription hypothécair",
+          "Droits d'inscription hypothécaire",
           "Salaire du Conservateur",
           "Honoraires du notaire TVAC",
           "Frais de dossier (acquises par la banque)"
         ],
         datasets: [
           {
-            data: [$scope.fin.loanRegistrationTax, $scope.fin.mortgageRegistration, $scope.fin.conservativeSalary, $scope.fin.loanNotaryFees, $scope.fin.loanVariousFees],
+            data: [funChartsCtrl.fin.loanRegistrationTax, funChartsCtrl.fin.mortgageRegistration, funChartsCtrl.fin.conservativeSalary, funChartsCtrl.fin.loanRegistrationNotaryFees, funChartsCtrl.fin.loanVariousFees],
             backgroundColor: [
               dashboardColors.white,
               dashboardColors.blueStone,
@@ -70,7 +70,7 @@
       var ctx = document.getElementById('chart-area').getContext('2d');
       window.myDoughnut = new Chart(ctx, {
         type: 'doughnut',
-        data: $scope.doughnutData,
+        data: funChartsCtrl.doughnutData,
         options: {
           cutoutPercentage: 64,
           responsive: true,

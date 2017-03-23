@@ -1,7 +1,7 @@
-<form name="acquisitionCostForm" id="acquisitionCostForm" novalidate>
+<form name="fundingForm" id="fundingForm" novalidate>
 
   <!-- Total coût d'achat: -->
-  <div class="form-group" ng-if="immo.total">
+  <div class="form-group" ng-if="funCtrl.immo.total">
     <label>Total coût d'achat:</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
@@ -10,29 +10,34 @@
              placeholder=""
              id="immoTotal"
              name="immoTotal"
-             ng-value="immo.total | currency:'€':'0'" disabled>
+             ng-value="funCtrl.immo.total | currency:'€':'0'" disabled>
     </div>
   </div>
 
   <!-- Apport personnel -->
-  <div class="form-group" ng-if="immo.total">
+  <div class="form-group" ng-if="funCtrl.immo.total">
     <label>Apport personnel</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
              step="1000"
              min="0"
-             max="{{immo.total}}"
+             ng-max="{{funCtrl.immo.total}}"
              class="form-control with-success-addon"
              placeholder=""
              id="personalContribution"
              name="personalContribution"
-             ng-model="fin.personalContribution">
+             ng-model="funCtrl.fin.personalContribution">
     </div>
-    <span ng-if="immo.total && !immo.isPublicSale" class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-          Droits d'enregistrment({{immo.registrationTax | currency:'€':0}}) + Honoraires notariaux({{immo.notaryHonorTTC | currency:'€':0}}) + Frais divers({{immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{fin.taxLoanAmount | currency:'€':0}})</span>
-    <span ng-if="immo.total && immo.isPublicSale" class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-          Frais de la vente publique({{immo.registrationTaxPublicSale | currency:'€':0}}) + Frais divers({{immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{fin.taxLoanAmount | currency:'€':0}}) </span>
+    <span ng-if="funCtrl.immo.total && !funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+          Droits d'enregistrment({{funCtrl.immo.registrationTax | currency:'€':0}}) + Honoraires notariaux({{funCtrl.immo.notaryHonorTTC | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}})</span>
+    <span ng-if="funCtrl.immo.total && funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+          Frais de la vente publique({{funCtrl.immo.registrationTaxPublicSale | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}}) </span>
+    <div ng-show="fundingForm.$submitted || fundingForm.personalContribution.$touched">
+      <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$error.max">
+        <span class="text-danger"> L'apport personnel ne peut pas être plus grand que le coût d'achat!</span>
+      </div>
+    </div>
   </div>
 
   <!-- Capital à emprunter -->
@@ -45,7 +50,7 @@
              placeholder=""
              id="loanAmount"
              name="loanAmount"
-             ng-model="fin.loanAmount">
+             ng-model="funCtrl.fin.loanAmount">
     </div>
   </div>
 
@@ -53,7 +58,7 @@
   <div class="form-group">
     <label>Frais d’acte sur emprunt hypothécaire
       <!-- Button trigger modal -->
-      <a data-toggle="modal" role="button" data-target="#taxLoanAmountDetailsModal"
+      <a data-toggle="modal" role="button" ng-click="funCtrl.open('app/pages/funding/form/modals/taxLoanAmountDetailsModal.html')"
          style="color:blue;">
         <span class="glyphicon glyphicon-question-sign"></span>
       </a>
@@ -65,7 +70,7 @@
              placeholder=""
              id="taxLoanAmount"
              name="taxLoanAmount"
-             ng-value="fin.taxLoanAmount | currency:'€':0"
+             ng-value="funCtrl.fin.taxLoanAmount | currency:'€':0"
              disabled>
     </div>
   </div>
@@ -83,7 +88,7 @@
              placeholder=""
              id="interestRateYear"
              name="interestRateYear"
-             ng-model="fin.interestRateYear">
+             ng-model="funCtrl.fin.interestRateYear">
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
           Indiquez le taux d'intérêt annuel, hors assurance</span>
@@ -99,7 +104,7 @@
            placeholder=""
            id="termLoan"
            name="termLoan"
-           ng-model="fin.loanDurationOnYears">
+           ng-model="funCtrl.fin.loanDurationOnYears">
     <p class="help-block text-danger"></p>
   </div>
   <div class="form-group">
@@ -109,7 +114,7 @@
                   grid="true"
                   min="1"
                   max="40"
-                  from="fin.loanDurationOnYears"
+                  from="funCtrl.fin.loanDurationOnYears"
                   on-change='rangeChangeCallback'
                   on-finish='rangeChangeCallback'
                   disable="false">
@@ -130,7 +135,7 @@
              placeholder=""
              id="insuranceLoan"
              name="insuranceLoan"
-             ng-model="fin.insuranceLoan">
+             ng-model="funCtrl.fin.insuranceLoan">
     </div>
   </div>
 
@@ -142,7 +147,7 @@
            placeholder=""
            id="monthlyPayments"
            name="monthlyPayments"
-           ng-value="fin.monthlyPayments | currency : '€': 0"
+           ng-value="funCtrl.fin.monthlyPayments | currency : '€': 0"
            readonly>
   </div>
 
@@ -160,14 +165,14 @@
            placeholder=""
            id="monthlyPaymentsWithInsurance"
            name="monthlyPaymentsWithInsurance"
-           ng-value="fin.monthlyPaymentsWithInsurance | currency:'€':0"
+           ng-value="funCtrl.fin.monthlyPaymentsWithInsurance | currency:'€':0"
            readonly>
     <p class="help-block text-danger"></p>
     <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
-          Coût des intérêts: {{fin.totalLoanInterest | currency:'€':0}} |
-          Coût de l'assurance:{{fin.totalLoanInsurance | currency:'€':0}} |
-          Coût total:{{fin.totalLoanInterestAndInsurance | currency:'€':0}}
+          Coût des intérêts: {{funCtrl.fin.totalLoanInterest | currency:'€':0}} |
+          Coût de l'assurance:{{funCtrl.fin.totalLoanInsurance | currency:'€':0}} |
+          Coût total:{{funCtrl.fin.totalLoanInterestAndInsurance | currency:'€':0}}
       </span>
   </div>
 
@@ -196,58 +201,5 @@
   </div>
 </div>
 
-
-<!-- Frais d’acte sur emprunt hypothécaire -->
-<div class="modal fade" id="taxLoanAmountDetailsModal" tabindex="-1" role="dialog"
-     aria-labelledby="taxLoanAmountDetailsLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="taxLoanAmountDetailsLabel">Frais d’acte sur emprunt hypothécaire</h4>
-      </div>
-      <div class="modal-body">
-        <article class="text-justify">
-          Capital emprunté = {{fin.loanAmount | currency:'€':0}} <br>
-          Le principe de base pour calculer les coûts = capital emprunté + accessoires(10%) = {{fin.loanAmount * 1.10 | currency:'€':0}} <br>
-          <br>
-          <ul>
-            <li>Droits d'enregistrement(1%) = {{fin.loanRegistrationTax | currency:'€':0}}.</li>
-            <li>Droits d'inscription hypothécaire(*) = {{fin.mortgageRegistration | currency:'€':0}}</li>
-            <li>Salaire du Conservateur sur l'inscription de votre hypothèque = {{fin.conservativeSalary | currency:'€':0}}
-            </li>
-            <li>Honoraires du notaire TVAC = {{fin.loanNotaryFees | currency:'€':0}}</li>
-            <li>Frais de dossier (acquises par la banque) = {{fin.loanVariousFees | currency:'€':0}} (**)</li>
-            <li><strong>Total des frais = {{fin.taxLoanAmount | currency:'€':0}}</strong></li>
-          </ul>
-          <hr>
-          <span>
-                (*)
-                Le droit d'inscription hypothécaire est une taxe virée directement
-                à l'État par le notaire, lors de l'inscription de l'acte à la
-                conservation des hypothèques. Le droit est fixé à 0.30 % et il est
-                calculé sur le montant du capital et des accessoires, comme le droit d'enregistrement.
-                <br>
-            </span>
-          <span>(**) montant moyen</span>
-
-          <hr>
-
-          <fusioncharts
-            width="100%"
-            height="400"
-            type="pie2d"
-            dataFormat="json"
-            dataSource="{{taxLoanAmountDataSource}}">
-          </fusioncharts>
-        </article>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 

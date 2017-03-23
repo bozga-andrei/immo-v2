@@ -13,6 +13,7 @@
     return {
       restrict: 'E',
       controller: 'FundingCtrl',
+      controllerAs: 'funCtrl',
       templateUrl: 'app/pages/funding/funding.html'
     };
   }

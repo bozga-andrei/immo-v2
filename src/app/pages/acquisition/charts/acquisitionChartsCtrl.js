@@ -11,16 +11,16 @@
   /** @ngInject */
   function AcquisitionChartsCtrl($scope, $log, baConfig, colorHelper) {
 
-    var vm = this;
+    var acqChartsCtrl = this;
 
-    vm.immo = $scope.acqCtrl.immo;
+    acqChartsCtrl.immo = $scope.acqCtrl.immo;
 
-    vm.transparent = baConfig.theme.blur;
+    acqChartsCtrl.transparent = baConfig.theme.blur;
     var dashboardColors = baConfig.colors.dashboard;
 
     // Watch when fin object is changing
     $scope.$watchCollection(angular.bind(this, function () {
-        return vm.immo;
+        return acqChartsCtrl.immo;
       }), function (newVal, oldVal) {
         if (!newVal || !newVal.total) {
           return; // simply skip that
@@ -32,14 +32,14 @@
 
 
     function updateChart() {
-      var renovationPrice = !vm.immo.renovationPrice ? 0 : vm.immo.renovationPrice;
+      var renovationPrice = !acqChartsCtrl.immo.renovationPrice ? 0 : acqChartsCtrl.immo.renovationPrice;
 
-      var pricePercentage = (vm.immo.price * (100 / vm.immo.total)),
-        renovationPricePercentage = (renovationPrice * (100 / vm.immo.total)),
-        registrationTaxPricePercentage = (vm.immo.registrationTax * (100 / vm.immo.total)),
-        variousFeesPercentage = (vm.immo.variousFees * (100 / vm.immo.total));
+      var pricePercentage = (acqChartsCtrl.immo.price * (100 / acqChartsCtrl.immo.total)),
+        renovationPricePercentage = (renovationPrice * (100 / acqChartsCtrl.immo.total)),
+        registrationTaxPricePercentage = (acqChartsCtrl.immo.registrationTax * (100 / acqChartsCtrl.immo.total)),
+        variousFeesPercentage = (acqChartsCtrl.immo.variousFees * (100 / acqChartsCtrl.immo.total));
 
-      vm.doughnutData = {
+      acqChartsCtrl.doughnutData = {
         labels: [
           "Prix",
           "Montant des Travaux",
@@ -48,7 +48,7 @@
         ],
         datasets: [
           {
-            data: [vm.immo.price, vm.immo.renovationPrice, vm.immo.registrationTax, vm.immo.variousFees],
+            data: [acqChartsCtrl.immo.price, acqChartsCtrl.immo.renovationPrice, acqChartsCtrl.immo.registrationTax, acqChartsCtrl.immo.variousFees],
             backgroundColor: [
               dashboardColors.white,
               dashboardColors.blueStone,
@@ -69,7 +69,7 @@
       var ctx = document.getElementById('chart-area').getContext('2d');
       window.myDoughnut = new Chart(ctx, {
         type: 'doughnut',
-        data: vm.doughnutData,
+        data: acqChartsCtrl.doughnutData,
         options: {
           cutoutPercentage: 64,
           responsive: true,

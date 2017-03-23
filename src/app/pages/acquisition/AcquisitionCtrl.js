@@ -9,7 +9,7 @@
       .controller('AcquisitionCtrl', AcquisitionCtrl);
 
   /** @ngInject */
-  function AcquisitionCtrl($scope, $log, Acquisition, Funding) {
+  function AcquisitionCtrl($scope, $uibModal, $log, Acquisition, Funding) {
 
     var acqCtrl = this;
 
@@ -62,16 +62,16 @@
       function (newVal, oldVal) {
 
         //Check if the selected taxAllowanceSum is 175000 and price under 500.000€
-        if (acqCtrl.immo.taxAllowanceSum == 175000 && newVal.price > 500000) {
+        if (acqCtrl.immo.taxAllowanceSum === 175000 && newVal.price > 500000) {
           //Tax allowance is not accorded for a price higher than 500.000€
           acqCtrl.immo.registrationTax = Number((newVal.price * acqCtrl.immo.registrationFeePercentage).toFixed(0));
         } else {
           if (newVal.price > acqCtrl.immo.taxAllowanceSum) {
             var reducedPrice = newVal.price - acqCtrl.immo.taxAllowanceSum;
-            //The reduced tax is relevant only for a price under 161.438€, after that sum the normal tax rate is applicable.
-            if ((acqCtrl.immo.registrationFeePercentage == acqCtrl.FLANDERS_REDUCED_TAX_RATE ||
-              acqCtrl.immo.registrationFeePercentage == acqCtrl.WALLONIA_REDUCED_TAX_RATE) && newVal.price > 161438.00) {
-              var regionTax = acqCtrl.immo.registrationFeePercentage == acqCtrl.WALLONIA_REDUCED_TAX_RATE ? 0.125 : 0.100;
+            //In Wallonia and Flanders the reduced tax is relevant only for a price under 161.438€, after that sum the normal tax rate is applicable.
+            if ((acqCtrl.immo.registrationFeePercentage === acqCtrl.FLANDERS_REDUCED_TAX_RATE ||
+              acqCtrl.immo.registrationFeePercentage === acqCtrl.WALLONIA_REDUCED_TAX_RATE) && newVal.price > 161438.00) {
+              var regionTax = acqCtrl.immo.registrationFeePercentage === acqCtrl.WALLONIA_REDUCED_TAX_RATE ? 0.125 : 0.100;
               acqCtrl.immo.registrationTax = Number(((161438.00 * acqCtrl.immo.registrationFeePercentage) + ((newVal.price - 161438.00) * regionTax)).toFixed(0));
             } else {
               acqCtrl.immo.registrationTax = Number((reducedPrice * acqCtrl.immo.registrationFeePercentage).toFixed(0));
@@ -144,6 +144,19 @@
       true
     );
 
+    acqCtrl.open = function (page, size) {
+      $uibModal.open({
+        animation: true,
+        templateUrl: page,
+        size: size,
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+    };
+
 
     function getTotalImmoAmount() {
       var total;
@@ -161,31 +174,6 @@
       return total
     }
 
-
-    function getMonthlyRate(loanAmount, interestRateYear, loanDurationOnYears) {
-      //$log.debug("Calculate monthly rate: loanAmount[" + loanAmount + "] interestRateYear[" + interestRateYear + "] loanDurationOnYears[" + loanDurationOnYears + "]");
-      /*
-       * m : mensualité
-       * K : loanAmount
-       * t : interestRateYear
-       * n : nbrOfMonths
-       *
-       * m = [(K*t)/12] / [1-(1+(t/12))^-n]
-       */
-
-      var interest = interestRateYear / 100 / 12;
-      var payments = loanDurationOnYears * 12;
-      var x = Math.pow(1 + interest, payments);
-      var monthly = (loanAmount * x * interest) / (x - 1);
-
-      acqCtrl.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
-
-
-      //$log.debug("Return: " + monthly);
-      return parseInt((monthly + 0.005) * 100) / 100;
-
-    }
-
     /**
      * Calculate the barometric notarial honorary
      * @param immoPrice
@@ -199,20 +187,15 @@
 
       if (immoPrice > 7500.00) {
         honorary = honorary + (Math.min(immoPrice, 17500.00) - 7500.00) * 2.85 / 100;
-      }
-      if (immoPrice > 17500.00) {
+      } else if (immoPrice > 17500.00) {
         honorary = honorary + (Math.min(immoPrice, 30000.00) - 17500.00) * 2.28 / 100;
-      }
-      if (immoPrice > 30000.00) {
+      } else if (immoPrice > 30000.00) {
         honorary = honorary + (Math.min(immoPrice, 45495.00) - 30000.00) * 1.71 / 100;
-      }
-      if (immoPrice > 45495.00) {
+      } else if (immoPrice > 45495.00) {
         honorary = honorary + (Math.min(immoPrice, 64095.00) - 45495.00) * 1.14 / 100;
-      }
-      if (immoPrice > 64095.00) {
+      } else if (immoPrice > 64095.00) {
         honorary = honorary + (Math.min(immoPrice, 250095.00) - 64095.00) * 0.57 / 100;
-      }
-      if (immoPrice > 250095.00) {
+      } else if (immoPrice > 250095.00) {
         honorary = honorary + (immoPrice - 250095.00) * 0.057 / 100;
       }
 
@@ -294,70 +277,5 @@
       return amountOfTax;
     }
 
-
-    /**
-     * Loan registration tax representing 1% of the total loan amount with accessory of 10%
-     * @param loanAmountWithAccessory
-     * @returns {number}
-     */
-    function getLoanRegistrationTax(loanAmountWithAccessory) {
-
-      return Number((loanAmountWithAccessory * 0.01).toFixed(0));
-    }
-
-    /**
-     * Calculate the notary fees as defined by the law, based on the principal loan without accessory asked by the bank of 10%
-     * @param loan : int => the principal loan
-     * @returns {Number} notary fee TVAC
-     */
-    function getNotaryFeesForLoanTVAC(loan) {
-
-      //$log.debug("Get Notary fees TVAC for " + loan);
-
-      var notaryFees = Math.min(loan, 7500.00) * 1.425 / 100;
-
-      if (loan > 7500.00) {
-        notaryFees = notaryFees + (Math.min(loan, 17500.00) - 7500.00 ) * 1.14 / 100;
-      }
-      if (loan > 17500.00) {
-        notaryFees = notaryFees + (Math.min(loan, 30000.00) - 17500.00 ) * 0.684 / 100;
-      }
-      if (loan > 30000.00) {
-        notaryFees = notaryFees + (Math.min(loan, 45495.00) - 30000.00 ) * 0.57 / 100;
-      }
-      if (loan > 45495.00) {
-        notaryFees = notaryFees + (Math.min(loan, 64095.00) - 45495.00 ) * 0.456 / 100;
-      }
-      if (loan > 64095.00) {
-        notaryFees = notaryFees + (Math.min(loan, 250095.00) - 64095.00 ) * 0.228 / 100;
-      }
-      if (loan > 250095.00) {
-        notaryFees = notaryFees + (loan - 250095.00 ) * 0.0456 / 100;
-      }
-      notaryFees = Math.max(notaryFees, 8.48);
-      //Add TVA
-      notaryFees = notaryFees * TVA;
-      acqCtrl.fin.loanNotaryFees = notaryFees;
-
-      //$log.debug("Return notary fees " + notaryFees);
-
-      return parseInt(notaryFees);
-    }
-
-
-    /**
-     * Get conservative's salary. Is the remuneration of the Conservative of mortgages
-     * @param loanWithAccessory
-     * @returns {Number}
-     */
-    function getConservativeSalary(loanWithAccessory) {
-      var salary = 0;
-      if (loanWithAccessory <= 25000.00) {
-        salary = 58.55;
-      } else {
-        salary = (parseInt(((loanWithAccessory - 25000) / 25000) + 1) * 20.5) + 58.55;
-      }
-      return parseInt(salary);
-    }
   }
 })();

@@ -19,7 +19,7 @@
     };
 
     function saveEfficiency(obj) {
-      //$log.debug("Save immo object: ", obj);
+      //$log.debug("Save efficiency object: ", obj);
       efficiency = obj;
     }
 

@@ -15,7 +15,7 @@
           url: '/funding',
           templateUrl: 'app/pages/funding/funding.html',
           controller: 'FundingCtrl',
-          controllerAs: 'vm',
+          controllerAs: 'funCtrl',
           title: 'Financement',
           sidebarMeta: {
             icon: 'ion-social-euro-outline',

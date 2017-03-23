@@ -11,27 +11,47 @@
   /** @ngInject */
   function EfficiencyCtrl($scope, $timeout, $log, Acquisition, Funding, Efficiency) {
 
+    var effCtrl = this;
+
     //Immo
-    $scope.immo = Acquisition.getImmo();
+    effCtrl.immo = Acquisition.getImmo();
 
     //Funding
-    $scope.fin = Funding.getFunding();
+    effCtrl.fin = Funding.getFunding();
 
-    $scope.efficiency = {};
-    $scope.efficiency.prepaidExpenses = 0;
+    effCtrl.efficiency = {};
+    effCtrl.efficiency.monthlyRent;
+    effCtrl.immo.isElevator = false;
+    effCtrl.efficiency.maintenance = 0;
+    effCtrl.efficiency.prepaidExpenses = 0;
+    effCtrl.efficiency.insurance = 0;
+    effCtrl.efficiency.annualLoanInsurance = 0;
+
+    effCtrl.efficiency.totalIncoming = 0;
 
 
-    $scope.taxLoanAmountDataSource = {};
+    if(effCtrl.immo.total){
+      effCtrl.efficiency.investAmount = effCtrl.immo.total;
+    }
+
+    if(effCtrl.fin.totalLoanInsurance && effCtrl.fin.totalLoanInsurance > 0){
+      effCtrl.efficiency.annualLoanInsurance = effCtrl.fin.totalLoanInsurance * 12;
+    }
 
 
     // Watch when investment object is changing
-    $scope.$watchCollection('efficiency',
-      function (newVal, oldVal) {
-        $log.debug("efficiency.monthlyRent is set to : [" + $scope.efficiency.monthlyRent + "]");
-        if (newVal.monthlyRent >= 0) {
-          var monthlyRent = newVal.monthlyRent * 12;
-          $scope.efficiency.profitabilityNet = getNetEfficiency(monthlyRent);
+    $scope.$watchCollection('effCtrl.efficiency',
+      function (newEff, oldEff) {
+        if(!newEff || angular.equals(newEff, oldEff)){
+          return; // simply skip that
         }
+
+        if (newEff.monthlyRent >= 0) {
+          var monthlyRent = newEff.monthlyRent * 12;
+          effCtrl.efficiency.totalIncoming = monthlyRent + (effCtrl.efficiency.prepaidExpenses * 12);
+          effCtrl.efficiency.profitabilityNet = getNetEfficiency(monthlyRent);
+        }
+        Efficiency.saveEfficiency(effCtrl.efficiency);
       },
       true
     );
@@ -39,11 +59,11 @@
     //Watch when monthlyRent is changing and update the surface maintenance
     $scope.$watch(
       function () {
-        return $scope.efficiency.monthlyRent;
+        return effCtrl.efficiency.monthlyRent;
       },
       function (newVal, oldVal) {
         if (newVal) {
-          $scope.efficiency.maintenance = (newVal * 0.04); // 4%/year of the monthly rate
+          effCtrl.efficiency.maintenance = (newVal * 0.04); // 4%/year of the monthly rate
         }
       },
       true
@@ -52,12 +72,12 @@
     //Watch when immo.area is changing and update the efficiency.insurance
     $scope.$watch(
       function () {
-        return $scope.immo.area;
+        return effCtrl.immo.area;
       },
       function (newVal, oldVal) {
         if (newVal) {
-          $scope.efficiency.insurance = (newVal * 1.5);//TODO correction with the appropriate value
-          Acquisition.saveImmo($scope.immo)
+          effCtrl.efficiency.insurance = (newVal * 1.5);//TODO correction with the appropriate value
+          Acquisition.saveImmo(effCtrl.immo)
         }
       },
       true
@@ -65,9 +85,9 @@
 
 
     function getNetEfficiency(rent) {
-      var costs = $scope.efficiency.maintenance - $scope.fin.totalLoanInsurance - $scope.efficiency.insurance;
+      var costs = effCtrl.efficiency.maintenance + (effCtrl.fin.totalLoanInsurance || 0) + (effCtrl.efficiency.insurance || 0);
 
-      return ((((rent - costs) + ($scope.efficiency.prepaidExpenses * 12)) / $scope.immo.total) * 100);
+      return ((((rent - costs) + (effCtrl.efficiency.prepaidExpenses * 12)) / effCtrl.efficiency.investAmount) * 100);
 
     }
 

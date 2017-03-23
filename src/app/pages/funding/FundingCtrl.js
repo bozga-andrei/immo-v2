@@ -9,79 +9,93 @@
       .controller('FundingCtrl', FundingCtrl);
 
   /** @ngInject */
-  function FundingCtrl($scope, $timeout, $log, Acquisition, Funding) {
+  function FundingCtrl($scope, $uibModal, $log, Acquisition, Funding) {
 
+    var funCtrl = this;
 
     var TVA = 1.21;
 
     //Immo
-    $scope.immo = Acquisition.getImmo();
+    funCtrl.immo = Acquisition.getImmo();
 
 
     //Funding
-    $scope.fin = {};
-    $scope.fin.interestRateYear = 2.0;
-    $scope.fin.loanDurationOnYears = 20;
-    $scope.fin.insuranceLoan = 0.36;
-    $scope.fin.loanRegistrationTax = 0;
-    $scope.fin.conservativeSalary = 0;
-    $scope.fin.loanVariousFees = 300;
-    $scope.fin.loanNotaryFees = 0;
-    $scope.fin.monthlyPaymentsWithInsurance = 0;
-    $scope.fin.totalLoanInterest = 0;
-    $scope.fin.totalLoanInsurance = 0;
-    $scope.fin.totalLoanIterest = 0;
-    $scope.taxLoanAmountDataSource = {};
+    funCtrl.fin = {};
+    funCtrl.fin.interestRateYear = 2.0;
+    funCtrl.fin.loanDurationOnYears = 20;
+    funCtrl.fin.insuranceLoan = 0.36;
+    funCtrl.fin.loanRegistrationTax = 0;
+    funCtrl.fin.conservativeSalary = 0;
+    funCtrl.fin.loanVariousFees = 300;
+    funCtrl.fin.loanNotaryFees = 0;
+    funCtrl.fin.monthlyPaymentsWithInsurance = 0;
+    funCtrl.fin.totalLoanInterest = 0;
+    funCtrl.fin.totalLoanInsurance = 0;
+    funCtrl.fin.totalLoanIterest = 0;
+    funCtrl.taxLoanAmountDataSource = {};
 
-    if($scope.immo.total){
+    //If is coming from Acquisition and immo.total is defined we can calculate the personal contribution, loan amount and tax on the loan amount
+    if(funCtrl.immo.total){
       //Calculate personal Contribution
-      if ($scope.immo.isPublicSale) {
-        $scope.fin.personalContribution = Number(($scope.immo.registrationTaxPublicSale + $scope.immo.variousFees).toFixed(0));
+      if (funCtrl.immo.isPublicSale) {
+        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTaxPublicSale + funCtrl.immo.variousFees).toFixed(0));
       } else {
-        $scope.fin.personalContribution = Number(($scope.immo.registrationTax + $scope.immo.notaryHonorTTC + $scope.immo.variousFees).toFixed(0));
+        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTax + funCtrl.immo.notaryHonorTTC + funCtrl.immo.variousFees).toFixed(0));
       }
-      if(!$scope.fin.personalContribution)
-        $scope.fin.personalContribution = 0;
+      if(!funCtrl.fin.personalContribution)
+        funCtrl.fin.personalContribution = 0;
       //Set loan amount to 0 if personal contribution are greater that total price
-      if($scope.immo.total > $scope.fin.personalContribution){
-        $scope.fin.loanAmount = $scope.immo.total - $scope.fin.personalContribution;
+      if(funCtrl.immo.total > funCtrl.fin.personalContribution){
+        funCtrl.fin.loanAmount = funCtrl.immo.total - funCtrl.fin.personalContribution;
       } else {
-        $scope.fin.loanAmount = 0;
+        funCtrl.fin.loanAmount = 0;
       }
 
-      if($scope.fin.loanAmount > 0){
-        $scope.fin.taxLoanAmount = getTaxLoanAmount($scope.fin.loanAmount);
-        $scope.fin.personalContribution = $scope.fin.personalContribution + $scope.fin.taxLoanAmount;
+      if(funCtrl.fin.loanAmount > 0){
+        funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
+        funCtrl.fin.personalContribution = funCtrl.fin.personalContribution + funCtrl.fin.taxLoanAmount;
       }
-      Funding.saveFunding($scope.fin);
+
+      //Get monthly payments amount
+      funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
+
+      //Calculate the insurance
+      funCtrl.fin.totalLoanInsurance = ((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount);
+
+      //Calculate insurance + payments monthly
+      funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.totalLoanInsurance;
+
+      //Calculate total interests + insurance
+      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest;
+      Funding.saveFunding(funCtrl.fin);
     }
 
 
     // Watch when fin object is changing
-    $scope.$watchCollection('fin',
-      function (newVal, oldVal) {
-        if(!newVal || angular.equals(newVal, oldVal)){
+    $scope.$watchCollection('funCtrl.fin',
+      function (newFin, oldFin) {
+        if(!newFin || angular.equals(newFin, oldFin)){
           return; // simply skip that
         }
 
-        if($scope.fin.loanAmount > 0){
+        if(funCtrl.fin.loanAmount >= 0){
           //Calculate the total fees for the Loan: (Registration fees, Notarial fees, and divers fees)
-          $scope.fin.taxLoanAmount = getTaxLoanAmount($scope.fin.loanAmount);
+          funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
 
           //Get monthly payments amount
-          $scope.fin.monthlyPayments = getMonthlyRate($scope.fin.loanAmount, $scope.fin.interestRateYear, $scope.fin.loanDurationOnYears);
+          funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
 
           //Calculate the insurance
-          $scope.fin.totalLoanInsurance = (($scope.fin.insuranceLoan / 100) / 12 * $scope.fin.loanAmount);
+          funCtrl.fin.totalLoanInsurance = ((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount);
 
           //Calculate insurance + payments monthly
-          $scope.fin.monthlyPaymentsWithInsurance = $scope.fin.monthlyPayments + $scope.fin.totalLoanInsurance;
+          funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.totalLoanInsurance;
 
           //Calculate total interests + insurance
-          $scope.fin.totalLoanInterestAndInsurance = $scope.fin.totalLoanInsurance + $scope.fin.totalLoanInterest;
+          funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest;
         }
 
-        Funding.saveFunding($scope.fin);
+        Funding.saveFunding(funCtrl.fin);
       },
       true
     );
@@ -89,46 +103,63 @@
     //Watch when personalContribution is changing and update the loanAmount
     $scope.$watch(
       function () {
-        return $scope.fin.personalContribution;
+        return funCtrl.fin.personalContribution;
       },
       function (newVal, oldVal) {
-        if (newVal != oldVal) {
-          if ($scope.immo.total - newVal > 0) {
-            $scope.fin.loanAmount = ($scope.immo.total - newVal);
+        if (newVal !== oldVal) {
+          if (funCtrl.immo.total - newVal > 0) {
+            funCtrl.fin.loanAmount = (funCtrl.immo.total - newVal);
           } else {
-            $scope.fin.loanAmount = 0;
+            funCtrl.fin.loanAmount = 0;
           }
         }
       },
       true
     );
 
+    funCtrl.open = function (page, size) {
+      $uibModal.open({
+        animation: true,
+        templateUrl: page,
+        scope: $scope,
+        size: size,
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+    };
 
-    $scope.rangeChangeCallback = function(sliderObj){
+
+    funCtrl.rangeChangeCallback = function(sliderObj){
       var changedValue = sliderObj.from;
-      $scope.fin.loanDurationOnYears = sliderObj.from;
+      funCtrl.fin.loanDurationOnYears = sliderObj.from;
     };
 
 
     function getTaxLoanAmount(loanAmount) {
+      if(!loanAmount || loanAmount <= 0){
+        return 0;
+      }
       $log.debug("Calculate total tax for the loan amount");
       //Tax on loan amount is calculated on the loan amount + 10% accessories fees
       var loanAmountWithAccessoriesFess = loanAmount * 1.10;
       //Mortgage registration tax is fixed at 0.03% of loan amount with accessories fees
-      $scope.fin.mortgageRegistration = loanAmountWithAccessoriesFess * 0.003;
-      $scope.fin.conservativeSalary = getConservativeSalary(loanAmountWithAccessoriesFess);
+      funCtrl.fin.mortgageRegistration = loanAmountWithAccessoriesFess * 0.003;
+      funCtrl.fin.conservativeSalary = getConservativeSalary(loanAmountWithAccessoriesFess);
 
-      $scope.fin.loanRegistrationNotaryFees = getNotaryFeesForLoanTVAC(loanAmount);
-      $scope.fin.loanRegistrationTax = getLoanRegistrationTax(loanAmountWithAccessoriesFess);
+      funCtrl.fin.loanRegistrationNotaryFees = getNotaryFeesForLoanTVAC(loanAmount);
+      funCtrl.fin.loanRegistrationTax = getLoanRegistrationTax(loanAmountWithAccessoriesFess);
 
-      var taxLoanAmount =  $scope.fin.loanVariousFees +
-        $scope.fin.mortgageRegistration +
-        $scope.fin.conservativeSalary +
-        $scope.fin.loanRegistrationNotaryFees +
-        $scope.fin.loanRegistrationTax;
+      var taxLoanAmount =  funCtrl.fin.loanVariousFees +
+        funCtrl.fin.mortgageRegistration +
+        funCtrl.fin.conservativeSalary +
+        funCtrl.fin.loanRegistrationNotaryFees +
+        funCtrl.fin.loanRegistrationTax;
 
       //DataSource for fusioncharts that will be available on the modal 'taxLoanAmountDetailsModal'
-      $scope.taxLoanAmountDataSource = {
+      funCtrl.taxLoanAmountDataSource = {
         chart: {
           caption: "Répartitions des frais",
           subCaption: ""
@@ -136,23 +167,23 @@
         data: [
           {
             label: "Droits d'enregistrement",
-            value: parseInt($scope.fin.loanRegistrationTax)
+            value: parseInt(funCtrl.fin.loanRegistrationTax)
           },
           {
             label: "Droits d'inscription hypothécaire",
-            value: parseInt($scope.fin.mortgageRegistration)
+            value: parseInt(funCtrl.fin.mortgageRegistration)
           },
           {
             label: "Salaire du Conservateur",
-            value: parseInt($scope.fin.conservativeSalary)
+            value: parseInt(funCtrl.fin.conservativeSalary)
           },
           {
             label: "Honoraires du notaire",
-            value: parseInt($scope.fin.loanRegistrationNotaryFees)
+            value: parseInt(funCtrl.fin.loanRegistrationNotaryFees)
           },
           {
             label: "Frais de dossier",
-            value: parseInt($scope.fin.loanVariousFees)
+            value: parseInt(funCtrl.fin.loanVariousFees)
           }
         ]
       };
@@ -177,7 +208,7 @@
       var x = Math.pow(1 + interest, payments);
       var monthly = (loanAmount * x * interest) / (x - 1);
 
-      $scope.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
+      funCtrl.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
 
 
       $log.debug("Return: " + monthly);
@@ -202,6 +233,9 @@
      * @returns {Number} notary fee TVAC
      */
     function getNotaryFeesForLoanTVAC(loan) {
+      if(loan <= 0){
+        return 0;
+      }
 
       $log.debug("Get Notary fees TVAC for the amount of: " + loan);
 
@@ -228,7 +262,6 @@
       notaryFees = Math.max(notaryFees, 8.48);
       //Add TVA
       notaryFees = notaryFees * TVA;
-      $scope.fin.loanNotaryFees = notaryFees;
 
       $log.debug("Return notary fees " + notaryFees);
 

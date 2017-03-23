@@ -13,6 +13,7 @@
     return {
       restrict: 'E',
       controller: 'FundingChartsCtrl',
+      controllerAs: 'funChartsCtrl',
       templateUrl: 'app/pages/funding/charts/fundingCharts.html'
     };
   }
