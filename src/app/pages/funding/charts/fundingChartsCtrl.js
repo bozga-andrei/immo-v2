@@ -20,7 +20,7 @@
 
 
     // Watch when fin object is changing
-    $scope.$watchCollection('funChartsCtrl.fin',
+    $scope.$watchCollection('funChartsCtrl.fin.taxLoanAmount',
       function (newVal, oldVal) {
         if (funChartsCtrl.fin.taxLoanAmount) {
           updateChart();

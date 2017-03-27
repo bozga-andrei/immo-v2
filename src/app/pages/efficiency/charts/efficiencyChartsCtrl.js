@@ -42,7 +42,7 @@
         ],
         datasets: [
           {
-            data: [effChartsCtrl.efficiency.monthlyRent, effChartsCtrl.efficiency.prepaidExpenses],
+            data: [(effChartsCtrl.efficiency.monthlyRent * 12), (effChartsCtrl.efficiency.prepaidExpenses * 12)],
             backgroundColor: [
               dashboardColors.white,
               dashboardColors.blueStone

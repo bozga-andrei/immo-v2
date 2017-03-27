@@ -19,10 +19,8 @@
     var dashboardColors = baConfig.colors.dashboard;
 
     // Watch when fin object is changing
-    $scope.$watchCollection(angular.bind(this, function () {
-        return acqChartsCtrl.immo;
-      }), function (newVal, oldVal) {
-        if (!newVal || !newVal.total) {
+    $scope.$watchCollection('acqChartsCtrl.immo', function (newVal, oldVal) {
+        if (!newVal || !newVal.total || angular.equals(newVal.total, oldVal.total)) {
           return; // simply skip that
         }
         updateChart();
@@ -32,10 +30,9 @@
 
 
     function updateChart() {
-      var renovationPrice = !acqChartsCtrl.immo.renovationPrice ? 0 : acqChartsCtrl.immo.renovationPrice;
 
       var pricePercentage = (acqChartsCtrl.immo.price * (100 / acqChartsCtrl.immo.total)),
-        renovationPricePercentage = (renovationPrice * (100 / acqChartsCtrl.immo.total)),
+        renovationPricePercentage = ((acqChartsCtrl.immo.renovationPrice || 0) * (100 / acqChartsCtrl.immo.total)),
         registrationTaxPricePercentage = (acqChartsCtrl.immo.registrationTax * (100 / acqChartsCtrl.immo.total)),
         variousFeesPercentage = (acqChartsCtrl.immo.variousFees * (100 / acqChartsCtrl.immo.total));
 

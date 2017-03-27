@@ -46,6 +46,8 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
+             min="0"
+             step="10000"
              class="form-control with-success-addon"
              placeholder=""
              id="loanAmount"
@@ -137,6 +139,8 @@
              name="insuranceLoan"
              ng-model="funCtrl.fin.insuranceLoan">
     </div>
+    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+          Le montant mensuel de l'assurance vous est donnée à titre indicatif automatiquement. Modifier si nécessaire.</span>
   </div>
 
   <!-- Mensualités (hors assurance) -->
