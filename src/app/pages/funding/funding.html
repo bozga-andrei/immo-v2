@@ -23,7 +23,12 @@
     </div>
   </div>
   <div class="col-md-6">
-    <funding-charts></funding-charts>
+    <div
+      ba-panel
+      ba-panel-title="Total coût d'achat"
+      ba-panel-class="with-scroll" ng-show="funCtrl.fin.taxLoanAmount">
+      <funding-charts></funding-charts>
+    </div>
   </div>
 </div>
 

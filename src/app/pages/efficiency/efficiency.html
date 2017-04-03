@@ -23,7 +23,12 @@
     </div>
   </div>
   <div class="col-md-6">
-    <efficiency-charts></efficiency-charts>
+    <div
+      ba-panel
+      ba-panel-title="Loyer mensuel perçu"
+      ba-panel-class="with-scroll" ng-show="effCtrl.efficiency.profitabilityNet">
+      <efficiency-charts></efficiency-charts>
+    </div>
   </div>
 </div>
 

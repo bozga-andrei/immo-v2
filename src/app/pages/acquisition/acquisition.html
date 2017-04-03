@@ -23,7 +23,12 @@
     </div>
   </div>
   <div class="col-md-6">
-    <acquisition-charts></acquisition-charts>
+    <div
+      ba-panel
+      ba-panel-title="Total coût d'achat"
+      ba-panel-class="with-scroll" ng-show="acqCtrl.immo.total">
+      <acquisition-charts></acquisition-charts>
+    </div>
   </div>
 </div>
 

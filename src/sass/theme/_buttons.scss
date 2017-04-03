@@ -275,3 +275,9 @@ button.progress-button {
     transition: none;
   }
 }
+
+@media (max-width: $resM) {
+  .btn:hover {
+    transform: none;
+  }
+}

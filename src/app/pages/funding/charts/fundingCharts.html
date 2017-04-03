@@ -1,30 +1,25 @@
+<div class="col-xs-12">
+  <div id="pieChart" class="admin-chart"></div>
+</div>
 
-<div class="channels-block" ng-class="{'transparent': funChartsCtrl.transparent}" ng-show="funChartsCtrl.fin.taxLoanAmount">
-  <div class="chart-bg"></div>
-  <div class="traffic-chart" id="trafficChart">
-    <div class="canvas-holder">
-      <canvas id="chart-area" width="280" height="280"></canvas>
-      <div class="traffic-text">
-        <span ng-bind="funChartsCtrl.fin.taxLoanAmount | currency:'€':0"></span>
-        <span>Frais sur emprunt</span>
-      </div>
-    </div>
-  </div>
-
+<div class="col-xs-12">
   <div class="channels-info">
     <div>
-      <div class="channels-info-item" ng-repeat="label in funChartsCtrl.doughnutData.labels"
+      <div class="channels-info-item" ng-repeat="label in funChartsCtrl.legend.labels"
            ng-init="i = $index;">
-        <div class="legend-color" style="background-color: {{funChartsCtrl.doughnutData.datasets[0].backgroundColor[i]}}"></div>
-        <p>{{::label}}<span class="channel-number">+{{funChartsCtrl.doughnutData.datasets[0].percentage[i] | number:2}}%</span></p>
+        <div class="legend-color"
+             style="background-color: {{funChartsCtrl.legend.backgroundColor[i]}}"></div>
+        <p>{{::label}}<span class="channel-number">+{{funChartsCtrl.legend.percentage[i] | number:2}}%</span></p>
         <div class="progress progress-sm channel-progress">
           <div class="progress-bar " role="progressbar"
-               aria-valuenow="{{funChartsCtrl.doughnutData.datasets[0].percentage[i]}}" aria-valuemin="0" aria-valuemax="100"
-               style="width: {{funChartsCtrl.doughnutData.datasets[0].percentage[i]}}%">
+               aria-valuenow="{{funChartsCtrl.legend.percentage[i]}}" aria-valuemin="0"
+               aria-valuemax="100"
+               style="width: {{funChartsCtrl.legend.percentage[i]}}%">
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 

@@ -1,6 +1,6 @@
 /**
- * @author v.lugovsky
- * created on 16.12.2015
+ * @author a.bozga
+ * created on 03.04.2017
  */
 (function () {
   'use strict';
@@ -9,21 +9,49 @@
       .controller('PieChartCtrl', PieChartCtrl);
 
   /** @ngInject */
-  function PieChartCtrl($scope, $log, $element, layoutPaths, baConfig, Acquisition) {
-    //$scope.immo = Acquisition.getImmo();
-    $log.info("PieChartCtrl immo is: ", $scope.acqCtrl.immo);
+  function PieChartCtrl($scope, $log, $element, layoutPaths, baConfig) {
+
+    var pieChartCtrl = this;
 
     var layoutColors = baConfig.colors;
+    var dashboardColors = baConfig.colors.dashboard;
     var id = $element[0].getAttribute('id');
+
+
 
     // Watch when fin object is changing
     $scope.$watchCollection('acqCtrl.immo',
       function (newVal, oldVal) {
+        if (!newVal || !newVal.total || angular.equals(newVal.total, oldVal.total)) {
+          return; // simply skip that
+        }
 
-        var pieChart = AmCharts.makeChart(id, {
+        pieChartCtrl.chartData = [
+          {
+            price: 'Prix',
+            value: $scope.acqCtrl.immo.price
+          },
+          {
+            price: 'Montant des Travaux',
+            value: $scope.acqCtrl.immo.renovationPrice
+          },
+          {
+            price: 'Frais divers',
+            value: $scope.acqCtrl.immo.variousFees
+          }
+        ];
+
+        if($scope.acqCtrl.immo.isPublicSale){
+          pieChartCtrl.chartData.push({price:'Frais vente publique', value: $scope.acqCtrl.immo.registrationTaxPublicSale})
+        } else {
+          pieChartCtrl.chartData.push({price:'Droits d\'enregistrements', value: $scope.acqCtrl.immo.registrationTax});
+          pieChartCtrl.chartData.push({price:'Honoraires notariaux', value: $scope.acqCtrl.immo.notaryHonorTTC});
+        }
+
+        AmCharts.makeChart(id, {
           type: 'pie',
           startEffect: "elastic",
-          startDuration: 2,
+          startDuration: 1,
           theme: 'blur',
           autoMargins: false,
           marginTop: 1,
@@ -31,42 +59,40 @@
           marginBottom: 0,
           marginLeft: 0,
           marginRight: 0,
-          pullOutRadius: '5%',
+          labelRadius: 0,
+          innerRadius: '50%',
+          depth3D: 10,
+          angle: 20,
+          pullOutRadius: '20',
           pullOutDuration: 5,
           pullOutEffect: 'elastic',
+          colors: [
+            dashboardColors.surfieGreen,
+            dashboardColors.blueStone,
+            dashboardColors.white,
+            dashboardColors.silverTree,
+            dashboardColors.gossip],
           balloonText: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
           labelsEnabled: true,
           maxLabelWidth: 150,
           addClassNames: true,
           color: layoutColors.defaultText,
           labelTickColor: layoutColors.borderDark,
-          legend: {
-            enabled: false,
-            position: 'bottom',
-            autoMargins: true
-          },
-          labelRadius: 0,
-          innerRadius: '50%',
-          depth3D: 10,
-          angle: 15,
-          dataProvider: [
-            {
-              price: 'Prix',
-              value: $scope.acqCtrl.immo.price
-            },
-            {
-              price: 'Montant des Travaux',
-              value: $scope.acqCtrl.immo.renovationPrice
-            },
-            {
-              price: 'Droits d\'enregistrements',
-              value: $scope.acqCtrl.immo.registrationTax
-            },
-            {
-              price: 'Frais divers',
-              value: $scope.acqCtrl.immo.variousFees
-            }
-          ],
+          allLabels: [{
+            y: '45%',
+            align: 'center',
+            size: 15,
+            bold: true,
+            text: "Coût d'achat",
+            color: layoutColors.defaultText
+          }, {
+            y: '50%',
+            align: 'center',
+            size: 15,
+            text: parseInt($scope.acqCtrl.immo.total||0) + '€',
+            color: layoutColors.defaultText
+          }],
+          dataProvider: pieChartCtrl.chartData,
           valueField: 'value',
           titleField: 'price',
           export: {
@@ -80,42 +106,24 @@
           responsive: {
             enabled: true,
             rules: [
-              // at 400px wide, we hide legend
+              // at 550px wide, we hide legend
               {
-                maxWidth: 600,
+                maxWidth: 550,
                 overrides: {
                   labelsEnabled: false,
-                  legend: {
-                    enabled: true
-                  }
+                  depth3D: 5,
+                  angle: 5,
+                  creditsPosition: 'top-right'
                 }
               }
             ]
           }
 
         });
-
-        pieChart.addListener('init', handleInit);
-
-        pieChart.addListener('rollOverSlice', function (e) {
-          handleRollOver(e);
-        });
-
       },
       true
     );
 
-
-
-
-    function handleInit() {
-      pieChart.legend.addListener('rollOverItem', handleRollOver);
-    }
-
-    function handleRollOver(e) {
-      var wedge = e.dataItem.wedge.node;
-      wedge.parentNode.appendChild(wedge);
-    }
   }
 
 })();
