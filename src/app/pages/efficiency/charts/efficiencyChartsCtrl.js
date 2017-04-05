@@ -34,7 +34,7 @@
     // Watch when fin object is changing
     $scope.$watchCollection('effCtrl.efficiency',
       function (newVal, oldVal) {
-        if (!newVal || !newVal.profitabilityNet || angular.equals(newVal.profitabilityNet, oldVal.profitabilityNet)) {
+        if (!newVal || !newVal.totalAnnualIncoming || angular.equals(newVal.totalAnnualIncoming, oldVal.totalAnnualIncoming)) {
           return; // simply skip that
         }
         updateChart();
@@ -92,7 +92,7 @@
           y: '50%',
           align: 'center',
           size: 15,
-          text: parseInt($scope.effCtrl.efficiency.totalIncoming||0) + '€',
+          text: parseInt($scope.effCtrl.efficiency.totalAnnualIncoming||0) + '€',
           color: layoutColors.defaultText
         }],
         dataProvider: effChartsCtrl.chartData,
@@ -128,8 +128,8 @@
 
 
     function updateLegend() {
-      const monthlyRentPercentage = ((effChartsCtrl.efficiency.monthlyRent * 12) * (100 / effChartsCtrl.efficiency.totalIncoming)),
-        prepaidExpensesPercentage = ((effChartsCtrl.efficiency.prepaidExpenses * 12)  * (100 / effChartsCtrl.efficiency.totalIncoming));
+      const monthlyRentPercentage = ((effChartsCtrl.efficiency.monthlyRent * 12) * (100 / effChartsCtrl.efficiency.totalAnnualIncoming)),
+        prepaidExpensesPercentage = ((effChartsCtrl.efficiency.prepaidExpenses * 12)  * (100 / effChartsCtrl.efficiency.totalAnnualIncoming));
 
       effChartsCtrl.legend = {
         labels: [

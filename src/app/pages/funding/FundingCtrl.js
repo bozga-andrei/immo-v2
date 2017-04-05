@@ -18,21 +18,24 @@
     //Immo
     funCtrl.immo = Acquisition.getImmo();
 
-
     //Funding
-    funCtrl.fin = {};
-    funCtrl.fin.interestRateYear = 2.0;
-    funCtrl.fin.loanDurationOnYears = 20;
-    funCtrl.fin.insuranceLoan = 0.36;
-    funCtrl.fin.loanRegistrationTax = 0;
-    funCtrl.fin.conservativeSalary = 0;
-    funCtrl.fin.loanVariousFees = 300;
-    funCtrl.fin.loanNotaryFees = 0;
-    funCtrl.fin.monthlyPaymentsWithInsurance = 0;
-    funCtrl.fin.totalLoanInterest = 0;
-    funCtrl.fin.totalLoanInsurance = 0;
-    funCtrl.fin.totalLoanIterest = 0;
-    funCtrl.taxLoanAmountDataSource = {};
+    funCtrl.fin = Funding.getFunding();
+    //If funding object it doesn't exists set some default values
+    if(!funCtrl.fin || !funCtrl.fin.taxLoanAmount){
+      funCtrl.fin = {};
+      funCtrl.fin.interestRateYear = 2.0;
+      funCtrl.fin.loanDurationOnYears = 20;
+      funCtrl.fin.insuranceLoan = 0.36;
+      funCtrl.fin.loanRegistrationTax = 0;
+      funCtrl.fin.conservativeSalary = 0;
+      funCtrl.fin.loanVariousFees = 300;
+      funCtrl.fin.loanNotaryFees = 0;
+      funCtrl.fin.monthlyPaymentsWithInsurance = 0;
+      funCtrl.fin.totalLoanInterest = 0;
+      funCtrl.fin.monthlyLoanInsurance = 0;
+      funCtrl.fin.totalLoanIterest = 0;
+    }
+
 
     //If is coming from Acquisition and immo.total is defined we can calculate the personal contribution, loan amount and tax on the loan amount
     if(funCtrl.immo.total){
@@ -60,13 +63,15 @@
       funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
 
       //Calculate the insurance
-      funCtrl.fin.totalLoanInsurance = ((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount);
+      funCtrl.fin.monthlyLoanInsurance = Number(((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount).toFixed(0));
+      funCtrl.fin.annualLoanInsurance = funCtrl.fin.monthlyLoanInsurance * 12;
+      funCtrl.fin.totalLoanInsurance = funCtrl.fin.monthlyLoanInsurance * (funCtrl.fin.loanDurationOnYears * 12);
 
       //Calculate insurance + payments monthly
-      funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.totalLoanInsurance;
+      funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
 
       //Calculate total interests + insurance
-      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest;
+      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.monthlyLoanInsurance + funCtrl.fin.totalLoanInterest;
       Funding.saveFunding(funCtrl.fin);
     }
 
@@ -86,13 +91,15 @@
           funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
 
           //Calculate the insurance
-          funCtrl.fin.totalLoanInsurance = ((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount);
+          funCtrl.fin.monthlyLoanInsurance = Number(((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount).toFixed(0));
+          funCtrl.fin.annualLoanInsurance = funCtrl.fin.monthlyLoanInsurance * 12;
+          funCtrl.fin.totalLoanInsurance = funCtrl.fin.monthlyLoanInsurance * (funCtrl.fin.loanDurationOnYears * 12);
 
           //Calculate insurance + payments monthly
-          funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.totalLoanInsurance;
+          funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
 
           //Calculate total interests + insurance
-          funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest;
+          funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.monthlyLoanInsurance + funCtrl.fin.totalLoanInterest;
         }
 
         Funding.saveFunding(funCtrl.fin);
@@ -158,44 +165,14 @@
         funCtrl.fin.loanRegistrationNotaryFees +
         funCtrl.fin.loanRegistrationTax;
 
-      //DataSource for fusioncharts that will be available on the modal 'taxLoanAmountDetailsModal'
-      funCtrl.taxLoanAmountDataSource = {
-        chart: {
-          caption: "Répartitions des frais",
-          subCaption: ""
-        },
-        data: [
-          {
-            label: "Droits d'enregistrement",
-            value: parseInt(funCtrl.fin.loanRegistrationTax)
-          },
-          {
-            label: "Droits d'inscription hypothécaire",
-            value: parseInt(funCtrl.fin.mortgageRegistration)
-          },
-          {
-            label: "Salaire du Conservateur",
-            value: parseInt(funCtrl.fin.conservativeSalary)
-          },
-          {
-            label: "Honoraires du notaire",
-            value: parseInt(funCtrl.fin.loanRegistrationNotaryFees)
-          },
-          {
-            label: "Frais de dossier",
-            value: parseInt(funCtrl.fin.loanVariousFees)
-          }
-        ]
-      };
-
-      $log.debug("Total tax for the loan is: " + taxLoanAmount);
+      $log.debug("Total tax for the loan is: " + Number((taxLoanAmount).toFixed(0)));
       return Number((taxLoanAmount).toFixed(0));
     }
 
     function getMonthlyRate(loanAmount, interestRateYear, loanDurationOnYears) {
       $log.debug("Calculate monthly rate: loanAmount[" + loanAmount + "] interestRateYear[" + interestRateYear + "] loanDurationOnYears[" + loanDurationOnYears + "]");
       /*
-       * m : mensualité
+       * m : monthly
        * K : loanAmount
        * t : interestRateYear
        * n : nbrOfMonths
@@ -210,10 +187,8 @@
 
       funCtrl.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
 
-
-      $log.debug("Return: " + monthly);
-      return parseInt((monthly + 0.005) * 100) / 100;
-
+      $log.debug("Monthly rate is: " + monthly);
+      return Number((monthly).toFixed(0));
     }
 
 

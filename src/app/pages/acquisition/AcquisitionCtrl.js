@@ -95,25 +95,12 @@
 
 
         acqCtrl.immo.total = getTotalImmoAmount();
-        //$log.debug("Immo.total is set to : [" + acqCtrl.immo.total + "]");
 
         // === Update Invest section ===
         //Update immo insurance
         //acqCtrl.invest.insurance = (acqCtrl.immo.area * 1.5);//TODO correction with the appropriate value
 
         Acquisition.saveImmo(acqCtrl.immo);
-      },
-      true
-    );
-
-
-    // Watch when investment object is changing
-    $scope.$watchCollection('acqCtrl.invest',
-      function (newVal, oldVal) {
-        //$log.debug("invest.monthlyRent is set to : [" + acqCtrl.invest.monthlyRent + "]");
-        if (newVal.monthlyRent >= 0) {
-          acqCtrl.invest.profitabilityNet = (((((newVal.monthlyRent * 12) - acqCtrl.invest.maintenance - acqCtrl.fin.totalLoanInsurance - acqCtrl.invest.insurance) + (acqCtrl.invest.prepaidExpenses * 12)) / acqCtrl.immo.total) * 100);
-        }
       },
       true
     );
@@ -187,15 +174,20 @@
 
       if (immoPrice > 7500.00) {
         honorary = honorary + (Math.min(immoPrice, 17500.00) - 7500.00) * 2.85 / 100;
-      } else if (immoPrice > 17500.00) {
+      }
+      if (immoPrice > 17500.00) {
         honorary = honorary + (Math.min(immoPrice, 30000.00) - 17500.00) * 2.28 / 100;
-      } else if (immoPrice > 30000.00) {
+      }
+      if (immoPrice > 30000.00) {
         honorary = honorary + (Math.min(immoPrice, 45495.00) - 30000.00) * 1.71 / 100;
-      } else if (immoPrice > 45495.00) {
+      }
+      if (immoPrice > 45495.00) {
         honorary = honorary + (Math.min(immoPrice, 64095.00) - 45495.00) * 1.14 / 100;
-      } else if (immoPrice > 64095.00) {
+      }
+      if (immoPrice > 64095.00) {
         honorary = honorary + (Math.min(immoPrice, 250095.00) - 64095.00) * 0.57 / 100;
-      } else if (immoPrice > 250095.00) {
+      }
+      if (immoPrice > 250095.00) {
         honorary = honorary + (immoPrice - 250095.00) * 0.057 / 100;
       }
 

@@ -26,6 +26,11 @@
       dashboardColors.gossip];
 
 
+    if($scope.acqCtrl.immo.total){
+      updateChart();
+      updateLegend();
+    }
+
     // Watch when fin object is changing
     $scope.$watchCollection('acqCtrl.immo', function (newVal, oldVal) {
         if (!newVal || !newVal.total || angular.equals(newVal.total, oldVal.total)) {

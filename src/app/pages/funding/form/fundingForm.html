@@ -172,11 +172,11 @@
            ng-value="funCtrl.fin.monthlyPaymentsWithInsurance | currency:'€':0"
            readonly>
     <p class="help-block text-danger"></p>
-    <span class="help-block" ng-show="fin.loanRegistrationTax > 0">
+    <span class="help-block" ng-show="funCtrl.fin.loanRegistrationTax > 0">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
           Coût des intérêts: {{funCtrl.fin.totalLoanInterest | currency:'€':0}} |
-          Coût de l'assurance:{{funCtrl.fin.totalLoanInsurance | currency:'€':0}} |
-          Coût total:{{funCtrl.fin.totalLoanInterestAndInsurance | currency:'€':0}}
+          Coût de l'assurance: {{funCtrl.fin.totalLoanInsurance | currency:'€':0}} |
+          Coût total: {{funCtrl.fin.totalLoanInterestAndInsurance | currency:'€':0}}
       </span>
   </div>
 

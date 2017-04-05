@@ -152,7 +152,7 @@
           "Droits d'inscription hypothécaire",
           "Salaire du Conservateur",
           "Honoraires du notaire TVAC",
-          "Frais de dossier (acquises par la banque)"
+          "Frais de dossier"
         ],
         backgroundColor: funChartsCtrl.chartColors,
         percentage: [loanRegistrationTaxPercentage, mortgageRegistrationPercentage, conservativeSalaryPercentage, loanNotaryFeesPercentage, loanVariousFeesPercentage]
