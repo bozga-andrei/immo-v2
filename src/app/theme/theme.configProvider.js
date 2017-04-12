@@ -1,5 +1,6 @@
 /**
- * Created by k.danovsky on 13.05.2016.
+ * @author a.bozga
+ * created on 11.04.2017
  */
 
 (function () {

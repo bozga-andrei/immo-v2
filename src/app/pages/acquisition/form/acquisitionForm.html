@@ -217,46 +217,54 @@
 
   <!-- Droits d’enregistrement -->
   <div class="form-group" ng-if="acqCtrl.immo.isPublicSale == false">
-    <label>Droits d’enregistrement <!-- Button trigger modal -->
-      <a class="" data-toggle="modal" role="button" ng-click="acqCtrl.open('app/pages/acquisition/form/modals/registrationTaxPublicModal.html')">
-        <span class="glyphicon glyphicon-info-sign"></span>
-      </a>
-    </label>
-    <input type="text"
-           class="form-control"
-           id="registrationTax"
-           name="registrationTax"
-           ng-value="acqCtrl.immo.registrationTax | currency : '€' : 0"
-           readonly>
+    <label>Droits d’enregistrement</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control with-success-addon"
+             id="registrationTax"
+             name="registrationTax"
+             ng-value="acqCtrl.immo.registrationTax | currency : '€' : 0"
+             disabled>
+      <!-- Button trigger modal -->
+      <span class="input-group-btn addon-right input-group-addon-primary">
+        <button class="btn btn-primary" type="button" role="button" data-toggle="modal" ng-click="acqCtrl.open('app/pages/acquisition/form/modals/registrationTaxPublicModal.html')">&nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
+      </span>
+    </div>
   </div>
 
   <!-- Honoraires notariaux barêmisés (htva) -->
   <div class="form-group" ng-if="acqCtrl.immo.isPublicSale == false">
     <label>Honoraires notariaux barêmisés (TVAC)</label>
-    <input type="text"
-           class="form-control"
-           id="honorTVAC"
-           name="honorTVAC"
-           ng-value="acqCtrl.immo.notaryHonorTTC | currency:'€':0"
-           readonly>
-    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control with-success-addon"
+             id="honorTVAC"
+             name="honorTVAC"
+             ng-value="acqCtrl.immo.notaryHonorTTC | currency:'€':0"
+             disabled>
+    </div>
+    <span class="help-block sub-little-text" ng-if="acqCtrl.immo.notaryHonorHTVA"><i class="fa fa-info-circle" aria-hidden="true"></i>
           Honoraires notariaux HTVA: {{acqCtrl.immo.notaryHonorHTVA | currency:'€':0}} </span>
   </div>
 
   <!-- Frais de la vente publique -->
   <div class="form-group" ng-if="acqCtrl.immo.isPublicSale == true">
-    <label>Frais de la vente publique
+    <label>Frais de la vente publique</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control"
+             id="registrationTaxPublicSale"
+             name="registrationTaxPublicSale"
+             ng-value="acqCtrl.immo.registrationTaxPublicSale | currency:'€':0"
+             disabled>
       <!-- Button trigger modal -->
-      <a data-toggle="modal" role="button" ng-click="acqCtrl.open('app/pages/acquisition/form/modals/registrationTaxPublicSaleModal.html')">
-        <span class="glyphicon glyphicon-info-sign"></span>
-      </a>
-    </label>
-    <input type="text"
-           class="form-control"
-           id="registrationTaxPublicSale"
-           name="registrationTaxPublicSale"
-           ng-value="acqCtrl.immo.registrationTaxPublicSale | currency:'€':0"
-           readonly>
+      <span class="input-group-btn addon-right input-group-addon-primary">
+        <button class="btn btn-primary" type="button" role="button" data-toggle="modal" ng-click="acqCtrl.open('app/pages/acquisition/form/modals/registrationTaxPublicSaleModal.html')">&nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
+      </span>
+    </div>
   </div>
 
   <!-- Frais divers (tvac) -->
@@ -267,14 +275,20 @@
         <span class="glyphicon glyphicon-info-sign"></span>
       </a>
     </label>
-    <input type="number"
-           class="form-control"
-           placeholder=""
-           id="variousFees"
-           name="variousFees"
-           ng-model="acqCtrl.immo.variousFees"
-           data-validation-number-message="Ce champ ne doit contenir que des chiffres">
-    <p class="help-block text-danger"></p>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="number"
+             class="form-control"
+             placeholder=""
+             id="variousFees"
+             name="variousFees"
+             ng-model="acqCtrl.immo.variousFees"
+             data-validation-number-message="Ce champ ne doit contenir que des chiffres">
+      <!-- Button trigger modal -->
+      <span class="input-group-btn addon-right input-group-addon-primary">
+        <button class="btn btn-primary" type="button" role="button" data-toggle="modal" ng-click="acqCtrl.open('app/pages/acquisition/form/modals/variousFeesModal.html')">&nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
+      </span>
+    </div>
   </div>
 
   <br>

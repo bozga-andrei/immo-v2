@@ -1,6 +1,6 @@
 /**
- * @author v.lugovsky
- * created on 15.12.2015
+ * @author a.bozga
+ * created on 11.04.2017
  */
 (function () {
   'use strict';
@@ -16,7 +16,6 @@
       images: {
         root: IMAGES_ROOT,
         profile: IMAGES_ROOT + 'app/profile/',
-        amMap: 'assets/img/theme/vendor/ammap//dist/ammap/images/',
         amChart: 'assets/img/theme/vendor/amcharts/dist/amcharts/images/'
       }
     })

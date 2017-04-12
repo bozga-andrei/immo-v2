@@ -6,19 +6,19 @@
   'use strict';
 
   angular.module('BlurAdmin.pages.funding')
-    .controller('FundingChartsCtrl', FundingChartsCtrl);
+    .controller('TaxLoanAmountPieChartCtrl', TaxLoanAmountPieChartCtrl);
 
   /** @ngInject */
-  function FundingChartsCtrl($scope, $log, baConfig) {
+  function TaxLoanAmountPieChartCtrl($scope, $log, baConfig) {
 
-    var funChartsCtrl = this;
+    var taxLoanAmountPieChartCtrl = this;
 
-    funChartsCtrl.fin = $scope.funCtrl.fin;
+    taxLoanAmountPieChartCtrl.fin = $scope.funCtrl.fin;
 
     const layoutColors = baConfig.colors,
       dashboardColors = baConfig.colors.dashboard;
 
-    funChartsCtrl.chartColors = [
+    taxLoanAmountPieChartCtrl.chartColors = [
       dashboardColors.surfieGreen,
       dashboardColors.blueStone,
       dashboardColors.white,
@@ -29,9 +29,9 @@
     updateLegend();
 
     // Watch when fin object is changing
-    $scope.$watchCollection('funChartsCtrl.fin.taxLoanAmount',
+    $scope.$watchCollection('taxLoanAmountPieChartCtrl.fin.taxLoanAmount',
       function (newVal, oldVal) {
-        if (funChartsCtrl.fin.taxLoanAmount) {
+        if (taxLoanAmountPieChartCtrl.fin.taxLoanAmount) {
           if (angular.equals(newVal, oldVal)) {
             return; // simply skip that
           }
@@ -45,7 +45,7 @@
 
     function updateChart() {
 
-      funChartsCtrl.chartData = [
+      taxLoanAmountPieChartCtrl.chartData = [
         {
           price: 'Droits d\'enregistrement(1%)',
           value: $scope.funCtrl.fin.loanRegistrationTax
@@ -86,7 +86,7 @@
         pullOutRadius: '20',
         pullOutDuration: 5,
         pullOutEffect: 'elastic',
-        colors: funChartsCtrl.chartColors,
+        colors: taxLoanAmountPieChartCtrl.chartColors,
         balloonText: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
         labelsEnabled: true,
         maxLabelWidth: 150,
@@ -107,7 +107,7 @@
           text: parseInt($scope.funCtrl.fin.taxLoanAmount||0) + '€',
           color: layoutColors.defaultText
         }],
-        dataProvider: funChartsCtrl.chartData,
+        dataProvider: taxLoanAmountPieChartCtrl.chartData,
         valueField: 'value',
         titleField: 'price',
         export: {
@@ -139,14 +139,14 @@
     }
 
     function updateLegend(){
-      const loanRegistrationTaxPercentage = (funChartsCtrl.fin.loanRegistrationTax * (100 / funChartsCtrl.fin.taxLoanAmount)),
-        mortgageRegistrationPercentage = (funChartsCtrl.fin.mortgageRegistration * (100 / funChartsCtrl.fin.taxLoanAmount)),
-        conservativeSalaryPercentage = (funChartsCtrl.fin.conservativeSalary * (100 / funChartsCtrl.fin.taxLoanAmount)),
-        loanNotaryFeesPercentage = (funChartsCtrl.fin.loanRegistrationNotaryFees * (100 / funChartsCtrl.fin.taxLoanAmount)),
-        loanVariousFeesPercentage = (funChartsCtrl.fin.loanVariousFees * (100 / funChartsCtrl.fin.taxLoanAmount));
+      const loanRegistrationTaxPercentage = (taxLoanAmountPieChartCtrl.fin.loanRegistrationTax * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
+        mortgageRegistrationPercentage = (taxLoanAmountPieChartCtrl.fin.mortgageRegistration * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
+        conservativeSalaryPercentage = (taxLoanAmountPieChartCtrl.fin.conservativeSalary * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
+        loanNotaryFeesPercentage = (taxLoanAmountPieChartCtrl.fin.loanRegistrationNotaryFees * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
+        loanVariousFeesPercentage = (taxLoanAmountPieChartCtrl.fin.loanVariousFees * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount));
 
 
-      funChartsCtrl.legend = {
+      taxLoanAmountPieChartCtrl.legend = {
         labels: [
           "Droits d'enregistrement(1%)",
           "Droits d'inscription hypothécaire",
@@ -154,7 +154,7 @@
           "Honoraires du notaire TVAC",
           "Frais de dossier"
         ],
-        backgroundColor: funChartsCtrl.chartColors,
+        backgroundColor: taxLoanAmountPieChartCtrl.chartColors,
         percentage: [loanRegistrationTaxPercentage, mortgageRegistrationPercentage, conservativeSalaryPercentage, loanNotaryFeesPercentage, loanVariousFeesPercentage]
       };
 

@@ -1,5 +1,5 @@
 {
-  "name": "immoV2",
+  "name": "immo.v2",
   "version": "0.1.0",
   "ignore": [
     "**/.*",
@@ -15,8 +15,6 @@
     "jquery.easy-pie-chart": "~2.1.6",
     "chart.js": "~2.5.0",
     "Ionicons": "ionicons#~2.0.1",
-    "amcharts": "~3.15.2",
-    "amcharts-stock": "*",
     "angular": "~1.5.8",
     "angular-route": "~1.5.8",
     "angular-slimscroll": "~1.1.5",
@@ -30,7 +28,6 @@
     "bootstrap-switch": "~3.3.2",
     "bootstrap-tagsinput": "~0.7.1",
     "font-awesome": "fontawesome#~4.4.0",
-    "moment": "~2.17.0",
     "slimScroll": "jquery-slimscroll#~1.3.6",
     "angular-progress-button-styles": "~0.1.0",
     "angular-ui-router": "~0.3.2",
@@ -44,7 +41,8 @@
     "textAngular": "~1.4.6",
     "angular-xeditable": "~0.5.0",
     "angular-ui-select": "^0.19.6",
-    "amcharts3": "^3.21.0"
+    "amcharts3": "^3.21.0",
+    "angular-i18n": "^1.6.4"
   },
   "resolutions": {
     "angular": "~1.5.9",
@@ -61,15 +59,6 @@
         "./amcharts/pie.js"
       ]
     },
-    "amcharts-stock": {
-      "main": "./dist/amcharts/amstock.js"
-    },
-    "ammap": {
-      "main": [
-        "./dist/ammap/ammap.js",
-        "./dist/ammap/maps/js/worldLow.js"
-      ]
-    },
     "bootstrap": {
       "main": [
         "dist/css/bootstrap.css",
@@ -79,6 +68,11 @@
     },
     "slimScroll": {
       "main": "./jquery.slimscroll.js"
+    },
+    "angular-i18n": {
+      "main": [
+        "./angular-locale_fr-be.js"
+      ]
     },
     "font-awesome": {
       "main": [

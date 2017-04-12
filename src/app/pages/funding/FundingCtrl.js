@@ -71,7 +71,7 @@
       funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
 
       //Calculate total interests + insurance
-      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.monthlyLoanInsurance + funCtrl.fin.totalLoanInterest;
+      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest + funCtrl.fin.loanAmount;
       Funding.saveFunding(funCtrl.fin);
     }
 
@@ -99,7 +99,7 @@
           funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
 
           //Calculate total interests + insurance
-          funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.monthlyLoanInsurance + funCtrl.fin.totalLoanInterest;
+          funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest + funCtrl.fin.loanAmount;
         }
 
         Funding.saveFunding(funCtrl.fin);
@@ -149,7 +149,7 @@
       if(!loanAmount || loanAmount <= 0){
         return 0;
       }
-      $log.debug("Calculate total tax for the loan amount");
+      //$log.debug("Calculate total tax for the loan amount");
       //Tax on loan amount is calculated on the loan amount + 10% accessories fees
       var loanAmountWithAccessoriesFess = loanAmount * 1.10;
       //Mortgage registration tax is fixed at 0.03% of loan amount with accessories fees
@@ -165,12 +165,12 @@
         funCtrl.fin.loanRegistrationNotaryFees +
         funCtrl.fin.loanRegistrationTax;
 
-      $log.debug("Total tax for the loan is: " + Number((taxLoanAmount).toFixed(0)));
+      //$log.debug("Total tax for the loan is: " + Number((taxLoanAmount).toFixed(0)));
       return Number((taxLoanAmount).toFixed(0));
     }
 
     function getMonthlyRate(loanAmount, interestRateYear, loanDurationOnYears) {
-      $log.debug("Calculate monthly rate: loanAmount[" + loanAmount + "] interestRateYear[" + interestRateYear + "] loanDurationOnYears[" + loanDurationOnYears + "]");
+      //$log.debug("Calculate monthly rate: loanAmount[" + loanAmount + "] interestRateYear[" + interestRateYear + "] loanDurationOnYears[" + loanDurationOnYears + "]");
       /*
        * m : monthly
        * K : loanAmount
@@ -185,9 +185,9 @@
       var x = Math.pow(1 + interest, payments);
       var monthly = (loanAmount * x * interest) / (x - 1);
 
-      funCtrl.fin.totalLoanInterest = ((monthly * payments) - loanAmount);
+      funCtrl.fin.totalLoanInterest = Number(((monthly * payments) - loanAmount).toFixed(0));
 
-      $log.debug("Monthly rate is: " + monthly);
+      //$log.debug("Monthly rate is: " + monthly);
       return Number((monthly).toFixed(0));
     }
 
@@ -199,7 +199,7 @@
      */
     function getLoanRegistrationTax(loanAmountWithAccessory) {
 
-      return loanAmountWithAccessory * 0.01;
+      return Number((loanAmountWithAccessory * 0.01).toFixed(0));
     }
 
     /**
@@ -212,7 +212,7 @@
         return 0;
       }
 
-      $log.debug("Get Notary fees TVAC for the amount of: " + loan);
+      //$log.debug("Get Notary fees TVAC for the amount of: " + loan);
 
       var notaryFees = Math.min(loan, 7500.00) * 1.425 / 100;
 
@@ -238,9 +238,9 @@
       //Add TVA
       notaryFees = notaryFees * TVA;
 
-      $log.debug("Return notary fees " + notaryFees);
+      //$log.debug("Return notary fees " + Number((notaryFees).toFixed(0)));
 
-      return parseInt(notaryFees);
+      return Number((notaryFees).toFixed(0));
     }
 
 
@@ -256,7 +256,7 @@
       } else {
         salary = (parseInt(((loanWithAccessory - 25000) / 25000) + 1) * 20.5) + 58.55;
       }
-      return parseInt(salary);
+      return Number((salary).toFixed(0));
     }
   }
 })();
