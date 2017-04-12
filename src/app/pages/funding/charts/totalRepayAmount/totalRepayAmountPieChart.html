@@ -1,0 +1,25 @@
+<div class="col-xs-12">
+  <div id="pieChart" class="admin-chart"></div>
+</div>
+
+<div class="col-xs-12">
+  <div class="channels-info">
+    <div>
+      <div class="channels-info-item" ng-repeat="label in totalRepayAmountPieChartCtrl.legend.labels"
+           ng-init="i = $index;">
+        <div class="legend-color"
+             style="background-color: {{totalRepayAmountPieChartCtrl.legend.backgroundColor[i]}}"></div>
+        <p>{{::label}}<span class="channel-number">+{{totalRepayAmountPieChartCtrl.legend.percentage[i] | number:2}}%</span></p>
+        <div class="progress progress-sm channel-progress">
+          <div class="progress-bar " role="progressbar"
+               aria-valuenow="{{totalRepayAmountPieChartCtrl.legend.percentage[i]}}" aria-valuemin="0"
+               aria-valuemax="100"
+               style="width: {{totalRepayAmountPieChartCtrl.legend.percentage[i]}}%">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
