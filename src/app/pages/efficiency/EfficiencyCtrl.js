@@ -28,6 +28,7 @@
       effCtrl.efficiency.maintenance = 0;
       effCtrl.efficiency.prepaidExpenses = 0;
       effCtrl.efficiency.insurance = 0;
+      effCtrl.efficiency.userAge = 30;
       effCtrl.efficiency.annualLoanInsurance = 0;
 
       effCtrl.efficiency.totalAnnualIncoming = 0;

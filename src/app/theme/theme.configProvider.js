@@ -24,11 +24,11 @@
 
   // dashboard colors for charts
   var dashboardColors = {
-    blueStone: '#005562',
     surfieGreen: '#0e8174',
+    blueStone: '#005562',
+    white: '#ffffff',
     silverTree: '#6eba8c',
-    gossip: '#b9f2a1',
-    white: '#10c4b5'
+    gossip: '#b9f2a1'
   };
 
   angular.module('BlurAdmin.theme')
@@ -65,11 +65,47 @@
         dangerDark: colorHelper.shade(colorScheme.danger, 15),
 
         dashboard: {
-          blueStone: dashboardColors.blueStone,
           surfieGreen: dashboardColors.surfieGreen,
+          blueStone: dashboardColors.blueStone,
+          white: dashboardColors.white,
           silverTree: dashboardColors.silverTree,
-          gossip: dashboardColors.gossip,
-          white: dashboardColors.white
+          gossip: dashboardColors.gossip
+        }
+      },
+      amChartPieConfig: {
+        type: 'pie',
+        startEffect: "elastic",
+        startDuration: 1,
+        autoMargins: false,
+        marginTop: 1,
+        alpha: 0.9,
+        marginBottom: 0,
+        marginLeft: 0,
+        marginRight: 0,
+        labelRadius: 2,
+        innerRadius: '50%',
+        depth3D: 10,
+        angle: 20,
+        pullOutRadius: '20',
+        pullOutDuration: 1,
+        pullOutEffect: 'elastic',
+        colors: Object.values(dashboardColors),
+        balloonText: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+        decimalSeparator: ',',
+        labelsEnabled: true,
+        maxLabelWidth: 150,
+        addClassNames: true,
+        color: basic.default,
+        labelTickColor: basic.borderDark,
+        valueField: 'value',
+        titleField: 'price',
+        export: {
+          enabled: true
+        },
+        creditsPosition: 'bottom-left',
+        valueAxes: {
+          inside: true,
+          labelsEnabled: false
         }
       }
     };

@@ -64,7 +64,7 @@
           depth3D: 10,
           angle: 20,
           pullOutRadius: '20',
-          pullOutDuration: 5,
+          pullOutDuration: 3,
           pullOutEffect: 'elastic',
           colors: [
             dashboardColors.surfieGreen,
@@ -73,6 +73,7 @@
             dashboardColors.silverTree,
             dashboardColors.gossip],
           balloonText: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+          decimalSeparator: ',',
           labelsEnabled: true,
           maxLabelWidth: 150,
           addClassNames: true,
@@ -113,7 +114,9 @@
                   labelsEnabled: false,
                   depth3D: 5,
                   angle: 5,
-                  creditsPosition: 'top-right'
+                  creditsPosition: 'top-right',
+                  startEffect: "none",
+                  startDuration: 1
                 }
               }
             ]

@@ -20,13 +20,6 @@
     const layoutColors = baConfig.colors,
       dashboardColors = baConfig.colors.dashboard;
 
-    effChartsCtrl.chartColors = [
-      dashboardColors.surfieGreen,
-      dashboardColors.blueStone,
-      dashboardColors.white,
-      dashboardColors.silverTree,
-      dashboardColors.gossip];
-
     //Update and display chart when the page is first displayed
     updateChart();
     updateLegend();
@@ -56,73 +49,40 @@
         }
       ];
 
-      AmCharts.makeChart('pieChart', {
-        type: 'pie',
-        startEffect: "elastic",
-        startDuration: 1,
-        theme: 'blur',
-        autoMargins: false,
-        marginTop: 1,
-        alpha: 0.9,
-        marginBottom: 0,
-        marginLeft: 0,
-        marginRight: 0,
-        labelRadius: 0,
-        innerRadius: '50%',
-        depth3D: 10,
-        angle: 20,
-        pullOutRadius: '20',
-        pullOutDuration: 5,
-        pullOutEffect: 'elastic',
-        colors: effChartsCtrl.chartColors,
-        balloonText: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-        labelsEnabled: true,
-        maxLabelWidth: 150,
-        addClassNames: true,
-        color: layoutColors.defaultText,
-        labelTickColor: layoutColors.borderDark,
-        allLabels: [{
-          y: '45%',
-          align: 'center',
-          size: 15,
-          bold: true,
-          text: "Revenu total",
-          color: layoutColors.defaultText
-        }, {
-          y: '50%',
-          align: 'center',
-          size: 15,
-          text: parseInt($scope.effCtrl.efficiency.totalAnnualIncoming||0) + '€',
-          color: layoutColors.defaultText
-        }],
-        dataProvider: effChartsCtrl.chartData,
-        valueField: 'value',
-        titleField: 'price',
-        export: {
-          enabled: true
-        },
-        creditsPosition: 'bottom-left',
-        valueAxes: {
-          inside: true,
-          labelsEnabled: false
-        },
-        responsive: {
-          enabled: true,
-          rules: [
-            // at 550px wide, we hide legend
-            {
-              maxWidth: 550,
-              overrides: {
-                labelsEnabled: false,
-                depth3D: 5,
-                angle: 5,
-                creditsPosition: 'top-right'
-              }
+      var pieChartConfig = baConfig.amChartPieConfig;
+      pieChartConfig.dataProvider = effChartsCtrl.chartData;
+      pieChartConfig.theme = 'blur';
+      pieChartConfig.allLabels= [{
+        y: '45%',
+        align: 'center',
+        size: 15,
+        bold: true,
+        text: "Revenu total",
+        color: layoutColors.defaultText
+      }, {
+        y: '50%',
+        align: 'center',
+        size: 15,
+        text: parseInt($scope.effCtrl.efficiency.totalAnnualIncoming||0) + '€',
+        color: layoutColors.defaultText
+      }];
+      pieChartConfig.responsive = {
+        enabled: true,
+        rules: [
+          // at 550px wide, we hide legend
+          {
+            maxWidth: 550,
+            overrides: {
+              labelsEnabled: false,
+              depth3D: 5,
+              angle: 5,
+              creditsPosition: 'top-right'
             }
-          ]
-        }
+          }
+        ]
+      };
 
-      });
+      AmCharts.makeChart('pieChart', pieChartConfig);
 
     }
 
@@ -136,7 +96,7 @@
           "Loyer mensuel perçu",
           "Charges preçues"
         ],
-        backgroundColor: effChartsCtrl.chartColors,
+        backgroundColor: Object.values(dashboardColors),
         percentage: [monthlyRentPercentage, prepaidExpensesPercentage]
       };
     }
