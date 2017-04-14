@@ -15,8 +15,7 @@
 
     taxLoanAmountPieChartCtrl.fin = $scope.funCtrl.fin;
 
-    const layoutColors = baConfig.colors,
-      dashboardColors = baConfig.colors.dashboard;
+    const layoutColors = baConfig.colors;
 
     updateChart();
     updateLegend();
@@ -36,6 +35,7 @@
     );
 
 
+    var pieChartConfig;
     function updateChart() {
 
       taxLoanAmountPieChartCtrl.chartData = [
@@ -62,7 +62,7 @@
       ];
 
 
-      var pieChartConfig = baConfig.amChartPieConfig;
+      pieChartConfig = baConfig.amChartPieConfig;
       pieChartConfig.dataProvider = taxLoanAmountPieChartCtrl.chartData;
       pieChartConfig.theme = 'blur';
       pieChartConfig.allLabels= [{
@@ -99,25 +99,20 @@
 
     }
 
-    function updateLegend(){
+    function updateLegend() {
+
       const loanRegistrationTaxPercentage = (taxLoanAmountPieChartCtrl.fin.loanRegistrationTax * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
         mortgageRegistrationPercentage = (taxLoanAmountPieChartCtrl.fin.mortgageRegistration * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
         conservativeSalaryPercentage = (taxLoanAmountPieChartCtrl.fin.conservativeSalary * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
         loanNotaryFeesPercentage = (taxLoanAmountPieChartCtrl.fin.loanRegistrationNotaryFees * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount)),
         loanVariousFeesPercentage = (taxLoanAmountPieChartCtrl.fin.loanVariousFees * (100 / taxLoanAmountPieChartCtrl.fin.taxLoanAmount));
 
+      var percentages = [loanRegistrationTaxPercentage, mortgageRegistrationPercentage, conservativeSalaryPercentage, loanNotaryFeesPercentage, loanVariousFeesPercentage];
 
-      taxLoanAmountPieChartCtrl.legend = {
-        labels: [
-          "Droits d'enregistrement(1%)",
-          "Droits d'inscription hypothécaire",
-          "Salaire du Conservateur",
-          "Honoraires du notaire TVAC",
-          "Frais de dossier"
-        ],
-        backgroundColor: Object.values(dashboardColors),
-        percentage: [loanRegistrationTaxPercentage, mortgageRegistrationPercentage, conservativeSalaryPercentage, loanNotaryFeesPercentage, loanVariousFeesPercentage]
-      };
+      taxLoanAmountPieChartCtrl.legend = [];
+      for (var i = 0; i < pieChartConfig.dataProvider.length; i++) {
+        taxLoanAmountPieChartCtrl.legend.push({label: pieChartConfig.dataProvider[i].price, backgroundColor: pieChartConfig.colors[i], percentage: percentages[i]})
+      }
 
     }
 

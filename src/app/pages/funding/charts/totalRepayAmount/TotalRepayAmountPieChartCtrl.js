@@ -36,6 +36,7 @@
     );
 
 
+    var pieChartConfig;
     function updateChart() {
 
       totalRepayAmountPieChartCtrl.chartData = [
@@ -53,7 +54,7 @@
         }
       ];
 
-      var pieChartConfig = baConfig.amChartPieConfig;
+      pieChartConfig = baConfig.amChartPieConfig;
       pieChartConfig.dataProvider = totalRepayAmountPieChartCtrl.chartData;
       pieChartConfig.theme = 'blur';
       pieChartConfig.allLabels= [{
@@ -89,6 +90,7 @@
       AmCharts.makeChart('pieChart', pieChartConfig);
 
     }
+/*
 
     function updateLegend(){
       const totalLoanInterestPercentage = (totalRepayAmountPieChartCtrl.fin.totalLoanInterest * (100 / totalRepayAmountPieChartCtrl.fin.totalLoanInterestAndInsurance)),
@@ -105,6 +107,22 @@
         backgroundColor: Object.values(dashboardColors),
         percentage: [totalLoanInterestPercentage, totalLoanInsurancePercentage, loanAmountPercentage]
       };
+
+    }
+*/
+
+    function updateLegend() {
+
+      const totalLoanInterestPercentage = (totalRepayAmountPieChartCtrl.fin.totalLoanInterest * (100 / totalRepayAmountPieChartCtrl.fin.totalLoanInterestAndInsurance)),
+        totalLoanInsurancePercentage = (totalRepayAmountPieChartCtrl.fin.totalLoanInsurance * (100 / totalRepayAmountPieChartCtrl.fin.totalLoanInterestAndInsurance)),
+        loanAmountPercentage = (totalRepayAmountPieChartCtrl.fin.loanAmount * (100 / totalRepayAmountPieChartCtrl.fin.totalLoanInterestAndInsurance));
+
+      var percentages = [totalLoanInterestPercentage, totalLoanInsurancePercentage, loanAmountPercentage];
+
+      totalRepayAmountPieChartCtrl.legend = [];
+      for (var i = 0; i < pieChartConfig.dataProvider.length; i++) {
+        totalRepayAmountPieChartCtrl.legend.push({label: pieChartConfig.dataProvider[i].price, backgroundColor: pieChartConfig.colors[i], percentage: percentages[i]})
+      }
 
     }
 

@@ -87,7 +87,7 @@
 
     function getNetEfficiency(rent) {
       var costs = effCtrl.efficiency.maintenance + (effCtrl.fin.monthlyLoanInsurance || 0) + (effCtrl.efficiency.insurance || 0);
-      return ((((rent - costs) + ((effCtrl.efficiency.prepaidExpenses || 0) * 12)) / effCtrl.efficiency.investAmount) * 100);
+      return Number(((((rent - costs) + ((effCtrl.efficiency.prepaidExpenses || 0) * 12)) / effCtrl.efficiency.investAmount) * 100).toFixed(2));
     }
 
   }

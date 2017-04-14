@@ -36,6 +36,7 @@
       true
     );
 
+    var pieChartConfig;
     function updateChart() {
 
       effChartsCtrl.chartData = [
@@ -49,7 +50,7 @@
         }
       ];
 
-      var pieChartConfig = baConfig.amChartPieConfig;
+      pieChartConfig = baConfig.amChartPieConfig;
       pieChartConfig.dataProvider = effChartsCtrl.chartData;
       pieChartConfig.theme = 'blur';
       pieChartConfig.allLabels= [{
@@ -86,6 +87,7 @@
 
     }
 
+/*
 
     function updateLegend() {
       const monthlyRentPercentage = ((effChartsCtrl.efficiency.monthlyRent * 12) * (100 / effChartsCtrl.efficiency.totalAnnualIncoming)),
@@ -99,6 +101,21 @@
         backgroundColor: Object.values(dashboardColors),
         percentage: [monthlyRentPercentage, prepaidExpensesPercentage]
       };
+    }
+*/
+
+    function updateLegend() {
+
+      const monthlyRentPercentage = ((effChartsCtrl.efficiency.monthlyRent * 12) * (100 / effChartsCtrl.efficiency.totalAnnualIncoming)),
+        prepaidExpensesPercentage = ((effChartsCtrl.efficiency.prepaidExpenses * 12)  * (100 / effChartsCtrl.efficiency.totalAnnualIncoming));
+
+      var percentages = [monthlyRentPercentage, prepaidExpensesPercentage];
+
+      effChartsCtrl.legend = [];
+      for (var i = 0; i < pieChartConfig.dataProvider.length; i++) {
+        effChartsCtrl.legend.push({label: pieChartConfig.dataProvider[i].price, backgroundColor: pieChartConfig.colors[i], percentage: percentages[i]})
+      }
+
     }
 
 
