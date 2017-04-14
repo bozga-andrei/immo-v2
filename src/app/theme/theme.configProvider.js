@@ -100,9 +100,6 @@
         labelTickColor: basic.borderDark,
         valueField: 'value',
         titleField: 'price',
-        export: {
-          enabled: true
-        },
         creditsPosition: 'bottom-left',
         valueAxes: {
           inside: true,

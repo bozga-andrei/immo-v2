@@ -88,6 +88,11 @@
               labelsEnabled: false,
               depth3D: 5,
               angle: 5,
+              startDuration: 0,
+              pullOutRadius: '20',
+              pullOutDuration: 1,
+              pullOutEffect: 'elastic',
+              startEffect: "bounce",
               creditsPosition: 'top-right'
             }
           }

@@ -65,6 +65,7 @@
       pieChartConfig = baConfig.amChartPieConfig;
       pieChartConfig.dataProvider = taxLoanAmountPieChartCtrl.chartData;
       pieChartConfig.theme = 'blur';
+      pieChartConfig.startEffect = "bounce";
       pieChartConfig.allLabels= [{
         y: '45%',
         align: 'center',
@@ -89,6 +90,7 @@
               labelsEnabled: false,
               depth3D: 5,
               angle: 5,
+              startDuration: 0,
               creditsPosition: 'top-right'
             }
           }
