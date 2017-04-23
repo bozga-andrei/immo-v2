@@ -193,7 +193,7 @@
 
       honorary = Math.max(honorary, 8.48);
 
-      return parseInt((honorary + 0.005) * 100) / 100;
+      return Number((honorary).toFixed(0));
     }
 
     /**
@@ -266,7 +266,7 @@
         amountOfTax = amountOfTax - (taxAllowanceSum * registrationFeePercentage);
       }
 
-      return amountOfTax;
+      return Number((amountOfTax).toFixed(0));
     }
 
   }

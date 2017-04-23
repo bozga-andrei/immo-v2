@@ -92,6 +92,7 @@
         colors: Object.values(dashboardColors),
         balloonText: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
         decimalSeparator: ',',
+        thousandsSeparator: '.',
         labelsEnabled: true,
         maxLabelWidth: 150,
         addClassNames: true,
@@ -99,9 +100,6 @@
         labelTickColor: basic.borderDark,
         valueField: 'value',
         titleField: 'price',
-        export: {
-          enabled: true
-        },
         creditsPosition: 'bottom-left',
         valueAxes: {
           inside: true,

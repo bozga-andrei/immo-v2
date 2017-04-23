@@ -5,16 +5,15 @@
 <div class="col-xs-12">
   <div class="channels-info">
     <div>
-      <div class="channels-info-item" ng-repeat="label in taxLoanAmountPieChartCtrl.legend.labels"
-           ng-init="i = $index;">
+      <div class="channels-info-item" ng-repeat="legend in taxLoanAmountPieChartCtrl.legend">
         <div class="legend-color"
-             style="background-color: {{taxLoanAmountPieChartCtrl.legend.backgroundColor[i]}}"></div>
-        <p>{{::label}}<span class="channel-number">+{{taxLoanAmountPieChartCtrl.legend.percentage[i] | number:2}}%</span></p>
+             style="background-color: {{legend.backgroundColor}}"></div>
+        <p>{{::legend.label}}<span class="channel-number">+{{legend.percentage | number:2}}%</span></p>
         <div class="progress progress-sm channel-progress">
           <div class="progress-bar " role="progressbar"
-               aria-valuenow="{{taxLoanAmountPieChartCtrl.legend.percentage[i]}}" aria-valuemin="0"
+               aria-valuenow="{{legend.percentage}}" aria-valuemin="0"
                aria-valuemax="100"
-               style="width: {{taxLoanAmountPieChartCtrl.legend.percentage[i]}}%">
+               style="width: {{legend.percentage}}%">
           </div>
         </div>
       </div>
