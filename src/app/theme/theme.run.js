@@ -10,10 +10,7 @@
 
   /** @ngInject */
   function themeRun($timeout, $rootScope, layoutPaths, preloader, $q, baSidebarService, themeLayoutSettings) {
-    var whatToWait = [
-      preloader.loadAmCharts(),
-      $timeout(3000)
-    ];
+    var whatToWait = [];
 
     var theme = themeLayoutSettings;
     if (theme.blur) {
@@ -33,7 +30,7 @@
       if (!$rootScope.$pageFinishedLoading) {
         $rootScope.$pageFinishedLoading = true;
       }
-    }, 7000);
+    }, 3000);
 
     $rootScope.$baSidebarService = baSidebarService;
   }
