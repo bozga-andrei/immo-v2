@@ -14,7 +14,8 @@
              id="price"
              name="price"
              ng-model="acqCtrl.immo.price"
-             ng-required="true">
+             ng-required="true"
+             autofocus>
     </div>
     <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.price.$touched">
       <div class="help-block text-danger" ng-if="acquisitionCostForm.price.$error.required">

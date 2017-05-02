@@ -1,6 +1,6 @@
 /**
- * @author v.lugovsky
- * created on 15.01.2016
+ * @author a.bozga
+ * created on 25.04.2017
  */
 (function () {
   'use strict';

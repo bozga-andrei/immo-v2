@@ -1,0 +1,24 @@
+<!-- Frais d’acte sur emprunt hypothécaire -->
+<div class="modal-content">
+  <div class="modal-header bg-info">
+    <button type="button" class="close" ng-click="$dismiss()" aria-label="Close">
+      <em class="ion-ios-close-empty sn-link-close"></em>
+    </button>
+    <h4 class="" id="monthlyPaymentsDetailsModalLabel"><i class="ion-information-circled modal-icon"></i> À rembourser</h4>
+  </div>
+  <div class="modal-body">
+    <article class="text-justify">
+
+      <div class="row">
+        <div ba-panel ba-panel-class="with-scroll" ng-show="funCtrl.fin.totalLoanInterestAndInsurance">
+          <total-repay-amount-pie-chart></total-repay-amount-pie-chart>
+          <br>
+        </div>
+      </div>
+
+    </article>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-info" ng-click="$dismiss()">Fermer</button>
+  </div>
+</div>

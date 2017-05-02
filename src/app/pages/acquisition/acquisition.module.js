@@ -6,72 +6,24 @@
   'use strict';
 
   angular.module('BlurAdmin.pages.acquisition', [])
-      .config(routeConfig).config(chartJsConfig);
+    .config(routeConfig);
 
   /** @ngInject */
   function routeConfig($stateProvider, $logProvider) {
     $logProvider.debugEnabled(true);
 
     $stateProvider
-        .state('acquisition', {
-          url: '/acquisition',
-          templateUrl: 'app/pages/acquisition/acquisition.html',
-          controller: 'AcquisitionCtrl',
-          controllerAs: 'acqCtrl',
-          title: 'Acquisition',
-          sidebarMeta: {
-            icon: 'ion-android-home',
-            order: 0
-          }
-        });
-  }
-
-  function chartJsConfig(ChartJsProvider, baConfigProvider) {
-    var layoutColors = baConfigProvider.colors;
-    // Configure all charts
-    ChartJsProvider.setOptions({
-      chartColors: [
-        layoutColors.primary, layoutColors.danger, layoutColors.warning, layoutColors.success, layoutColors.info, layoutColors.default, layoutColors.primaryDark, layoutColors.successDark, layoutColors.warningLight, layoutColors.successLight, layoutColors.primaryLight],
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        duration: 2500
-      },
-      scale: {
-        gridLines: {
-          color: layoutColors.border
-        },
-        scaleLabel: {
-          fontColor: layoutColors.defaultText
-        },
-        ticks: {
-          fontColor: layoutColors.defaultText,
-          showLabelBackdrop: false
+      .state('acquisition', {
+        url: '/acquisition',
+        templateUrl: 'app/pages/acquisition/acquisition.html',
+        controller: 'AcquisitionCtrl',
+        controllerAs: 'acqCtrl',
+        title: 'Acquisition',
+        sidebarMeta: {
+          icon: 'ion-android-home',
+          order: 0
         }
-      }
-    });
-    // Configure all line charts
-    ChartJsProvider.setOptions('Line', {
-      datasetFill: false
-    });
-    // Configure all radar charts
-    ChartJsProvider.setOptions('radar', {
-      scale: {
-        pointLabels: {
-          fontColor: layoutColors.defaultText
-        },
-        ticks: {
-          maxTicksLimit: 5,
-          display: false
-        }
-      }
-    });
-    // Configure all bar charts
-    ChartJsProvider.setOptions('bar', {
-      tooltips: {
-        enabled: false
-      }
-    });
+      });
   }
 
 })();

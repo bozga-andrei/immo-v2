@@ -29,9 +29,11 @@
              name="personalContribution"
              ng-model="funCtrl.fin.personalContribution">
     </div>
-    <span ng-if="funCtrl.immo.total && !funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+    <span ng-if="funCtrl.immo.total && !funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i
+      class="fa fa-info-circle" aria-hidden="true"></i>
           Droits d'enregistrment({{funCtrl.immo.registrationTax | currency:'€':0}}) + Honoraires notariaux({{funCtrl.immo.notaryHonorTTC | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}})</span>
-    <span ng-if="funCtrl.immo.total && funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+    <span ng-if="funCtrl.immo.total && funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i
+      class="fa fa-info-circle" aria-hidden="true"></i>
           Frais de la vente publique({{funCtrl.immo.registrationTaxPublicSale | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}}) </span>
     <div ng-show="fundingForm.$submitted || fundingForm.personalContribution.$touched">
       <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$error.max">
@@ -70,7 +72,8 @@
              disabled>
       <!-- Button trigger modal -->
       <span class="input-group-btn addon-right input-group-addon-primary">
-        <button class="btn btn-primary" type="button" data-toggle="modal" ng-click="funCtrl.open('app/pages/funding/form/modals/taxLoanAmountDetailsModal.html', 'lg')">&nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
+        <button class="btn btn-primary" type="button" data-toggle="modal"
+                ng-click="funCtrl.open('app/pages/funding/form/modals/taxLoanAmountDetailsModal.html', 'lg')">&nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
       </span>
     </div>
   </div>
@@ -144,64 +147,47 @@
   <!-- Mensualités (hors assurance) -->
   <div class="form-group">
     <label>Mensualités (hors assurance)</label>
-    <input type="text"
-           class="form-control"
-           placeholder=""
-           id="monthlyPayments"
-           name="monthlyPayments"
-           ng-value="funCtrl.fin.monthlyPayments | currency : '€': 0"
-           disabled>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control"
+             placeholder=""
+             id="monthlyPayments"
+             name="monthlyPayments"
+             ng-value="funCtrl.fin.monthlyPayments | currency : '€': 0"
+             disabled>
+    </div>
   </div>
 
   <!-- Mensualités -->
   <div class="form-group">
-    <label>Mensualités
+    <label>Mensualités</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="text"
+             class="form-control"
+             placeholder=""
+             id="monthlyPaymentsWithInsurance"
+             name="monthlyPaymentsWithInsurance"
+             ng-value="funCtrl.fin.monthlyPaymentsWithInsurance | currency:'€':0"
+             disabled>
       <!-- Button trigger modal -->
-      <a data-toggle="modal" role="button" data-target="#monthlyPaymentsDetailsModal"
-         style="color:blue;">
-        <span class="glyphicon glyphicon-question-sign"></span>
-      </a>
-    </label>
-    <input type="text"
-           class="form-control"
-           placeholder=""
-           id="monthlyPaymentsWithInsurance"
-           name="monthlyPaymentsWithInsurance"
-           ng-value="funCtrl.fin.monthlyPaymentsWithInsurance | currency:'€':0"
-           disabled>
+      <span class="input-group-btn addon-right input-group-addon-primary" ng-if="funCtrl.isMobile">
+        <button class="btn btn-primary" type="button" data-toggle="modal"
+                ng-click="funCtrl.open('app/pages/funding/form/modals/monthlyPaymentsDetailsModal.html', 'lg')">&nbsp;&nbsp;<i
+          class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
+      </span>
+    </div>
     <p class="help-block text-danger"></p>
     <span class="help-block" ng-show="funCtrl.fin.loanRegistrationTax > 0">
-          <i class="fa fa-info-circle" aria-hidden="true"></i>
-          Coût des intérêts: {{funCtrl.fin.totalLoanInterest | currency:'€':0}} |
-          Coût de l'assurance: {{funCtrl.fin.totalLoanInsurance | currency:'€':0}} |
-          Coût total: {{funCtrl.fin.totalLoanInterestAndInsurance | currency:'€':0}}
-      </span>
+        <i class="fa fa-info-circle" aria-hidden="true"></i>
+        Coût des intérêts: {{funCtrl.fin.totalLoanInterest | currency:'€':0}} |
+        Coût de l'assurance: {{funCtrl.fin.totalLoanInsurance | currency:'€':0}} |
+        Coût total: {{funCtrl.fin.totalLoanInterestAndInsurance | currency:'€':0}}
+    </span>
   </div>
 
 </form>
-
-
-<!-- Détails mensualités -->
-<div class="modal fade" id="monthlyPaymentsDetailsModal" tabindex="-1" role="dialog"
-     aria-labelledby="monthlyPaymentsDetailsLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="monthlyPaymentsDetailsLabel">Détails mensualités</h4>
-      </div>
-      <div class="modal-body">
-        <article class="text-justify">
-
-        </article>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 

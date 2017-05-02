@@ -9,11 +9,13 @@
       .controller('FundingCtrl', FundingCtrl);
 
   /** @ngInject */
-  function FundingCtrl($scope, $uibModal, $log, Acquisition, Funding) {
+  function FundingCtrl($scope, $uibModal, $log, themeLayoutSettings, Acquisition, Funding) {
 
     var funCtrl = this;
 
     var TVA = 1.21;
+
+    funCtrl.isMobile = themeLayoutSettings.mobile;
 
     //Immo
     funCtrl.immo = Acquisition.getImmo();

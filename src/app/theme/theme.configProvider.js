@@ -36,6 +36,8 @@
 
   /** @ngInject */
   function configProvider(colorHelper) {
+    var isMobile = (/android|webos|iphone|ipad|ipod|blackberry|windows phone/).test(navigator.userAgent.toLowerCase());
+
     var conf = {
       theme: {
         blur: false
@@ -75,7 +77,7 @@
       amChartPieConfig: {
         type: 'pie',
         startEffect: "elastic",
-        startDuration: 1,
+        startDuration: supportsSVG() && !isMobile ? 0.8 : 0,
         autoMargins: false,
         marginTop: 1,
         alpha: 0.9,
@@ -121,5 +123,9 @@
       return conf;
     };
     return conf;
+  }
+
+  function supportsSVG() {
+    return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
   }
 })();

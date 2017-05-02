@@ -15,8 +15,7 @@
     .constant('layoutPaths', {
       images: {
         root: IMAGES_ROOT,
-        profile: IMAGES_ROOT + 'app/profile/',
-        amChart: 'assets/img/theme/vendor/amcharts/dist/amcharts/images/'
+        profile: IMAGES_ROOT + 'app/profile/'
       }
     })
     .constant('colorHelper', {
