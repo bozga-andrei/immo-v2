@@ -85,43 +85,5 @@
 
 <script src="assets/js/sw-toolbox/companion.js" data-service-worker="sw.js"></script>
 
-<script>
-
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCrkl7KL4b-stypFAOOU5ZYF4wKLeZJI6g",
-    authDomain: "immoinvet.firebaseapp.com",
-    databaseURL: "https://immoinvet.firebaseio.com",
-    projectId: "immoinvet",
-    storageBucket: "immoinvet.appspot.com",
-    messagingSenderId: "486683404629"
-  };
-  firebase.initializeApp(config);
-
-  // Retrieve Firebase Messaging object.
-  const messaging = firebase.messaging();
-
-  messaging.requestPermission()
-    .then(function () {
-      console.log('Notification permission granted.');
-      return messaging.getToken();
-    })
-    .then(function (token) {
-      console.log(token);
-    })
-    .catch(function (err) {
-      console.log('Unable to get permission to notify.', err);
-    });
-
-
-  // Handle incoming messages. Called when:
-  // - a message is received while the app has focus
-  // - the user clicks on an app notification created by a sevice worker
-  //   `messaging.setBackgroundMessageHandler` handler.
-  messaging.onMessage(function (payload) {
-    console.log("Message received. ", payload);
-    // ...
-  });
-</script>
 </body>
 </html>

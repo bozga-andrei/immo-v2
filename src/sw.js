@@ -66,35 +66,3 @@ toolbox.router.get("/*", function (request, values, options) {
   }
 });
 
-/*
- self.addEventListener('fetch', function (event) {
-
- event.respondWith(
- caches.match(event.request)
- .then(function (cacheResp) {
- if (cacheResp)
- return cacheResp;
-
- if (!navigator.onLine)
- return new Response('<h1> Offline :( </h1>');
-
- return fetchAndUpdate(event.request);
- }));
- });
-
-
- function fetchAndUpdate(request) {
- return fetch(request)
- .then(function (serverResp) {
- if (serverResp) {
- return caches.open(version)
- .then(function (cache) {
- return cache.put(request, serverResp.clone())
- .then(function () {
- return serverResp;
- });
- });
- }
- })
- }
- */

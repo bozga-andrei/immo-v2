@@ -10,8 +10,7 @@ firebase.initializeApp({
   'messagingSenderId': '486683404629'
 });
 
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
+// Retrieve an instance of Firebase Messaging so that it can handle background messages.
 const messaging = firebase.messaging();
 
 // If you would like to customize notifications that are received in the
