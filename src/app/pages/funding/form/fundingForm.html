@@ -73,7 +73,8 @@
       <!-- Button trigger modal -->
       <span class="input-group-btn addon-right input-group-addon-primary">
         <button class="btn btn-primary" type="button" data-toggle="modal"
-                ng-click="funCtrl.open('app/pages/funding/form/modals/taxLoanAmountDetailsModal.html', 'lg')">&nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
+                ng-click="funCtrl.open('app/pages/funding/form/modals/taxLoanAmountDetailsModal.html', 'lg')">&nbsp;&nbsp;<i
+          class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
       </span>
     </div>
   </div>
@@ -97,32 +98,22 @@
           Indiquez le taux d'intérêt annuel, hors assurance</span>
   </div>
 
+  <br>
   <!-- Durée de l'emprunt (années) -->
   <div class="form-group">
     <label>Durée de l'emprunt (années)</label>
-    <input type="number"
-           min="5"
-           max="40"
-           class="form-control"
-           placeholder=""
-           id="termLoan"
-           name="termLoan"
-           ng-model="funCtrl.fin.loanDurationOnYears">
-    <p class="help-block text-danger"></p>
-  </div>
-  <div class="form-group">
-    <div class="slider-box">
-      <h5>Durée de l'emprunt (années)</h5>
-      <ion-slider type="single"
-                  grid="true"
-                  min="1"
-                  max="40"
-                  from="funCtrl.fin.loanDurationOnYears"
-                  on-change='rangeChangeCallback'
-                  on-finish='rangeChangeCallback'
-                  disable="false">
-      </ion-slider>
-    </div>
+    <md-slider-container>
+      <md-slider class="md-warn" flex md-discrete step="1" min="5" max="40" ng-model="funCtrl.fin.loanDurationOnYears" aria-label="red" id="red-slider">
+      </md-slider>
+      <md-input-container>
+        <input flex
+               type="number"
+               id="termLoan"
+               name="termLoan"
+               ng-model="funCtrl.fin.loanDurationOnYears" aria-label="red"
+               aria-controls="red-slider">
+      </md-input-container>
+    </md-slider-container>
   </div>
 
   <!-- Assurance crédit (%) -->
@@ -188,6 +179,7 @@
   </div>
 
 </form>
+
 
 
 

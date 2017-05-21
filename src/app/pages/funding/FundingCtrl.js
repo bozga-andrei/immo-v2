@@ -141,12 +141,6 @@
     };
 
 
-    funCtrl.rangeChangeCallback = function(sliderObj){
-      var changedValue = sliderObj.from;
-      funCtrl.fin.loanDurationOnYears = sliderObj.from;
-    };
-
-
     function getTaxLoanAmount(loanAmount) {
       if(!loanAmount || loanAmount <= 0){
         return 0;

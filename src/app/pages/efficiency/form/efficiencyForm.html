@@ -1,5 +1,5 @@
 
-<!-- Ajuter auss le precompte imobiliare + si ascenseur ou non ( True => Entretien ascenseur) + rectifier l'assurance immeuble
+<!-- Ajuter aussi le precompte imobiliare + si ascenseur ou non ( True => Entretien ascenseur) + rectifier l'assurance immeuble
 - pour l'entretien immeuble ajouter entre parentese => Électricité communs) -->
 <form name="efficiencyForm" id="efficiencyForm" novalidate>
 
@@ -16,7 +16,16 @@
              placeholder=""
              id="investAmount"
              name="investAmount"
-             ng-model="effCtrl.efficiency.investAmount">
+             ng-model="effCtrl.efficiency.investAmount"
+             required>
+    </div>
+    <div ng-show="efficiencyForm.$submitted || efficiencyForm.investAmount.$touched">
+      <div class="help-block text-danger" ng-if="efficiencyForm.investAmount.$error.required">
+        <span class="text-danger"> Entrez le montant que vous desirez investir svp.</span>
+      </div>
+      <div class="help-block text-danger" ng-if="effCtrl.efficiency.investAmount === 0">
+        <span class="text-danger"> Le montant a investir doit être supérieur à 0!</span>
+      </div>
     </div>
   </div>
 
@@ -32,7 +41,13 @@
              placeholder=""
              id="investMonthlyRent"
              name="investMonthlyRent"
-             ng-model="effCtrl.efficiency.monthlyRent">
+             ng-model="effCtrl.efficiency.monthlyRent"
+             required>
+    </div>
+    <div ng-show="efficiencyForm.$submitted || efficiencyForm.investMonthlyRent.$touched">
+      <div class="help-block text-danger" ng-if="efficiencyForm.investMonthlyRent.$error.required">
+        <span class="text-danger"> Le loyer mensuel perçu est nécessaire pour calculer la rentabilité</span>
+      </div>
     </div>
   </div>
 
@@ -53,65 +68,26 @@
     </div>
   </div>
 
-  <!-- Taux droits d'enregistrement -->
+  <!-- Entretien (€/an) -->
   <div class="form-group">
-    <p>L'immeuble possède un ascenseur?</p>
-    <div class="col-xs-offset-1">
-      <div class="radio">
-        <label class="radio custom-radio nowrap">
-          <input type="radio" name="isElevator" id="isElevatorTrue"
-                 ng-model="effCtrl.immo.isElevator" ng-value=true>
-          <span>Oui</span>
-        </label>
-      </div>
-      <div class="radio">
-        <label class="radio custom-radio nowrap">
-          <input type="radio" name="isElevator" id="isElevatorFalse"
-                 ng-model="effCtrl.immo.isElevator" ng-value=false>
-          <span>Non</span>
-        </label>
-      </div>
-    </div>
-  </div>
-
-
-  <div ng-class="{'row': effCtrl.immo.isElevator}" ng-cloak>
-    <!-- Entretien (€/an) -->
-    <div class="form-group" ng-class="{'col-sm-6': effCtrl.immo.isElevator}">
-      <label>Entretien (€/an)</label>
-      <div class="input-group">
-        <span class="input-group-addon addon-left input-group-addon-success">€</span>
-        <input type="number"
-               step="10"
-               min="0"
-               max="10000"
-               class="form-control with-success-addon"
-               placeholder=""
-               id="ivestMaintenance"
-               name="ivestMaintenance"
-               ng-model="effCtrl.efficiency.maintenance">
-      </div>
-      <span class="help-block sub-little-text" ng-if="effCtrl.immo.total > 0"><i class="fa fa-info-circle" aria-hidden="true"></i>
-        Modifier si nécessaire</span>
-    </div>
-
-    <!-- Entretien Ascenseur (€/an) -->
-    <div class="form-group col-sm-6" ng-if="effCtrl.immo.isElevator">
-      <label>Entretien Ascenseur(€/an)</label>
-      <div class="input-group">
-        <span class="input-group-addon addon-left input-group-addon-success">€</span>
-        <input type="number"
-               step="10"
-               min="0"
-               max="10000"
-               class="form-control with-success-addon"
-               placeholder=""
-               id="ivestElevatorMaintenance"
-               name="ivestElevatorMaintenance"
-               ng-model="effCtrl.efficiency.elevatorMaintenance">
-      </div>
-      <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-        Modifier si nécessaire</span>
+    <label>Entretien (€/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="number"
+             step="10"
+             min="0"
+             max="10000"
+             class="form-control with-success-addon"
+             placeholder=""
+             id="ivestMaintenance"
+             name="ivestMaintenance"
+             ng-model="effCtrl.efficiency.maintenance">
+      <span class="input-group-btn addon-right input-group-addon-primary">
+        <button class="btn btn-primary" type="button"
+                uib-tooltip="Depenses pour travaux de structure et les « grands entretiens » liés à la tenue du logement. Ex: Réparation de la toiture, façade, structure du bâtiment, parties communes, réparation des gouttières...">
+          &nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;
+        </button>
+      </span>
     </div>
   </div>
 
@@ -130,9 +106,14 @@
              id="investPrepaidExpenses"
              name="investPrepaidExpenses"
              ng-model="effCtrl.efficiency.prepaidExpenses">
+      <!-- Button trigger modal -->
+      <span class="input-group-btn addon-right input-group-addon-primary">
+        <button class="btn btn-primary" type="button"
+                uib-tooltip="Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.">
+          &nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;
+        </button>
+      </span>
     </div>
-    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-        Le montant des charges mensuelles provisionnelles que vous allez demander au locataire en plus de loyer.</span>
   </div>
 
   <!-- Assurances (€/an) -->
@@ -145,7 +126,7 @@
              placeholder=""
              id="investInsurance"
              name="investInsurance"
-             ng-model="effCtrl.efficiency.insurance">
+             ng-model="effCtrl.efficiency.diversInsurances">
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
         Modifier si nécessaire</span>

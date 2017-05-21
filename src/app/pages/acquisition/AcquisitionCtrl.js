@@ -24,6 +24,9 @@
     acqCtrl.REDUCED_TAX_ALLOWANCE_SUM = 60000;
     acqCtrl.TAX_ALLOWANCE_SUM = 75000;
     acqCtrl.TAX_ALLOWANCE_SUM_2017 = 175000;
+    acqCtrl.TAX_ALLOWANCE_SUM_FLANDERS_15 = 15000;
+    acqCtrl.TAX_ALLOWANCE_SUM_FLANDERS_25 = 25000;
+    acqCtrl.TAX_ALLOWANCE_SUM_FLANDERS_35 = 35000;
 
     //Immo
     acqCtrl.immo = Acquisition.getImmo();

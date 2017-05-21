@@ -8,6 +8,7 @@
   angular.module('BlurAdmin.theme', [
       'toastr',
       'textAngular',
+      'ngMaterial',
       'BlurAdmin.theme.components',
       'BlurAdmin.theme.inputs'
   ]);
