@@ -45,8 +45,8 @@
 
     // if monthly rent is already defined we can calculate the efficiency
     if(effCtrl.efficiency.monthlyRent && effCtrl.efficiency.investAmount && effCtrl.efficiency.investAmount > 0){
-      const annualRent = newEff.monthlyRent * 12;
-      const annualPrepaidExpenses = (effCtrl.efficiency.prepaidExpenses||0) * 12;
+      var annualRent = newEff.monthlyRent * 12;
+      var annualPrepaidExpenses = (effCtrl.efficiency.prepaidExpenses||0) * 12;
 
       calculateEfficiency(annualRent, annualPrepaidExpenses);
 
@@ -61,8 +61,8 @@
         }
 
         if (newEff.monthlyRent >= 0) {
-          const annualRent = newEff.monthlyRent * 12;
-          const annualPrepaidExpenses = (effCtrl.efficiency.prepaidExpenses||0) * 12;
+          var annualRent = newEff.monthlyRent * 12;
+          var annualPrepaidExpenses = (effCtrl.efficiency.prepaidExpenses||0) * 12;
 
           calculateEfficiency(annualRent, annualPrepaidExpenses);
 
@@ -94,7 +94,7 @@
       },
       function (newVal, oldVal) {
         if (newVal) {
-          let annualRent = newVal * 12;
+          var annualRent = newVal * 12;
 
           //Calculate maintenance
           effCtrl.efficiency.maintenance = (annualRent * 0.04); // 4%/year of the monthly rate
@@ -114,7 +114,7 @@
     }
 
     function getNetEfficiency(annualRent, maintenance, monthlyLoanInsurance, diversInsurances, annualPrepaidExpenses, investAmount) {
-      const costs = maintenance + monthlyLoanInsurance + diversInsurances;
+      var costs = maintenance + monthlyLoanInsurance + diversInsurances;
       return Number(((((annualRent - costs) + annualPrepaidExpenses) / investAmount) * 100).toFixed(2));
     }
 
