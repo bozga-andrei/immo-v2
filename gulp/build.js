@@ -94,7 +94,9 @@ gulp.task('other', ['copyVendorImages'], function () {
 gulp.task('serviceWorker', function () {
   return gulp.src([
     path.join(conf.paths.src, 'sw.js'),
-    path.join(conf.paths.src, 'firebase-messaging-sw.js')
+    path.join(conf.paths.src, 'firebase-messaging-sw.js'),
+    path.join(conf.paths.src, 'assets/js/sw-toolbox/companion.js'),
+    path.join(conf.paths.src, 'assets/js/sw-toolbox/sw-toolbox.js')
   ])
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });

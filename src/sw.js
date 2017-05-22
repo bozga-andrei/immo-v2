@@ -2,7 +2,7 @@
  * Created by Andrei Bozga on 24-04-17.
  */
 
-importScripts('assets/js/sw-toolbox/sw-toolbox.js'); // Update path to match your own setup
+importScripts('sw-toolbox.js'); // Update path to match your own setup
 
 const spCaches = {
   'static': 'static-v1',

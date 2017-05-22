@@ -7,7 +7,7 @@ importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
 firebase.initializeApp({
-  'messagingSenderId': '486683404629'
+  'messagingSenderId': '640591150702'
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background messages.
@@ -28,7 +28,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
   }
   const options = {
     body: payload.data.body,
-    icon: 'immo/latest/assets/img/favicon-32x32.png'
+    icon: 'assets/img/favicon-32x32.png'
   };
 
   return self.registration.showNotification(title, options);

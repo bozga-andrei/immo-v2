@@ -29,18 +29,22 @@ function initServiceWorker() {
   }
 }
 
-
+/** @ngInject */
 function initFirebaseNotification() {
+
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyCrkl7KL4b-stypFAOOU5ZYF4wKLeZJI6g",
-    authDomain: "immoinvet.firebaseapp.com",
-    databaseURL: "https://immoinvet.firebaseio.com",
-    projectId: "immoinvet",
-    storageBucket: "immoinvet.appspot.com",
-    messagingSenderId: "486683404629"
+    apiKey: "AIzaSyAGZGvUm9mE43w6Egn30jNDG5fHtaOH6J4",
+    authDomain: "immo-invest.firebaseapp.com",
+    databaseURL: "https://immo-invest.firebaseio.com",
+    projectId: "immo-invest",
+    storageBucket: "immo-invest.appspot.com",
+    messagingSenderId: "640591150702"
   };
   firebase.initializeApp(config);
+
+  // Get a reference to the database service
+  var database = firebase.database();
 
   //Initialize a service worker for firebase messaging
   if('serviceWorker' in navigator) {
@@ -65,7 +69,7 @@ function initFirebaseNotification() {
               // app server.
               setTokenSentToServer(false);
               // Send Instance ID token to app server.
-              sendTokenToServer(refreshedToken);
+              sendTokenToServer(database, refreshedToken);
             })
             .catch(function(err) {
               console.log('Unable to retrieve refreshed token ', err);
@@ -80,7 +84,7 @@ function initFirebaseNotification() {
           })
           .then(function (token) {
             console.log(token);
-            sendTokenToServer(token);
+            sendTokenToServer(database, token);
           })
           .catch(function (err) {
             console.log('Unable to get permission to notify.', err);
@@ -90,7 +94,7 @@ function initFirebaseNotification() {
 
         // Handle incoming messages. Called when:
         // - a message is received while the app has focus
-        // - the user clicks on an app notification created by a sevice worker
+        // - the user clicks on an app notification created by a service worker
         //   `messaging.setBackgroundMessageHandler` handler.
         messaging.onMessage(function (payload) {
           console.log("Message received. ", payload);
@@ -107,10 +111,19 @@ function initFirebaseNotification() {
 // Send the Instance ID token to your application server, so that it can:
 // - send messages back to this app
 // - subscribe/unsubscribe the token from topics
-function sendTokenToServer(currentToken) {
+function sendTokenToServer(database, currentToken) {
   if (!isTokenSentToServer()) {
     console.log('Sending token to server...');
-    // TODO(developer): Send the current token to your server.
+    if(window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
+      database.ref('local-tokens/' + new Date().getTime()).set({
+        token: currentToken
+      });
+    } else {
+      database.ref('tokens/'+ new Date().getTime()).set({
+        token: currentToken
+      });
+    }
+
     setTokenSentToServer(true);
   } else {
     console.log('Token already sent to server so won\'t send it again ' +
