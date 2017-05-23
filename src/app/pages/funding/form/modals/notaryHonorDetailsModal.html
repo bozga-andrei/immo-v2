@@ -1,0 +1,47 @@
+<!-- Le tarif des notaires -->
+<div class="modal-content">
+  <div class="modal-header bg-info">
+    <button type="button" class="close" ng-click="$dismiss()" aria-label="Close">
+      <em class="ion-ios-close-empty sn-link-close"></em>
+    </button>
+    <h4 class="" id="taxLoanAmountDetailsModalLabel"><i class="ion-information-circled modal-icon"></i> Honoraires des notaires</h4>
+  </div>
+  <div class="modal-body">
+    <article class="text-justify">
+      Le tarif 2017 des notaires correspond à la grille fixée par l'arrêté du 26 février 2016. Voici les honoraires des actes notariaux réglementés, notamment en matière d'immobilier, de donation ou de succession.
+      <br>
+      <ul>
+        <li>Droits d'enregistrement(1%) = {{funCtrl.fin.loanRegistrationTax | currency:'€':0}}.</li>
+        <li>Droits d'inscription hypothécaire(*) = {{funCtrl.fin.mortgageRegistration | currency:'€':0}}</li>
+        <li>Salaire du Conservateur sur l'inscription de votre hypothèque = {{funCtrl.fin.conservativeSalary | currency:'€':0}}
+        </li>
+        <li>Honoraires du notaire TVAC = {{funCtrl.fin.loanRegistrationNotaryFees | currency:'€':0}}</li>
+        <li>Frais de dossier (acquises par la banque) = {{funCtrl.fin.loanVariousFees | currency:'€':0}} (**)</li>
+        <li><strong>Total des frais = {{funCtrl.fin.taxLoanAmount | currency:'€':0}}</strong></li>
+      </ul>
+      <hr>
+      <span>
+          (*)
+          Le droit d'inscription hypothécaire est une taxe virée directement
+          à l'État par le notaire, lors de l'inscription de l'acte à la
+          conservation des hypothèques. Le droit est fixé à 0.30 % et il est
+          calculé sur le montant du capital et des accessoires, comme le droit d'enregistrement.
+          <br>
+      </span>
+      <span>(**) montant moyen</span>
+
+      <hr>
+
+      <div class="row">
+        <div ba-panel ba-panel-class="with-scroll" ng-show="funCtrl.fin.taxLoanAmount">
+          <tax-loan-amount-pie-chart></tax-loan-amount-pie-chart>
+          <br>
+        </div>
+      </div>
+
+    </article>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-info" ng-click="$dismiss()">Fermer</button>
+  </div>
+</div>

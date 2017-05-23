@@ -8,9 +8,7 @@
       <input type="number"
              step="10000"
              min="0"
-             max="10000000"
              class="form-control with-success-addon"
-             placeholder=""
              id="price"
              name="price"
              ng-model="acqCtrl.immo.price"
@@ -216,9 +214,8 @@
              ng-value="acqCtrl.immo.notaryHonorTTC | currency:'€':0"
              disabled>
     </div>
-    <span class="help-block sub-little-text" ng-if="acqCtrl.immo.notaryHonorHTVA"><i class="fa fa-info-circle"
-                                                                                     aria-hidden="true"></i>
-          Honoraires notariaux HTVA: {{acqCtrl.immo.notaryHonorHTVA | currency:'€':0}} </span>
+    <span class="help-block sub-little-text" ng-if="acqCtrl.immo.notaryHonorHTVA">
+      <i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; Honoraires notariaux HTVA: {{acqCtrl.immo.notaryHonorHTVA | currency:'€':0}} </span>
   </div>
 
   <!-- Frais de la vente publique -->
@@ -243,13 +240,7 @@
 
   <!-- Frais divers (tvac) -->
   <div class="form-group">
-    <label>Frais divers (tvac)
-      <!-- Button trigger modal -->
-      <a data-toggle="modal" role="button"
-         ng-click="acqCtrl.open('app/pages/acquisition/form/modals/variousFeesModal.html')">
-        <span class="glyphicon glyphicon-info-sign"></span>
-      </a>
-    </label>
+    <label>Frais divers (tvac)</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
@@ -269,12 +260,10 @@
   </div>
 
   <br>
-  <h2 class="text-danger">Total coût d'achat: <b>{{acqCtrl.immo.total | currency:"€":0}}</b></h2>
-  <h2 class="text-danger" ng-if="acqCtrl.immo.area > 0">Total prix au m²: <b>{{acqCtrl.immo.total / acqCtrl.immo.area |
-    currency:"€":0}}</b></h2>
+  <h2 class="text-danger" ng-if="acqCtrl.immo.total">Total coût d'achat: <b>{{acqCtrl.immo.total | currency:"€":0}}</b></h2>
+  <h2 class="text-danger" ng-if="acqCtrl.immo.area > 0">Total prix au m²: <b>{{acqCtrl.immo.total / acqCtrl.immo.area | currency:"€":0}}</b></h2>
 
   <br>
-  <div id="success"></div>
 
 </form>
 
