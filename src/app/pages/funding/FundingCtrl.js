@@ -35,7 +35,8 @@
       funCtrl.fin.monthlyPaymentsWithInsurance = 0;
       funCtrl.fin.totalLoanInterest = 0;
       funCtrl.fin.monthlyLoanInsurance = 0;
-      funCtrl.fin.totalLoanIterest = 0;
+      funCtrl.fin.totalLoanInterest = 0;
+      funCtrl.fin.personalContribution = 0
     }
 
 
@@ -43,12 +44,10 @@
     if(funCtrl.immo.total){
       //Calculate personal Contribution
       if (funCtrl.immo.isPublicSale) {
-        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTaxPublicSale + funCtrl.immo.variousFees).toFixed(0));
+        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTaxPublicSale + funCtrl.immo.variousFees).toFixed(0)) || 0;
       } else {
-        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTax + funCtrl.immo.notaryHonorTTC + funCtrl.immo.variousFees).toFixed(0));
+        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTax + funCtrl.immo.notaryHonorTTC + funCtrl.immo.variousFees).toFixed(0)) || 0;
       }
-      if(!funCtrl.fin.personalContribution)
-        funCtrl.fin.personalContribution = 0;
       //Set loan amount to 0 if personal contribution are greater that total price
       if(funCtrl.immo.total > funCtrl.fin.personalContribution){
         funCtrl.fin.loanAmount = funCtrl.immo.total - funCtrl.fin.personalContribution;
@@ -56,10 +55,8 @@
         funCtrl.fin.loanAmount = 0;
       }
 
-      if(funCtrl.fin.loanAmount > 0){
-        funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
-        funCtrl.fin.personalContribution = funCtrl.fin.personalContribution + funCtrl.fin.taxLoanAmount;
-      }
+      funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
+      funCtrl.fin.personalContribution = funCtrl.fin.personalContribution + funCtrl.fin.taxLoanAmount;
 
       //Get monthly payments amount
       funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
@@ -115,7 +112,7 @@
         return funCtrl.fin.personalContribution;
       },
       function (newVal, oldVal) {
-        if (newVal !== oldVal) {
+        if (newVal && newVal !== oldVal) {
           if (funCtrl.immo.total - newVal > 0) {
             funCtrl.fin.loanAmount = (funCtrl.immo.total - newVal);
           } else {
@@ -149,7 +146,7 @@
       //Tax on loan amount is calculated on the loan amount + 10% accessories fees
       var loanAmountWithAccessoriesFess = loanAmount * 1.10;
       //Mortgage registration tax is fixed at 0.03% of loan amount with accessories fees
-      funCtrl.fin.mortgageRegistration = loanAmountWithAccessoriesFess * 0.003;
+      funCtrl.fin.mortgageRegistration = Number((loanAmountWithAccessoriesFess * 0.003).toFixed(0));
       funCtrl.fin.conservativeSalary = getConservativeSalary(loanAmountWithAccessoriesFess);
 
       funCtrl.fin.loanRegistrationNotaryFees = getNotaryFeesForLoanTVAC(loanAmount);

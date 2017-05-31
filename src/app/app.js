@@ -5,7 +5,6 @@ angular.module('BlurAdmin', [
   'ui.bootstrap',
   'ui.sortable',
   'ui.router',
-  'ngTouch',
   'toastr',
   'ui.slimscroll',
   'angular-progress-button-styles',

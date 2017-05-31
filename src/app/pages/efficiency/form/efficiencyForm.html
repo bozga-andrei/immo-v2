@@ -9,7 +9,6 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
-             step="10000"
              min="0"
              max="10000000"
              class="form-control with-success-addon"
@@ -27,6 +26,9 @@
         <span class="text-danger"> Le montant a investir doit être supérieur à 0!</span>
       </div>
     </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.investAmount.$invalid && !efficiencyForm.investAmount.$error.required">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
   </div>
 
   <!-- Loyer mensuel (hors charges) -->
@@ -35,7 +37,6 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
-             step="100"
              min="0"
              class="form-control with-success-addon"
              placeholder=""
@@ -49,6 +50,9 @@
         <span class="text-danger"> Le loyer mensuel perçu est nécessaire pour calculer la rentabilité</span>
       </div>
     </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.investMonthlyRent.$invalid && !efficiencyForm.investMonthlyRent.$error.required">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
   </div>
 
   <!-- Surface du bien (en m²) -->
@@ -57,7 +61,6 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">m²</span>
       <input type="number"
-             step="10"
              min="0"
              max="9000"
              class="form-control with-success-addon"
@@ -65,6 +68,9 @@
              id="investArea"
              name="investArea"
              ng-model="effCtrl.immo.area">
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.investArea.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
     </div>
   </div>
 
@@ -74,13 +80,12 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
-             step="10"
              min="0"
              max="10000"
              class="form-control with-success-addon"
              placeholder=""
-             id="ivestMaintenance"
-             name="ivestMaintenance"
+             id="maintenance"
+             name="maintenance"
              ng-model="effCtrl.efficiency.maintenance">
       <span class="input-group-btn addon-right input-group-addon-primary">
         <button class="btn btn-primary" type="button"
@@ -88,6 +93,9 @@
           &nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;
         </button>
       </span>
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.maintenance.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
     </div>
   </div>
 
@@ -98,11 +106,9 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
-             step="10"
              min="0"
              max="10000"
              class="form-control with-success-addon"
-             placeholder=""
              id="investPrepaidExpenses"
              name="investPrepaidExpenses"
              ng-model="effCtrl.efficiency.prepaidExpenses">
@@ -114,6 +120,9 @@
         </button>
       </span>
     </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.investPrepaidExpenses.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
   </div>
 
   <!-- Assurances (€/an) -->
@@ -122,28 +131,19 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
+             min="0"
              class="form-control with-success-addon"
-             placeholder=""
-             id="investInsurance"
-             name="investInsurance"
+             id="diversInsurances"
+             name="diversInsurances"
              ng-model="effCtrl.efficiency.diversInsurances">
     </div>
-    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+    <span class="help-block sub-little-text" ng-if="effCtrl.immo.area > 0"><i class="fa fa-info-circle" aria-hidden="true"></i>
         Modifier si nécessaire</span>
+    <div class="help-block text-danger" ng-if="efficiencyForm.diversInsurances.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
   </div>
 
-  <!-- Age -->
-<!--  <div class="form-group">
-    <label>Age</label>
-    <div class="input-group">
-      <input type="number"
-             class="form-control with-success-addon"
-             placeholder=""
-             id="userAge"
-             name="userAge"
-             ng-model="effCtrl.efficiency.userAge">
-    </div>
-  </div>-->
 
   <!-- Assurance crédit(€/an) -->
   <div class="form-group">
@@ -152,10 +152,12 @@
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
              class="form-control with-success-addon"
-             placeholder=""
-             id="investLoanInsurance"
-             name="investLoanInsurance"
+             id="annualLoanInsurance"
+             name="annualLoanInsurance"
              ng-model="effCtrl.efficiency.annualLoanInsurance">
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.annualLoanInsurance.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
     </div>
   </div>
 
@@ -165,8 +167,6 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">%</span>
       <input type="number"
-             min="-1000"
-             max="1000"
              class="form-control with-success-addon"
              placeholder=""
              id="profitabilityNet"

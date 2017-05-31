@@ -48,6 +48,13 @@ browserSync.use(browserSyncSpa({
 }));
 
 gulp.task('serve', ['watch'], function () {
+  gulp.src([
+    path.join(conf.paths.src, 'sw.js'),
+    path.join(conf.paths.src, 'firebase-messaging-sw.js'),
+    path.join(conf.wiredep.directory, 'sw-toolbox/*.js')
+  ])
+    .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve')));
+
   browserSyncInit([path.join(conf.paths.tmp, '/serve'), conf.paths.src]);
 });
 

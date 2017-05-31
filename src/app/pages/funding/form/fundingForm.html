@@ -20,11 +20,9 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
-             step="1000"
              min="0"
              ng-max="{{funCtrl.immo.total}}"
              class="form-control with-success-addon"
-             placeholder=""
              id="personalContribution"
              name="personalContribution"
              ng-model="funCtrl.fin.personalContribution">
@@ -35,11 +33,13 @@
     <span ng-if="funCtrl.immo.total && funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i
       class="fa fa-info-circle" aria-hidden="true"></i>
           Frais de la vente publique({{funCtrl.immo.registrationTaxPublicSale | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}}) </span>
-    <div ng-show="fundingForm.$submitted || fundingForm.personalContribution.$touched">
-      <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$error.max">
-        <span class="text-danger"> L'apport personnel ne peut pas être plus grand que le coût d'achat!</span>
-      </div>
+    <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$error.max" zoom-out>
+      <span class="text-danger"> L'apport personnel ne peut pas être plus grand que le coût d'achat!</span>
     </div>
+    <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
+
   </div>
 
   <!-- Capital à emprunter -->
@@ -49,13 +49,16 @@
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="number"
              min="0"
-             step="10000"
              class="form-control with-success-addon"
              placeholder=""
              id="loanAmount"
              name="loanAmount"
              ng-model="funCtrl.fin.loanAmount">
     </div>
+    <div class="help-block text-danger" ng-if="fundingForm.loanAmount.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
+
   </div>
 
   <!-- Frais d’acte sur emprunt hypothécaire -->
@@ -79,31 +82,29 @@
     </div>
   </div>
 
+
   <!-- Taux d'intérêt annuel (%) -->
   <div class="form-group">
     <label>Taux d'intérêt annuel (%)</label>
-    <div class="input-group">
-      <span class="input-group-addon addon-left input-group-addon-success">%</span>
-      <input type="number"
-             step="0.10"
-             min="1"
-             max="10"
-             class="form-control with-success-addon"
-             placeholder=""
-             id="interestRateYear"
-             name="interestRateYear"
-             ng-model="funCtrl.fin.interestRateYear">
-    </div>
-    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-          Indiquez le taux d'intérêt annuel, hors assurance</span>
+    <md-slider-container>
+      <md-slider class="md-warn" flex md-discrete step="0.1" min="0.1" max="10" ng-model="funCtrl.fin.interestRateYear" aria-label="red" id="interestRateYear-slider">
+      </md-slider>
+      <md-input-container>
+        <input flex
+               type="number"
+               id="interestRateYear"
+               name="interestRateYear"
+               ng-model="funCtrl.fin.interestRateYear" aria-label="red"
+               aria-controls="red-slider">
+      </md-input-container>
+    </md-slider-container>
   </div>
 
-  <br>
   <!-- Durée de l'emprunt (années) -->
   <div class="form-group">
     <label>Durée de l'emprunt (années)</label>
     <md-slider-container>
-      <md-slider class="md-warn" flex md-discrete step="1" min="5" max="40" ng-model="funCtrl.fin.loanDurationOnYears" aria-label="red" id="red-slider">
+      <md-slider class="md-warn" flex md-discrete step="1" min="5" max="40" ng-model="funCtrl.fin.loanDurationOnYears" aria-label="red" id="termLoan-slider">
       </md-slider>
       <md-input-container>
         <input flex
@@ -122,7 +123,6 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">%</span>
       <input type="number"
-             step="0.10"
              min="0.10"
              max="10"
              class="form-control with-success-addon"
@@ -133,6 +133,9 @@
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
           Le montant mensuel de l'assurance vous est donnée à titre indicatif automatiquement. Modifier si nécessaire.</span>
+    <div class="help-block text-danger" ng-if="fundingForm.insuranceLoan.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
   </div>
 
   <!-- Mensualités (hors assurance) -->

@@ -38,6 +38,11 @@
       effCtrl.efficiency.investAmount = effCtrl.immo.total;
     }
 
+    //If we know the living area we can calculate the approximate insurance
+    if(effCtrl.immo.area){
+      effCtrl.efficiency.diversInsurances = (newVal * 1.5);//TODO correction with the appropriate value
+    }
+
     //Get annualLoanInsurance from funding page if defined
     if(effCtrl.fin.annualLoanInsurance && effCtrl.fin.annualLoanInsurance > 0){
       effCtrl.efficiency.annualLoanInsurance = effCtrl.fin.annualLoanInsurance;
@@ -72,22 +77,7 @@
       true
     );
 
-
-    //Watch when immo.area is changing and update the efficiency.diversInsurances
-    $scope.$watch(
-      function () {
-        return effCtrl.immo.area;
-      },
-      function (newVal, oldVal) {
-        if (newVal) {
-          effCtrl.efficiency.diversInsurances = (newVal * 1.5);//TODO correction with the appropriate value
-          Acquisition.saveImmo(effCtrl.immo)
-        }
-      },
-      true
-    );
-
-    //Watch when immo.area is changing and update the efficiency.diversInsurances
+    //Watch when efficiency.monthlyRent is changing and update the efficiency.maintenance
     $scope.$watch(
       function () {
         return effCtrl.efficiency.monthlyRent;

@@ -6,18 +6,20 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success"> € </span>
       <input type="number"
-             step="10000"
              min="0"
              class="form-control with-success-addon"
              id="price"
              name="price"
              ng-model="acqCtrl.immo.price"
              ng-required="true"
-             autofocus>
+             autofocus/>
     </div>
     <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.price.$touched">
       <div class="help-block text-danger" ng-if="acquisitionCostForm.price.$error.required">
         <span class="text-danger"> Entrez le montant du votre bien svp.</span>
+      </div>
+      <div class="help-block text-danger" ng-if="acquisitionCostForm.price.$invalid && !acquisitionCostForm.price.$error.required">
+        <span class="text-danger"> Veuillez saisir un nombre valide.</span>
       </div>
     </div>
   </div>
@@ -28,15 +30,17 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success"> m²</span>
       <input type="number"
-             step="10"
              min="0"
-             max="9000"
              class="form-control"
              placeholder=""
              id="immoArea"
              name="immoArea"
              ng-model="acqCtrl.immo.area">
-      <p class="help-block text-danger"></p>
+    </div>
+    <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.immoArea.$touched">
+      <div class="help-block text-danger" ng-if="acquisitionCostForm.immoArea.$invalid">
+        <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+      </div>
     </div>
   </div>
 
@@ -46,14 +50,17 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success"> € </span>
       <input type="number"
-             step="1000"
              min="0"
              class="form-control"
              placeholder=""
              id="renovationPrice"
              name="renovationPrice"
              ng-model="acqCtrl.immo.renovationPrice">
-      <p class="help-block text-danger"></p>
+    </div>
+    <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.renovationPrice.$touched">
+      <div class="help-block text-danger" ng-if="acquisitionCostForm.renovationPrice.$invalid">
+        <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+      </div>
     </div>
   </div>
 
@@ -257,6 +264,12 @@
           class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;</button>
       </span>
     </div>
+    <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.variousFees.$touched">
+      <div class="help-block text-danger" ng-if="acquisitionCostForm.variousFees.$invalid">
+        <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+      </div>
+    </div>
+
   </div>
 
   <br>

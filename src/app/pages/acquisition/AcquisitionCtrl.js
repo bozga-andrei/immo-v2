@@ -63,6 +63,9 @@
     // Watch when immo price is changing
     $scope.$watchCollection('acqCtrl.immo',
       function (newVal, oldVal) {
+        if(!newVal || angular.equals(newVal, oldVal)){
+          return; // simply skip that
+        }
 
         //Check if the selected taxAllowanceSum is 175000 and price under 500.000€
         if (acqCtrl.immo.taxAllowanceSum === 175000 && newVal.price > 500000) {
@@ -104,32 +107,6 @@
         //acqCtrl.invest.insurance = (acqCtrl.immo.area * 1.5);//TODO correction with the appropriate value
 
         Acquisition.saveImmo(acqCtrl.immo);
-      },
-      true
-    );
-
-    //Watch when monthlyRent is changing and update the surface maintenance
-    $scope.$watch(
-      function () {
-        return acqCtrl.invest.monthlyRent;
-      },
-      function (newVal, oldVal) {
-        if (newVal) {
-          acqCtrl.invest.maintenance = (newVal * 0.04); // 4%/year of the monthly rate
-        }
-      },
-      true
-    );
-
-    //Watch when immo.area is changing and update the invest.insurance
-    $scope.$watch(
-      function () {
-        return acqCtrl.immo.area;
-      },
-      function (newVal, oldVal) {
-        if (newVal) {
-          acqCtrl.invest.insurance = (newVal * 1.5);//TODO correction with the appropriate value
-        }
       },
       true
     );
