@@ -21,39 +21,44 @@
 
     //Efficiency
     effCtrl.efficiency = Efficiency.getEfficiency();
+
     //If efficiency object it doesn't exists set some default values
-    if(!effCtrl.efficiency){
+    if(!effCtrl.efficiency || !effCtrl.efficiency.investAmount){
       effCtrl.efficiency = {};
+      effCtrl.efficiency.occupancyRate = 100;
       effCtrl.efficiency.maintenance = 0;
       effCtrl.efficiency.prepaidExpenses = 0;
       effCtrl.efficiency.diversInsurances = 0;
-      effCtrl.efficiency.userAge = 30;
-      effCtrl.efficiency.annualLoanInsurance = 0;
-
+      effCtrl.efficiency.totalInterestAndInsurance = 0;
       effCtrl.efficiency.totalAnnualIncoming = 0;
+      effCtrl.efficiency.propertyTax = 0;
+      effCtrl.efficiency.monthlyRent = null;
     }
 
 
-    if(effCtrl.immo.total){
-      effCtrl.efficiency.investAmount = effCtrl.immo.total;
+    if(effCtrl.immo.total > 0){
+      effCtrl.efficiency.investAmount = effCtrl.immo.price;
+      if(effCtrl.fin.totalAcquisitionFees > 0){
+        effCtrl.efficiency.investAmount = effCtrl.immo.price + effCtrl.fin.totalAcquisitionFees;
+      }
     }
 
     //If we know the living area we can calculate the approximate insurance
     if(effCtrl.immo.area){
-      effCtrl.efficiency.diversInsurances = (newVal * 1.5);//TODO correction with the appropriate value
+      effCtrl.efficiency.diversInsurances = (effCtrl.immo.area * 1.5);//TODO correction with the appropriate value
     }
 
-    //Get annualLoanInsurance from funding page if defined
-    if(effCtrl.fin.annualLoanInsurance && effCtrl.fin.annualLoanInsurance > 0){
-      effCtrl.efficiency.annualLoanInsurance = effCtrl.fin.annualLoanInsurance;
+    //Calculate the annual loan interest + annual loan insurance
+    if(effCtrl.fin.annualLoanInterest > 0 && effCtrl.fin.annualLoanInsurance > 0){
+      effCtrl.efficiency.totalInterestAndInsurance = effCtrl.fin.annualLoanInterest + effCtrl.fin.annualLoanInsurance;
     }
 
     // if monthly rent is already defined we can calculate the efficiency
     if(effCtrl.efficiency.monthlyRent && effCtrl.efficiency.investAmount && effCtrl.efficiency.investAmount > 0){
-      var annualRent = newEff.monthlyRent * 12;
+      var annualRent = effCtrl.efficiency.monthlyRent * 12;
       var annualPrepaidExpenses = (effCtrl.efficiency.prepaidExpenses||0) * 12;
 
-      calculateEfficiency(annualRent, annualPrepaidExpenses);
+      calculateEfficiency(annualRent, annualPrepaidExpenses, effCtrl.efficiency.investAmount);
 
       Efficiency.saveEfficiency(effCtrl.efficiency);
     }
@@ -69,7 +74,7 @@
           var annualRent = newEff.monthlyRent * 12;
           var annualPrepaidExpenses = (effCtrl.efficiency.prepaidExpenses||0) * 12;
 
-          calculateEfficiency(annualRent, annualPrepaidExpenses);
+          calculateEfficiency(annualRent, annualPrepaidExpenses, effCtrl.efficiency.investAmount);
 
         }
         Efficiency.saveEfficiency(effCtrl.efficiency);
@@ -95,17 +100,25 @@
     );
 
 
-    function calculateEfficiency(annualRent, annualPrepaidExpenses) {
-      //Calculate total annual incoming
-      effCtrl.efficiency.totalAnnualIncoming = annualRent + annualPrepaidExpenses;
+    function calculateEfficiency(annualRent, annualPrepaidExpenses, investAmount) {
+      var incomingGross = annualRent + annualPrepaidExpenses;
+      var incomingNet = (annualRent * (effCtrl.efficiency.occupancyRate / 100)) + annualPrepaidExpenses;
+      effCtrl.efficiency.totalAnnualIncoming = incomingNet;
+
+      //Costs:
+      var costs = (effCtrl.efficiency.maintenance||0) + (effCtrl.efficiency.propertyTax||0)  + (effCtrl.efficiency.diversInsurances || 0) + (effCtrl.efficiency.totalInterestAndInsurance || 0);
 
       //Calculate profitabilityNet
-      effCtrl.efficiency.profitabilityNet = getNetEfficiency(annualRent, (effCtrl.efficiency.maintenance||0), (effCtrl.fin.monthlyLoanInsurance || 0), (effCtrl.efficiency.diversInsurances || 0), annualPrepaidExpenses, (effCtrl.efficiency.investAmount || 0));
+      effCtrl.efficiency.profitabilityNet = getNetEfficiency(incomingNet, costs, investAmount);
+      effCtrl.efficiency.profitabilityGross = getGrossEfficiency(incomingGross, investAmount);
     }
 
-    function getNetEfficiency(annualRent, maintenance, monthlyLoanInsurance, diversInsurances, annualPrepaidExpenses, investAmount) {
-      var costs = maintenance + monthlyLoanInsurance + diversInsurances;
-      return Number(((((annualRent - costs) + annualPrepaidExpenses) / investAmount) * 100).toFixed(2));
+    function getNetEfficiency(incoming, costs, investAmount) {
+      return Number(((incoming - costs) / investAmount) * 100).toFixed(2);
+    }
+
+    function getGrossEfficiency(incoming, investAmount) {
+      return Number((incoming / investAmount) * 100).toFixed(2);
     }
 
   }

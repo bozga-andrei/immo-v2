@@ -9,6 +9,7 @@
       'toastr',
       'textAngular',
       'ngMaterial',
+      'ui.utils.masks',
       'BlurAdmin.theme.components',
       'BlurAdmin.theme.inputs'
   ]);

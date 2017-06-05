@@ -9,7 +9,7 @@
     .controller('TaxLoanAmountPieChartCtrl', TaxLoanAmountPieChartCtrl);
 
   /** @ngInject */
-  function TaxLoanAmountPieChartCtrl($scope, $log, baConfig) {
+  function TaxLoanAmountPieChartCtrl($scope, $log, $filter, themeLayoutSettings, baConfig) {
 
     var taxLoanAmountPieChartCtrl = this;
 
@@ -17,8 +17,51 @@
 
     const layoutColors = baConfig.colors;
 
-    updateChart();
-    updateLegend();
+
+    //get the general amChart PIE config from configProvider
+    var pieChartConfig = baConfig.amChartPieConfig;
+
+    //Update some values
+    pieChartConfig.theme = 'blur';
+    pieChartConfig.startEffect = "bounce";
+    pieChartConfig.allLabels= [{
+      y: '45%',
+      align: 'center',
+      size: 15,
+      bold: true,
+      text: "Frais sur emprunt",
+      color: layoutColors.defaultText
+    }, {
+      y: '50%',
+      align: 'center',
+      size: 15,
+      text: $filter('currency')($scope.funCtrl.fin.taxLoanAmount||0, '€', 0),
+      color: layoutColors.defaultText
+    }];
+    pieChartConfig.responsive = {
+      enabled: true,
+      rules: [
+        // at 550px wide, we hide legend
+        {
+          maxWidth: 550,
+          overrides: {
+            labelsEnabled: false,
+            depth3D: 5,
+            angle: 5,
+            startDuration: 0,
+            creditsPosition: 'top-right'
+          }
+        }
+      ]
+    };
+
+    var amChart = AmCharts.makeChart('pieChart', pieChartConfig);
+
+
+    setTimeout(function () {
+      updateChart();
+      updateLegend();
+    }, 100);
 
     // Watch when fin object is changing
     $scope.$watchCollection('taxLoanAmountPieChartCtrl.fin.taxLoanAmount',
@@ -27,8 +70,10 @@
           if (angular.equals(newVal, oldVal)) {
             return; // simply skip that
           }
-          updateChart();
-          updateLegend();
+          setTimeout(function () {
+            updateChart();
+            updateLegend();
+          }, 100);
         }
       },
       true
@@ -62,11 +107,9 @@
       ];
 
 
-      pieChartConfig = baConfig.amChartPieConfig;
-      pieChartConfig.dataProvider = taxLoanAmountPieChartCtrl.chartData;
-      pieChartConfig.theme = 'blur';
-      pieChartConfig.startEffect = "bounce";
-      pieChartConfig.allLabels= [{
+
+      amChart.dataProvider = taxLoanAmountPieChartCtrl.chartData;
+      amChart.allLabels= [{
         y: '45%',
         align: 'center',
         size: 15,
@@ -77,27 +120,16 @@
         y: '50%',
         align: 'center',
         size: 15,
-        text: parseInt($scope.funCtrl.fin.taxLoanAmount||0) + '€',
+        text: $filter('currency')($scope.funCtrl.fin.taxLoanAmount||0, '€', 0),
         color: layoutColors.defaultText
       }];
-      pieChartConfig.responsive = {
-        enabled: true,
-        rules: [
-          // at 550px wide, we hide legend
-          {
-            maxWidth: 550,
-            overrides: {
-              labelsEnabled: false,
-              depth3D: 5,
-              angle: 5,
-              startDuration: 0,
-              creditsPosition: 'top-right'
-            }
-          }
-        ]
-      };
 
-      AmCharts.makeChart('pieChart', pieChartConfig);
+      amChart.validateData();
+      if(!taxLoanAmountPieChartCtrl.isMobile){
+        amChart.startEffect = "bounce";
+        amChart.startDuration = 0.8;
+        amChart.animateAgain();
+      }
 
     }
 
@@ -112,8 +144,8 @@
       var percentages = [loanRegistrationTaxPercentage, mortgageRegistrationPercentage, conservativeSalaryPercentage, loanNotaryFeesPercentage, loanVariousFeesPercentage];
 
       taxLoanAmountPieChartCtrl.legend = [];
-      for (var i = 0; i < pieChartConfig.dataProvider.length; i++) {
-        taxLoanAmountPieChartCtrl.legend.push({label: pieChartConfig.dataProvider[i].price, backgroundColor: pieChartConfig.colors[i], percentage: percentages[i]})
+      for (var i = 0; i < taxLoanAmountPieChartCtrl.chartData.length; i++) {
+        taxLoanAmountPieChartCtrl.legend.push({label: taxLoanAmountPieChartCtrl.chartData[i].price, backgroundColor: pieChartConfig.colors[i], percentage: percentages[i]})
       }
 
     }

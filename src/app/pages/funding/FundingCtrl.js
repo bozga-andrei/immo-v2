@@ -22,6 +22,8 @@
 
     //Funding
     funCtrl.fin = Funding.getFunding();
+
+
     //If funding object it doesn't exists set some default values
     if(!funCtrl.fin || !funCtrl.fin.taxLoanAmount){
       funCtrl.fin = {};
@@ -36,41 +38,33 @@
       funCtrl.fin.totalLoanInterest = 0;
       funCtrl.fin.monthlyLoanInsurance = 0;
       funCtrl.fin.totalLoanInterest = 0;
-      funCtrl.fin.personalContribution = 0
+      funCtrl.fin.personalContribution = 0;
+      funCtrl.fin.personalContributionUpdated = false;
+      funCtrl.fin.totalAcquisitionFees = null;
     }
 
 
     //If is coming from Acquisition and immo.total is defined we can calculate the personal contribution, loan amount and tax on the loan amount
     if(funCtrl.immo.total){
+      funCtrl.fin.personalContributionUpdated = false;
+      funCtrl.fin.personalContribution = 0;
       //Calculate personal Contribution
       if (funCtrl.immo.isPublicSale) {
-        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTaxPublicSale + funCtrl.immo.variousFees).toFixed(0)) || 0;
+        funCtrl.fin.acquisitionFees = Number((funCtrl.immo.registrationTaxPublicSale + funCtrl.immo.variousFees).toFixed(0)) || 0;
       } else {
-        funCtrl.fin.personalContribution = Number((funCtrl.immo.registrationTax + funCtrl.immo.notaryHonorTTC + funCtrl.immo.variousFees).toFixed(0)) || 0;
+        funCtrl.fin.acquisitionFees = Number((funCtrl.immo.registrationTax + funCtrl.immo.notaryHonorTTC + funCtrl.immo.variousFees).toFixed(0)) || 0;
       }
       //Set loan amount to 0 if personal contribution are greater that total price
       if(funCtrl.immo.total > funCtrl.fin.personalContribution){
-        funCtrl.fin.loanAmount = funCtrl.immo.total - funCtrl.fin.personalContribution;
+        funCtrl.fin.loanAmount = funCtrl.immo.total - funCtrl.fin.acquisitionFees;
       } else {
         funCtrl.fin.loanAmount = 0;
       }
 
-      funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
-      funCtrl.fin.personalContribution = funCtrl.fin.personalContribution + funCtrl.fin.taxLoanAmount;
+      calculateFinancing();
+      funCtrl.fin.totalAcquisitionFees = funCtrl.fin.acquisitionFees + funCtrl.fin.taxLoanAmount;
+      funCtrl.fin.personalContribution = funCtrl.fin.totalAcquisitionFees;
 
-      //Get monthly payments amount
-      funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
-
-      //Calculate the insurance
-      funCtrl.fin.monthlyLoanInsurance = Number(((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount).toFixed(0));
-      funCtrl.fin.annualLoanInsurance = funCtrl.fin.monthlyLoanInsurance * 12;
-      funCtrl.fin.totalLoanInsurance = funCtrl.fin.monthlyLoanInsurance * (funCtrl.fin.loanDurationOnYears * 12);
-
-      //Calculate insurance + payments monthly
-      funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
-
-      //Calculate total interests + insurance
-      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest + funCtrl.fin.loanAmount;
       Funding.saveFunding(funCtrl.fin);
     }
 
@@ -83,22 +77,9 @@
         }
 
         if(funCtrl.fin.loanAmount >= 0){
-          //Calculate the total fees for the Loan: (Registration fees, Notarial fees, and divers fees)
-          funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
-
-          //Get monthly payments amount
-          funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
-
-          //Calculate the insurance
-          funCtrl.fin.monthlyLoanInsurance = Number(((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount).toFixed(0));
-          funCtrl.fin.annualLoanInsurance = funCtrl.fin.monthlyLoanInsurance * 12;
-          funCtrl.fin.totalLoanInsurance = funCtrl.fin.monthlyLoanInsurance * (funCtrl.fin.loanDurationOnYears * 12);
-
-          //Calculate insurance + payments monthly
-          funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
-
-          //Calculate total interests + insurance
-          funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest + funCtrl.fin.loanAmount;
+          calculateFinancing();
+          funCtrl.fin.totalAcquisitionFees = funCtrl.fin.acquisitionFees + funCtrl.fin.taxLoanAmount;
+          funCtrl.fin.personalContributionWithTaxLoanAmount = funCtrl.fin.personalContribution + funCtrl.fin.taxLoanAmount;
         }
 
         Funding.saveFunding(funCtrl.fin);
@@ -107,7 +88,7 @@
     );
 
     //Watch when personalContribution is changing and update the loanAmount
-    $scope.$watch(
+/*    $scope.$watch(
       function () {
         return funCtrl.fin.personalContribution;
       },
@@ -121,7 +102,7 @@
         }
       },
       true
-    );
+    );*/
 
     funCtrl.open = function (page, size) {
       $uibModal.open({
@@ -136,6 +117,35 @@
         }
       });
     };
+
+
+    function calculateFinancing(){
+
+      if(funCtrl.fin.personalContribution > 0){
+        funCtrl.fin.personalContributionUpdated = true;
+        funCtrl.fin.loanAmount = funCtrl.immo.total - funCtrl.fin.personalContribution;
+      }
+
+
+      //Calculate the total fees for the Loan: (Registration fees, Notarial fees, and divers fees)
+      funCtrl.fin.taxLoanAmount = getTaxLoanAmount(funCtrl.fin.loanAmount);
+
+      //Get monthly payments amount
+      funCtrl.fin.monthlyPayments = getMonthlyRate(funCtrl.fin.loanAmount, funCtrl.fin.interestRateYear, funCtrl.fin.loanDurationOnYears);
+
+      //Calculate the insurance
+      funCtrl.fin.monthlyLoanInsurance = Number(((funCtrl.fin.insuranceLoan / 100) / 12 * funCtrl.fin.loanAmount).toFixed(0));
+      funCtrl.fin.annualLoanInsurance = funCtrl.fin.monthlyLoanInsurance * 12;
+      funCtrl.fin.totalLoanInsurance = funCtrl.fin.monthlyLoanInsurance * (funCtrl.fin.loanDurationOnYears * 12);
+
+      //Calculate insurance + payments monthly
+      funCtrl.fin.monthlyPaymentsWithInsurance = funCtrl.fin.monthlyPayments + funCtrl.fin.monthlyLoanInsurance;
+
+      //Calculate total interests + insurance
+      funCtrl.fin.totalLoanInterestAndInsurance = funCtrl.fin.totalLoanInsurance + funCtrl.fin.totalLoanInterest + funCtrl.fin.loanAmount;
+
+
+    }
 
 
     function getTaxLoanAmount(loanAmount) {
@@ -178,6 +188,7 @@
       var x = Math.pow(1 + interest, payments);
       var monthly = (loanAmount * x * interest) / (x - 1);
 
+      funCtrl.fin.annualLoanInterest = Number((((monthly * payments) - loanAmount) / loanDurationOnYears).toFixed(0));
       funCtrl.fin.totalLoanInterest = Number(((monthly * payments) - loanAmount).toFixed(0));
 
       //$log.debug("Monthly rate is: " + monthly);

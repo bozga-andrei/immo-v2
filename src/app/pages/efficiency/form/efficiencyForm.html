@@ -1,23 +1,24 @@
 
 <!-- Ajuter aussi le precompte imobiliare + si ascenseur ou non ( True => Entretien ascenseur) + rectifier l'assurance immeuble
 - pour l'entretien immeuble ajouter entre parentese => Électricité communs) -->
-<form name="efficiencyForm" id="efficiencyForm" novalidate>
+<form name="efficiencyForm" id="efficiencyForm" autocomplete="off"=""  novalidate>
 
-  <!-- Loyer mensuel (hors charges) -->
+  <!-- Montant à investir -->
   <div class="form-group">
     <label>Montant à investir</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
              min="0"
-             max="10000000"
              class="form-control with-success-addon"
-             placeholder=""
              id="investAmount"
              name="investAmount"
              ng-model="effCtrl.efficiency.investAmount"
-             required>
+             required ui-number-mask="0">
     </div>
+    <span ng-if="effCtrl.immo.total && effCtrl.fin.totalAcquisitionFees> 0" class="help-block sub-little-text"><i
+      class="fa fa-info-circle" aria-hidden="true"></i>
+          Prix d'achat: {{effCtrl.immo.price | currency:'€':'0'}} + Frais d'aquisition: {{effCtrl.fin.totalAcquisitionFees | currency:'€':'0'}} </span>
     <div ng-show="efficiencyForm.$submitted || efficiencyForm.investAmount.$touched">
       <div class="help-block text-danger" ng-if="efficiencyForm.investAmount.$error.required">
         <span class="text-danger"> Entrez le montant que vous desirez investir svp.</span>
@@ -36,14 +37,13 @@
     <label>Loyer mensuel perçu (hors charges)</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
              min="0"
              class="form-control with-success-addon"
-             placeholder=""
              id="investMonthlyRent"
              name="investMonthlyRent"
              ng-model="effCtrl.efficiency.monthlyRent"
-             required>
+             required ui-number-mask="0">
     </div>
     <div ng-show="efficiencyForm.$submitted || efficiencyForm.investMonthlyRent.$touched">
       <div class="help-block text-danger" ng-if="efficiencyForm.investMonthlyRent.$error.required">
@@ -55,63 +55,19 @@
     </div>
   </div>
 
-  <!-- Surface du bien (en m²) -->
-  <div class="form-group">
-    <label>Surface du bien (en m²)</label>
-    <div class="input-group">
-      <span class="input-group-addon addon-left input-group-addon-success">m²</span>
-      <input type="number"
-             min="0"
-             max="9000"
-             class="form-control with-success-addon"
-             placeholder=""
-             id="investArea"
-             name="investArea"
-             ng-model="effCtrl.immo.area">
-    </div>
-    <div class="help-block text-danger" ng-if="efficiencyForm.investArea.$invalid">
-      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
-    </div>
-  </div>
-
-  <!-- Entretien (€/an) -->
-  <div class="form-group">
-    <label>Entretien (€/an)</label>
-    <div class="input-group">
-      <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
-             min="0"
-             max="10000"
-             class="form-control with-success-addon"
-             placeholder=""
-             id="maintenance"
-             name="maintenance"
-             ng-model="effCtrl.efficiency.maintenance">
-      <span class="input-group-btn addon-right input-group-addon-primary">
-        <button class="btn btn-primary" type="button"
-                uib-tooltip="Depenses pour travaux de structure et les « grands entretiens » liés à la tenue du logement. Ex: Réparation de la toiture, façade, structure du bâtiment, parties communes, réparation des gouttières...">
-          &nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;
-        </button>
-      </span>
-    </div>
-    <div class="help-block text-danger" ng-if="efficiencyForm.maintenance.$invalid">
-      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
-    </div>
-  </div>
-
-
   <!-- Charges perçues (€/mois) -->
   <div class="form-group">
     <label>Charges perçues (€/mois)</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
              min="0"
              max="10000"
              class="form-control with-success-addon"
              id="investPrepaidExpenses"
              name="investPrepaidExpenses"
-             ng-model="effCtrl.efficiency.prepaidExpenses">
+             ng-model="effCtrl.efficiency.prepaidExpenses"
+             ui-number-mask="0">
       <!-- Button trigger modal -->
       <span class="input-group-btn addon-right input-group-addon-primary">
         <button class="btn btn-primary" type="button"
@@ -125,63 +81,111 @@
     </div>
   </div>
 
-  <!-- Assurances (€/an) -->
+  <!-- Taux d’occupation -->
   <div class="form-group">
-    <label>Assurances (€/an)</label>
+    <label>Taux d’occupation annuel(%)</label>
+    <div class="input-group">
+      <md-slider-container>
+        <md-slider class="md-warn" flex md-discrete step="5" min="0" max="100" ng-model="effCtrl.efficiency.occupancyRate" aria-label="red" id="occupancyRate-slider">
+        </md-slider>
+        <md-input-container>
+          <input flex
+                 type="number"
+                 id="occupancyRate"
+                 name="occupancyRate"
+                 ng-model="effCtrl.efficiency.occupancyRate" aria-label="red"
+                 aria-controls="red-slider"
+                 required>
+        </md-input-container>
+      </md-slider-container>
+    </div>
+    <div ng-show="efficiencyForm.$submitted || efficiencyForm.occupancyRate.$touched">
+      <div class="help-block text-danger" ng-if="efficiencyForm.occupancyRate.$error.required">
+        <span class="text-danger"> Le taux d'occupation annuel est est nécessaire pour calculer la rentabilité</span>
+      </div>
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.occupancyRate.$invalid && !efficiencyForm.occupancyRate.$error.required">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
+  </div>
+
+  <!-- Itérêts de l'emprunt -->
+  <div class="form-group">
+    <label>Itérêts sur l'emprunt + Assurance</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
+             min="0"
+             class="form-control with-success-addon"
+             id="totalInterestAndInsurance"
+             name="totalInterestAndInsurance"
+             ng-model="effCtrl.efficiency.totalInterestAndInsurance"
+             ui-number-mask="0">
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.totalInterestAndInsurance.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
+  </div>
+
+  <!-- Entretien (€/an) -->
+  <div class="form-group">
+    <label>Entretien (€/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="tel"
+             min="0"
+             class="form-control with-success-addon"
+             id="maintenance"
+             name="maintenance"
+             ng-model="effCtrl.efficiency.maintenance"
+             ui-number-mask="0">
+      <span class="input-group-btn addon-right input-group-addon-primary">
+        <button class="btn btn-primary" type="button"
+                uib-tooltip="Depenses pour travaux de structure et les « grands entretiens » liés à la tenue du logement. Ex: Réparation de la toiture, façade, structure du bâtiment, parties communes, réparation des gouttières...">
+          &nbsp;&nbsp;<i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;
+        </button>
+      </span>
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.maintenance.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
+  </div>
+
+  <!-- Assurances (€/an) -->
+  <div class="form-group">
+    <label>Précompte immobilier</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="tel"
+             min="0"
+             class="form-control with-success-addon"
+             id="propertyTax"
+             name="propertyTax"
+             ng-model="effCtrl.efficiency.propertyTax"
+             ui-number-mask="0">
+    </div>
+    <div class="help-block text-danger" ng-if="efficiencyForm.propertyTax.$invalid">
+      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
+    </div>
+  </div>
+
+  <!-- Autre Assurances (€/an) -->
+  <div class="form-group">
+    <label>Autre Assurances (€/an)</label>
+    <div class="input-group">
+      <span class="input-group-addon addon-left input-group-addon-success">€</span>
+      <input type="tel"
              min="0"
              class="form-control with-success-addon"
              id="diversInsurances"
              name="diversInsurances"
-             ng-model="effCtrl.efficiency.diversInsurances">
+             ng-model="effCtrl.efficiency.diversInsurances"
+             ui-number-mask="0">
     </div>
-    <span class="help-block sub-little-text" ng-if="effCtrl.immo.area > 0"><i class="fa fa-info-circle" aria-hidden="true"></i>
-        Modifier si nécessaire</span>
+    <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
+        Assurance habitation, Assurance protection juridique...</span>
     <div class="help-block text-danger" ng-if="efficiencyForm.diversInsurances.$invalid">
       <span class="text-danger"> Veuillez saisir un nombre valide.</span>
-    </div>
-  </div>
-
-
-  <!-- Assurance crédit(€/an) -->
-  <div class="form-group">
-    <label>Assurance Solde Restant Dû(€/an)</label>
-    <div class="input-group">
-      <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
-             class="form-control with-success-addon"
-             id="annualLoanInsurance"
-             name="annualLoanInsurance"
-             ng-model="effCtrl.efficiency.annualLoanInsurance">
-    </div>
-    <div class="help-block text-danger" ng-if="efficiencyForm.annualLoanInsurance.$invalid">
-      <span class="text-danger"> Veuillez saisir un nombre valide.</span>
-    </div>
-  </div>
-
-  <!-- Rentabilité nette (%/an) -->
-  <div class="form-group">
-    <label>Rentabilité nette (%/an)</label>
-    <div class="input-group">
-      <span class="input-group-addon addon-left input-group-addon-success">%</span>
-      <input type="number"
-             class="form-control with-success-addon"
-             placeholder=""
-             id="profitabilityNet"
-             name="profitabilityNet"
-             ng-model="effCtrl.efficiency.profitabilityNet"
-             disabled>
-    </div>
-  </div>
-
-  <!-- Rentabilité nette -->
-  <div class="row control-group">
-    <div class="form-group col-xs-12 floating-label-form-group floating-label-form-group-with-value controls">
-      <br>
-      <h2 class="text-danger">Rentabilité nette: <b>{{effCtrl.efficiency.profitabilityNet | number:2}}%</b>
-      </h2>
     </div>
   </div>
 

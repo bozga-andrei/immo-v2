@@ -1,4 +1,4 @@
-<form name="fundingForm" id="fundingForm" novalidate>
+<form name="fundingForm" id="fundingForm" autocomplete="off" novalidate>
 
   <!-- Total coût d'achat: -->
   <div class="form-group" ng-if="funCtrl.immo.total">
@@ -7,7 +7,6 @@
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="text"
              class="form-control with-success-addon"
-             placeholder=""
              id="immoTotal"
              name="immoTotal"
              ng-value="funCtrl.immo.total | currency:'€':'0'" disabled>
@@ -19,24 +18,28 @@
     <label>Apport personnel</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
              min="0"
-             ng-max="{{funCtrl.immo.total}}"
+             max="{{funCtrl.immo.total}}"
              class="form-control with-success-addon"
              id="personalContribution"
              name="personalContribution"
-             ng-model="funCtrl.fin.personalContribution">
+             ng-model="funCtrl.fin.personalContribution" ui-number-mask="0">
     </div>
-    <span ng-if="funCtrl.immo.total && !funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i
-      class="fa fa-info-circle" aria-hidden="true"></i>
+    <span ng-if="funCtrl.immo.total && !funCtrl.immo.isPublicSale && !funCtrl.fin.personalContributionUpdated" class="help-block sub-little-text">
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
           Droits d'enregistrment({{funCtrl.immo.registrationTax | currency:'€':0}}) + Honoraires notariaux({{funCtrl.immo.notaryHonorTTC | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}})</span>
-    <span ng-if="funCtrl.immo.total && funCtrl.immo.isPublicSale" class="help-block sub-little-text"><i
-      class="fa fa-info-circle" aria-hidden="true"></i>
+    <span ng-if="funCtrl.immo.total && funCtrl.immo.isPublicSale && !funCtrl.fin.personalContributionUpdated" class="help-block sub-little-text">
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
           Frais de la vente publique({{funCtrl.immo.registrationTaxPublicSale | currency:'€':0}}) + Frais divers({{funCtrl.immo.variousFees | currency:'€':0}}) + Frais d’acte sur emprunt hypothécaire({{funCtrl.fin.taxLoanAmount | currency:'€':0}}) </span>
-    <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$error.max" zoom-out>
+    <span ng-if="funCtrl.immo.total && funCtrl.fin.personalContributionWithTaxLoanAmount && funCtrl.fin.personalContributionUpdated" class="help-block sub-little-text">
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
+          Avec frais d’acte sur emprunt hypothécaire compris: ({{funCtrl.fin.personalContributionWithTaxLoanAmount | currency:'€':0}}) </span>
+
+    <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$error.max" zoom-in>
       <span class="text-danger"> L'apport personnel ne peut pas être plus grand que le coût d'achat!</span>
     </div>
-    <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$invalid">
+    <div class="help-block text-danger" ng-if="fundingForm.personalContribution.$invalid && !fundingForm.personalContribution.$error.max" zoom-in>
       <span class="text-danger"> Veuillez saisir un nombre valide.</span>
     </div>
 
@@ -47,13 +50,13 @@
     <label>Capital à emprunter</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
              min="0"
              class="form-control with-success-addon"
-             placeholder=""
              id="loanAmount"
              name="loanAmount"
-             ng-model="funCtrl.fin.loanAmount">
+             ng-model="funCtrl.fin.loanAmount"
+             ui-number-mask="0">
     </div>
     <div class="help-block text-danger" ng-if="fundingForm.loanAmount.$invalid">
       <span class="text-danger"> Veuillez saisir un nombre valide.</span>
@@ -68,7 +71,6 @@
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="text"
              class="form-control with-success-addon"
-             placeholder=""
              id="taxLoanAmount"
              name="taxLoanAmount"
              ng-value="funCtrl.fin.taxLoanAmount | currency:'€':0"
@@ -123,16 +125,15 @@
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">%</span>
       <input type="number"
-             min="0.10"
+             min="0"
              max="10"
              class="form-control with-success-addon"
-             placeholder=""
              id="insuranceLoan"
              name="insuranceLoan"
              ng-model="funCtrl.fin.insuranceLoan">
     </div>
     <span class="help-block sub-little-text"><i class="fa fa-info-circle" aria-hidden="true"></i>
-          Le montant mensuel de l'assurance vous est donnée à titre indicatif automatiquement. Modifier si nécessaire.</span>
+          Le pourcentage mensuel de l'assurance vous est donnée à titre indicatif automatiquement. Modifier si nécessaire.</span>
     <div class="help-block text-danger" ng-if="fundingForm.insuranceLoan.$invalid">
       <span class="text-danger"> Veuillez saisir un nombre valide.</span>
     </div>
@@ -145,7 +146,6 @@
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="text"
              class="form-control"
-             placeholder=""
              id="monthlyPayments"
              name="monthlyPayments"
              ng-value="funCtrl.fin.monthlyPayments | currency : '€': 0"
@@ -160,7 +160,6 @@
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
       <input type="text"
              class="form-control"
-             placeholder=""
              id="monthlyPaymentsWithInsurance"
              name="monthlyPaymentsWithInsurance"
              ng-value="funCtrl.fin.monthlyPaymentsWithInsurance | currency:'€':0"

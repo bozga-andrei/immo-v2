@@ -9,7 +9,7 @@
       .controller('EfficiencyChartsCtrl', EfficiencyChartsCtrl);
 
   /** @ngInject */
-  function EfficiencyChartsCtrl($scope, $log, baConfig) {
+  function EfficiencyChartsCtrl($scope, $log, $filter, baConfig) {
 
     var effChartsCtrl = this;
 
@@ -21,8 +21,10 @@
       dashboardColors = baConfig.colors.dashboard;
 
     //Update and display chart when the page is first displayed
-    updateChart();
-    updateLegend();
+    /*setTimeout(function () {
+      updateChart();
+      updateLegend();
+    }, 100);*/
 
     // Watch when fin object is changing
     $scope.$watchCollection('effCtrl.efficiency',
@@ -30,8 +32,10 @@
         if (!newVal || !newVal.totalAnnualIncoming || angular.equals(newVal.totalAnnualIncoming, oldVal.totalAnnualIncoming)) {
           return; // simply skip that
         }
-        updateChart();
-        updateLegend();
+        /*setTimeout(function () {
+          updateChart();
+          updateLegend();
+        }, 100);*/
       },
       true
     );
@@ -64,7 +68,7 @@
         y: '50%',
         align: 'center',
         size: 15,
-        text: parseInt($scope.effCtrl.efficiency.totalAnnualIncoming||0) + '€',
+        text: $filter('currency')($scope.effCtrl.efficiency.totalAnnualIncoming||0, '€', 0),
         color: layoutColors.defaultText
       }];
       pieChartConfig.responsive = {

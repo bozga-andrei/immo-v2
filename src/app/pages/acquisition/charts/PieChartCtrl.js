@@ -90,7 +90,7 @@
             y: '50%',
             align: 'center',
             size: 15,
-            text: parseInt($scope.acqCtrl.immo.total||0) + '€',
+            text: $filter('currency')($scope.acqCtrl.immo.total||0, '€', 0),
             color: layoutColors.defaultText
           }],
           dataProvider: pieChartCtrl.chartData,

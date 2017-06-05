@@ -22,6 +22,18 @@
       <div ng-include="'app/pages/efficiency/form/efficiencyForm.html'"></div>
     </div>
   </div>
+  <div class="col-md-6">
+    <div
+      ba-panel
+      ba-panel-title="Rendement sur investissement"
+      ba-panel-class="with-scroll" ng-show="effCtrl.efficiency.profitabilityNet">
+      <profitability-chart></profitability-chart>
+    </div>
+  </div>
 </div>
-
+<div class="row">
+  <div class="col-xs-12 col-md-3">
+    <button type="button" ui-sref="funding" class="btn btn-primary btn-lg btn-block btn-arrow-right"><span class="glyphicon glyphicon-menu-left"></span> Financement </button>
+  </div>
+</div>
 

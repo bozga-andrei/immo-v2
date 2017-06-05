@@ -1,18 +1,19 @@
-<form name="acquisitionCostForm" id="acquisitionCostForm" novalidate>
+<form name="acquisitionCostForm" id="acquisitionCostForm" autocomplete="off" novalidate>
 
   <!-- Prix d'achat (FAI) -->
   <div class="form-group">
     <label>Prix d'achat (FAI)</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success"> € </span>
-      <input type="number"
+      <input type="tel"
              min="0"
              class="form-control with-success-addon"
              id="price"
              name="price"
              ng-model="acqCtrl.immo.price"
              ng-required="true"
-             autofocus/>
+             autofocus
+             ui-number-mask="0"/>
     </div>
     <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.price.$touched">
       <div class="help-block text-danger" ng-if="acquisitionCostForm.price.$error.required">
@@ -32,7 +33,6 @@
       <input type="number"
              min="0"
              class="form-control"
-             placeholder=""
              id="immoArea"
              name="immoArea"
              ng-model="acqCtrl.immo.area">
@@ -49,13 +49,12 @@
     <label>Travaux de rénovation (TTC)</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success"> € </span>
-      <input type="number"
+      <input type="tel"
              min="0"
              class="form-control"
-             placeholder=""
              id="renovationPrice"
              name="renovationPrice"
-             ng-model="acqCtrl.immo.renovationPrice">
+             ng-model="acqCtrl.immo.renovationPrice" ui-number-mask="0">
     </div>
     <div ng-show="acquisitionCostForm.$submitted || acquisitionCostForm.renovationPrice.$touched">
       <div class="help-block text-danger" ng-if="acquisitionCostForm.renovationPrice.$invalid">
@@ -250,13 +249,12 @@
     <label>Frais divers (tvac)</label>
     <div class="input-group">
       <span class="input-group-addon addon-left input-group-addon-success">€</span>
-      <input type="number"
+      <input type="tel"
              class="form-control"
-             placeholder=""
              id="variousFees"
              name="variousFees"
              ng-model="acqCtrl.immo.variousFees"
-             data-validation-number-message="Ce champ ne doit contenir que des chiffres">
+             ui-number-mask="0">
       <!-- Button trigger modal -->
       <span class="input-group-btn addon-right input-group-addon-primary">
         <button class="btn btn-primary" type="button" role="button" data-toggle="modal"
