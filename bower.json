@@ -55,7 +55,6 @@
       "main": [
         "./amcharts/amcharts.js",
         "./amcharts/plugins/responsive/responsive.min.js",
-        "./amcharts/plugins/animate/animate.min.js",
         "./amcharts/pie.js",
         "./amcharts/gauge.js"
       ]

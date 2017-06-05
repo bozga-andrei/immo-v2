@@ -87,6 +87,7 @@
       arrows: [
         {
           //Gross profitability
+          startWidth: 20,
           alpha: 0.9,
           borderAlpha: 1,
           color: "#F44336",
@@ -96,6 +97,7 @@
         },
         {
           //Net profitability
+          startWidth: 20,
           alpha: 0.9,
           borderAlpha: 1,
           color: "#209e91",
@@ -146,6 +148,8 @@
               gaugeChart.axes[1].setBottomText("Rendement net:  " + profitabilityNet + " %");
             }
           }
+          gaugeChart.validateData();
+          gaugeChart.startDuration = 0.8;
         }
       }
     }
