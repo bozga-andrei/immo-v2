@@ -5,6 +5,6 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme.components', []);
+  angular.module('Immo.theme.components', []);
 
 })();

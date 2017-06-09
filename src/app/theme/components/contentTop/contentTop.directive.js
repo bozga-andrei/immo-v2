@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme.components')
+  angular.module('Immo.theme.components')
       .directive('contentTop', contentTop);
 
   /** @ngInject */

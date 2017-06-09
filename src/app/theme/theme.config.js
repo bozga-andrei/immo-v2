@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme')
+  angular.module('Immo.theme')
     .config(config);
 
   /** @ngInject */

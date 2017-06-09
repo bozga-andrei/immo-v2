@@ -19,7 +19,7 @@ gulp.task('partials', function () {
       quotes: true
     }))
     .pipe($.angularTemplatecache('templateCacheHtml.js', {
-      module: 'BlurAdmin',
+      module: 'Immo',
       root: 'app'
     }))
     .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
@@ -95,7 +95,8 @@ gulp.task('serviceWorker', function () {
   return gulp.src([
     path.join(conf.paths.src, 'sw.js'),
     path.join(conf.paths.src, 'firebase-messaging-sw.js'),
-    path.join(conf.wiredep.directory, 'sw-toolbox/*.js')
+    path.join(conf.wiredep.directory, 'sw-toolbox/*.js'),
+    path.join(conf.paths.src, 'browserconfig.xml')
   ])
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });

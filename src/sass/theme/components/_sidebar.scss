@@ -12,6 +12,10 @@ $angle-right: "\f101";
   background-color: $sidebar;
   height: 100%;
   position: fixed;
+  transition-duration: 0.5s;
+  &.scrolled {
+    top: 0;
+  }
 }
 
 .al-sidebar-list {

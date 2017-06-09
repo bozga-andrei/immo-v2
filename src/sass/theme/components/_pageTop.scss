@@ -7,9 +7,10 @@
   width: 100%;
   min-width: $resMin;
   padding: 0 32px 0 40px;
+  transition-duration: 0.5s;
 
   &.scrolled {
-    background-color: rgba(black, 0.85)
+    transform: translateY(-100%);
   }
 }
 

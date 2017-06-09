@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.funding')
+  angular.module('Immo.pages.funding')
       .service('Funding', Funding);
 
   /** @ngInject */

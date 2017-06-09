@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.efficiency')
+  angular.module('Immo.pages.efficiency')
       .service('Efficiency', Efficiency);
 
   /** @ngInject */

@@ -5,13 +5,13 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.theme', [
+  angular.module('Immo.theme', [
       'toastr',
       'textAngular',
       'ngMaterial',
       'ui.utils.masks',
-      'BlurAdmin.theme.components',
-      'BlurAdmin.theme.inputs'
+      'Immo.theme.components',
+      'Immo.theme.inputs'
   ]);
 
 })();

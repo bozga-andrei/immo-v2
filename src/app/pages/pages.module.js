@@ -5,11 +5,11 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages', [
+  angular.module('Immo.pages', [
     'ui.router',
-    'BlurAdmin.pages.acquisition',
-    'BlurAdmin.pages.funding',
-    'BlurAdmin.pages.efficiency'
+    'Immo.pages.acquisition',
+    'Immo.pages.funding',
+    'Immo.pages.efficiency'
   ])
       .config(routeConfig);
 

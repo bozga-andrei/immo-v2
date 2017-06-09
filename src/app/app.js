@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('BlurAdmin', [
+angular.module('Immo', [
   'ngAnimate',
   'ui.bootstrap',
   'ui.sortable',
@@ -8,8 +8,8 @@ angular.module('BlurAdmin', [
   'toastr',
   'ui.slimscroll',
   'angular-progress-button-styles',
-  'BlurAdmin.theme',
-  'BlurAdmin.pages'
+  'Immo.theme',
+  'Immo.pages'
 ]).run(initServiceWorker).run(initFirebaseNotification);
 
 

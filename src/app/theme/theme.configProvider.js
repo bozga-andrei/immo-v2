@@ -31,7 +31,7 @@
     gossip: '#b9f2a1'
   };
 
-  angular.module('BlurAdmin.theme')
+  angular.module('Immo.theme')
     .provider('baConfig', configProvider);
 
   /** @ngInject */

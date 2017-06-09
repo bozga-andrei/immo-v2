@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.acquisition')
+  angular.module('Immo.pages.acquisition')
       .controller('PieChartCtrl', PieChartCtrl);
 
   /** @ngInject */
