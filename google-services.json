@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "640591150702",
+    "firebase_url": "https://immo-invest.firebaseio.com",
+    "project_id": "immo-invest",
+    "storage_bucket": "immo-invest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640591150702:android:910163877179d758",
+        "android_client_info": {
+          "package_name": "be.bozga.immo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640591150702-v9ihino8380hh0f62jr1hchr7dtngm8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "be.bozga.immo",
+            "certificate_hash": "c66c3ce5133d4621eac77301717e8f024ec41b92"
+          }
+        },
+        {
+          "client_id": "640591150702-06hc2fg80t3nfumsq2g6s4fiu5g4d46i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "be.bozga.immo",
+            "certificate_hash": "d707da8fcbd957323f8b174f347b0dda4125f51b"
+          }
+        },
+        {
+          "client_id": "640591150702-m198c7t44gph732ju176l5hg6rpq43ic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDMhVls43K0hXRSuQIJytUzlSa9T1vMGw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640591150702-m198c7t44gph732ju176l5hg6rpq43ic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
