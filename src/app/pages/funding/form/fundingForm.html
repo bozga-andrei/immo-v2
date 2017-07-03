@@ -56,7 +56,7 @@
              id="loanAmount"
              name="loanAmount"
              ng-model="funCtrl.fin.loanAmount"
-             ui-number-mask="0">
+             ui-number-mask="0" ng-disabled="funCtrl.immo.total">
     </div>
     <div class="help-block text-danger" ng-if="fundingForm.loanAmount.$invalid">
       <span class="text-danger"> Veuillez saisir un nombre valide.</span>

@@ -42,6 +42,9 @@
         <span class="text-danger"> Veuillez saisir un nombre valide.</span>
       </div>
     </div>
+    <span ng-if="acqCtrl.immo.area && acqCtrl.immo.area > 0" class="help-block sub-little-text">
+      <i class="fa fa-info-circle" aria-hidden="true"></i>
+          Prix au m²: {{acqCtrl.immo.priceByM | currency:'€':0}}</span>
   </div>
 
   <!-- Montant des travaux -->
@@ -122,22 +125,7 @@
     <p>Abattement</p>
     <div class="col-xs-offset-1">
       <md-radio-group ng-model="acqCtrl.immo.taxAllowanceSum">
-        <md-radio-button ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE"
-                         class="md-primary"
-                         name="taxAllowance" id="taxAllowance60"
-                         ng-value="acqCtrl.REDUCED_TAX_ALLOWANCE_SUM">60.000 €</md-radio-button>
-        <div layout="row" layout-align="start start" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE">
-          <div>
-            <md-radio-button class="md-primary"
-                             name="taxAllowance" id="taxAllowance75"
-                             ng-value="acqCtrl.TAX_ALLOWANCE_SUM">75.000 € &nbsp;</md-radio-button>
-          </div>
-          <div>
-            <!-- Button trigger modal -->
-            <a data-toggle="modal" role="button" ng-click="acqCtrl.open('app/pages/acquisition/form/modals/taxAllowance75Modal.html')"><span class="glyphicon glyphicon-info-sign"></span></a>
-          </div>
-        </div>
-        <div layout="row" layout-align="start start" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE">
+        <div layout="row" layout-align="start start" ng-if="acqCtrl.immo.registrationFeePercentage == acqCtrl.BXL_AND_WALLONIA_TAX_RATE && acqCtrl.immo.price < 500000">
           <div>
             <md-radio-button class="md-primary"
                              name="taxAllowance175" id="taxAllowance175"

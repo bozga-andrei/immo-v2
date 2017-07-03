@@ -21,8 +21,6 @@
     acqCtrl.WALLONIA_REDUCED_TAX_RATE = 0.06;
     acqCtrl.FLANDERS_REDUCED_TAX_RATE = 0.05;
 
-    acqCtrl.REDUCED_TAX_ALLOWANCE_SUM = 60000;
-    acqCtrl.TAX_ALLOWANCE_SUM = 75000;
     acqCtrl.TAX_ALLOWANCE_SUM_2017 = 175000;
     acqCtrl.TAX_ALLOWANCE_SUM_FLANDERS_15 = 15000;
     acqCtrl.TAX_ALLOWANCE_SUM_FLANDERS_25 = 25000;
@@ -98,6 +96,9 @@
           acqCtrl.immo.notaryHonorHTVA = getImmoNotaryHonorary(newVal.price);
           acqCtrl.immo.notaryHonorTTC = parseInt(acqCtrl.immo.notaryHonorHTVA * TVA);
         }
+
+        if(newVal.price > acqCtrl.immo.area)
+        acqCtrl.immo.priceByM = newVal.price / acqCtrl.immo.area;
 
 
         acqCtrl.immo.total = getTotalImmoAmount();
